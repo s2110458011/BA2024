@@ -46,5 +46,8 @@ def extract_possible_answers(df: pd.DataFrame) -> dict:
         answers[column] = df[column].unique()
     return answers
 
-def extract_actual_answers(df: pd.DataFrame):
-    pass
+def get_answers_for_question(df: pd.DataFrame, question: str) -> pd.DataFrame:
+    all_answers = df[question]
+    all_answers = all_answers.to_frame(name=question)
+    all_answers = all_answers.groupby(question).size().to_frame(name='Count')
+    return all_answers
