@@ -23,11 +23,11 @@ def extract_features(df: pd.DataFrame) -> np.array:
     return features
 
 def extract_possible_answers(df: pd.DataFrame):
-    answers = []
+    answers = {}
     for column in df:
         if column == 'Zeitstempel':
             continue
-        answers.append(df[column].unique())
+        answers[column] = df[column].unique()
     return answers
 
 def extract_actual_answers(df: pd.DataFrame):
