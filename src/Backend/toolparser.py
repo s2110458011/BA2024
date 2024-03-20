@@ -22,13 +22,12 @@ def extract_features(df: pd.DataFrame) -> np.array:
     features = np.asarray(features)
     return features
 
-def extract_possible_answers(df: pd.DataFrame) -> np.array:
+def extract_possible_answers(df: pd.DataFrame):
     answers = []
     for column in df:
         if column == 'Zeitstempel':
             continue
         answers.append(df[column].unique())
-    answers = np.asarray(answers)
     return answers
 
 def extract_actual_answers(df: pd.DataFrame):
