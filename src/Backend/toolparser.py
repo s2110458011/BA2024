@@ -22,7 +22,7 @@ def extract_features(df: pd.DataFrame) -> np.array:
     features = np.asarray(features)
     return features
 
-def extract_possible_answers(df: pd.DataFrame):
+def extract_possible_answers(df: pd.DataFrame) -> dict:
     answers = {}
     for column in df:
         if column == 'Zeitstempel':
