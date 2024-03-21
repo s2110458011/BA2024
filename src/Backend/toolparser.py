@@ -46,7 +46,17 @@ def extract_possible_answers(df: pd.DataFrame) -> dict:
         answers[column] = df[column].unique()
     return answers
 
-def get_answers_for_question(df: pd.DataFrame, question: str) -> pd.DataFrame:
+def count_responses_for_unique_answers(df: pd.DataFrame, question: str) -> pd.DataFrame:
+    """Determine count of responses for each unique answer.
+
+    Args:
+        df (pd.DataFrame): Dataframe with survey data, headers represent the questions.
+        question (str): Question for which the answers should be counted.
+
+    Returns:
+        pd.DataFrame: Df, each row represents a unique answer and a column count with how many responses.
+    """
+
     all_answers = df[question]
     all_answers = all_answers.to_frame(name=question)
     all_answers = all_answers.groupby(question).size().to_frame(name='Count')
