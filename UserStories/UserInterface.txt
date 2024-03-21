@@ -15,3 +15,7 @@ Separate window for creating charts
 Section for printing reports (as pdf) / save reports
 - Possibility to write description / analysis that is added to the chart.
 - Or displayed as (interactive) Dashboard?
+
+-------
+Window for opening und loading csv files from file storage location
+- dialog to navigate to path and open file / load data
