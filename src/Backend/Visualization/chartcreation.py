@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from chart_data import ChartParams
+from backend.visualization.chartparameter import ChartParams
 
 """Script for visualizing charts.
 """
