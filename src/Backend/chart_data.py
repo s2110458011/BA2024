@@ -1,6 +1,6 @@
 from typing import Union
 
-class ChartData():
+class ChartParams():
 
     def __init__(self, kind: str = None, 
                  title: str = None, 
@@ -15,7 +15,7 @@ class ChartData():
     def set_title(self, title: str):
         self.title = title
     
-    def set_legent(self, legend: Union[bool, str]):
+    def set_legend(self, legend: Union[bool, str]):
         self.legend = legend
 
     
