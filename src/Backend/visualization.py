@@ -1,12 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from chart_data import ChartData
+from chart_data import ChartParams
 
 """Script for visualizing charts.
 """
 
-def create_chart(data: pd.DataFrame, params: ChartData):
+def create_chart(data: pd.DataFrame, params: ChartParams):
     data.plot(kind=params.kind)
     plt.show()
 
