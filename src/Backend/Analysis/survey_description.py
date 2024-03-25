@@ -28,6 +28,9 @@ class SurveyDescription():
         counts_df = pd.DataFrame(counts)
         return counts_df
     
-    def surveycompletion_precentages(self):
-        percentages = []
+    def surveycompletion_precentages_per_row(self) -> pd.DataFrame:
+        df = self.data.copy()
+        num_cols = df.shape[1]
+        df['completion'] = (df.notnull().sum(axis=1) / num_cols) * 100
+        return df
         
