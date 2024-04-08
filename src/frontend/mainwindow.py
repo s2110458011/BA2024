@@ -261,6 +261,6 @@ class Gui(ttk.Frame):
         
 
 if __name__ == '__main__':
-    app = ttk.Window("Analyzer", "minty")
+    app = ttk.Window("Analyzer", "sandstone")
     Gui(app)
     app.mainloop()
