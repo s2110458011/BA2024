@@ -11,32 +11,32 @@ class Gui(ttk.Frame):
         self.pack(fill=BOTH, expand=YES)
         
         # application images
-        self.images = [
-            ttk.PhotoImage(
-                name='logo',
-                file=PATH / 'icons8_broom_64px_1.png'),
-            ttk.PhotoImage(
-                name='cleaner',
-                file=PATH / 'icons8_broom_64px.png'),
-            ttk.PhotoImage(
-                name='registry',
-                file=PATH / 'icons8_registry_editor_64px.png'),
-            ttk.PhotoImage(
-                name='tools',
-                file=PATH / 'icons8_wrench_64px.png'),
-            ttk.PhotoImage(
-                name='options',
-                file=PATH / 'icons8_settings_64px.png'),
-            ttk.PhotoImage(
-                name='privacy',
-                file=PATH / 'icons8_spy_80px.png'),
-            ttk.PhotoImage(
-                name='junk',
-                file=PATH / 'icons8_trash_can_80px.png'),
-            ttk.PhotoImage(
-                name='protect',
-                file=PATH / 'icons8_protect_40px.png')
-        ]
+        # self.images = [
+        #     ttk.PhotoImage(
+        #         name='logo',
+        #         file=PATH / 'icons8_broom_64px_1.png'),
+        #     ttk.PhotoImage(
+        #         name='cleaner',
+        #         file=PATH / 'icons8_broom_64px.png'),
+        #     ttk.PhotoImage(
+        #         name='registry',
+        #         file=PATH / 'icons8_registry_editor_64px.png'),
+        #     ttk.PhotoImage(
+        #         name='tools',
+        #         file=PATH / 'icons8_wrench_64px.png'),
+        #     ttk.PhotoImage(
+        #         name='options',
+        #         file=PATH / 'icons8_settings_64px.png'),
+        #     ttk.PhotoImage(
+        #         name='privacy',
+        #         file=PATH / 'icons8_spy_80px.png'),
+        #     ttk.PhotoImage(
+        #         name='junk',
+        #         file=PATH / 'icons8_trash_can_80px.png'),
+        #     ttk.PhotoImage(
+        #         name='protect',
+        #         file=PATH / 'icons8_protect_40px.png')
+        # ]
         
         # header
         hdr_frame = ttk.Frame(self, padding=20, bootstyle=SECONDARY)
@@ -261,6 +261,6 @@ class Gui(ttk.Frame):
         
 
 if __name__ == '__main__':
-    app = ttk.Window("Analyzer", "pulse")
+    app = ttk.Window("Analyzer", "minty")
     Gui(app)
     app.mainloop()
