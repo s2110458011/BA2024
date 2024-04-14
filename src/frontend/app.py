@@ -17,19 +17,19 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
-        self.menu = menu.Menu(master=self, width=200)
+        self.menu = menu.Menu(master=self, controller=self, width=200)
         self.container = customtkinter.CTkFrame(self, width=800)
-        #self.container.grid_rowconfigure(0, weight=1)
-        #self.container.grid_columnconfigure(0, weight=1)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
         
         self.create_layout()
         
-        # self.frames = {}
-        # for F in (HomePage, Load):
-        #     frame = F(self.container, width=800)
-        #     self.frames[F] = frame
-        #     frame.grid(row=0, column=0, sticky='nsew')
-        # self.show_frame(HomePage)
+        self.frames = {}
+        for F in (HomePage, Load):
+            frame = F(self.container, controller=self, width=800)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky='nsew')
+        self.show_frame(HomePage)
         
         # run
         self.mainloop()
@@ -37,10 +37,14 @@ class App(customtkinter.CTk):
     def create_layout(self):
         self.menu.grid(row=0, column=0, sticky='ns')
         self.container.grid(row=0, column=1, sticky='nsew')
+        
     
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+    
+    def get_page(self, page_class):
+        return self.frames[page_class]
 
 
 if __name__ == "__main__":
