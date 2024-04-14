@@ -1,8 +1,15 @@
-from tkinter import *
 import customtkinter
+from tkinter import *
+from typing import Type, TYPE_CHECKING
+
+from backend.data_processor.toolparser import *
+from backend.analysis.survey import Survey
+
+if TYPE_CHECKING:
+    from backend.controller import Controller
 
 class Load(customtkinter.CTkFrame):
-    def __init__(self, master, controller, **kwargs):
+    def __init__(self, master, controller: Type['Controller'], **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller
         
@@ -36,5 +43,7 @@ class Load(customtkinter.CTkFrame):
     def open_file(self):
         file_path = self.lbl_filename.getvar
         if file_path:
-            pass
+            data = load_data_from_csv(file_path)
+            survey = Survey(data)
+            self.controller.add_survey_to_library(survey)
         

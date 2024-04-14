@@ -10,5 +10,5 @@ class Controller:
         self.view.mainloop()
     
     def add_survey_to_library(self, survey):
-        survey_name = ''
+        survey_name = '1'
         self.model.add_survey(survey_name, survey)

@@ -23,6 +23,7 @@ class MainWindow(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
+        # navigation and content container
         self.menu = Navigation(master=self, navigation=self, controller=self.controller, width=200)
         self.container = customtkinter.CTkFrame(self, width=800)
         self.container.grid_rowconfigure(0, weight=1)
