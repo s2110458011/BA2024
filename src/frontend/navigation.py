@@ -6,9 +6,10 @@ from frontend.modules.page_analyze import *
 from frontend.modules.page_print import *
 from frontend.modules.page_save import *
 
-class Menu(customtkinter.CTkFrame):
-    def __init__(self, master, controller, **kwargs):
+class Navigation(customtkinter.CTkFrame):
+    def __init__(self, master, navigation, controller, **kwargs):
         super().__init__(master, **kwargs)
+        self.main_window = navigation
         self.controller = controller
         
         self.create_widgets()
@@ -41,16 +42,16 @@ class Menu(customtkinter.CTkFrame):
         self.btn_save.grid(row=5)
         
     def load_click(self):
-        self.controller.show_frame(Load)
+        self.main_window.show_frame(Load)
     
     def prepare_click(self):
-        self.controller.show_frame(Prepare)
+        self.main_window.show_frame(Prepare)
         
     def analyze_click(self):
-        self.controller.show_frame(Analyze)
+        self.main_window.show_frame(Analyze)
     
     def print_click(self):
-        self.controller.show_frame(Print)
+        self.main_window.show_frame(Print)
     
     def save_click(self):
-        self.controller.show_frame(Save)
+        self.main_window.show_frame(Save)
