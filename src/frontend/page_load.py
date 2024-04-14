@@ -5,7 +5,6 @@ class Load(customtkinter.CTkFrame):
     def __init__(self, master, controller, **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller
-        #self.grid(row=0, column=0, sticky='nsew')
         
         self.create_widgets()
         self.create_layout()
@@ -31,5 +30,3 @@ class Load(customtkinter.CTkFrame):
         filename = customtkinter.filedialog.askopenfilename()
         self.lbl_filename.configure(text=filename, anchor='w', padx=5)
         
-    def open_load(self):
-        self.load = Load(master=self, width=800)

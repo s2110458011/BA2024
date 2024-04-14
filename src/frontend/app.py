@@ -2,7 +2,11 @@ from tkinter import *
 import customtkinter
 import menu
 from homepage import *
-from load import *
+from frontend.page_load import *
+from frontend.page_prepare import *
+from frontend.page_analyze import *
+from frontend.page_print import *
+from frontend.page_save import *
 
 customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("green")
@@ -25,7 +29,7 @@ class App(customtkinter.CTk):
         self.create_layout()
         
         self.frames = {}
-        for F in (HomePage, Load):
+        for F in (HomePage, Load, Prepare, Analyze, Print, Save):
             frame = F(self.container, controller=self, width=800)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')

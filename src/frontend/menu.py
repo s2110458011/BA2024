@@ -1,6 +1,10 @@
 from tkinter import *
 import customtkinter
-from load import *
+from frontend.page_load import *
+from frontend.page_prepare import *
+from frontend.page_analyze import *
+from frontend.page_print import *
+from frontend.page_save import *
 
 class Menu(customtkinter.CTkFrame):
     def __init__(self, master, controller, **kwargs):
@@ -22,10 +26,10 @@ class Menu(customtkinter.CTkFrame):
     def create_widgets(self):
         self.lbl_menu = customtkinter.CTkLabel(self, text='Menu', height=20)
         self.btn_load = self.create_menu_button('Load', 30, 0, action=self.load_click)
-        self.btn_prepare = self.create_menu_button('Prepare', 30, 0)
-        self.btn_analyze = self.create_menu_button('Analyze', 30, 0)
-        self.btn_print = self.create_menu_button('Print', 30, 0)
-        self.btn_save = self.create_menu_button('Save', 30, 0)
+        self.btn_prepare = self.create_menu_button('Prepare', 30, 0, action=self.prepare_click)
+        self.btn_analyze = self.create_menu_button('Analyze', 30, 0, action=self.analyze_click)
+        self.btn_print = self.create_menu_button('Print', 30, 0, action=self.print_click)
+        self.btn_save = self.create_menu_button('Save', 30, 0, action=self.save_click)
     
     def create_layout(self):
         # place the widgets
@@ -38,5 +42,15 @@ class Menu(customtkinter.CTkFrame):
         
     def load_click(self):
         self.controller.show_frame(Load)
-        #page.open_load()
+    
+    def prepare_click(self):
+        self.controller.show_frame(Prepare)
         
+    def analyze_click(self):
+        self.controller.show_frame(Analyze)
+    
+    def print_click(self):
+        self.controller.show_frame(Print)
+    
+    def save_click(self):
+        self.controller.show_frame(Save)
