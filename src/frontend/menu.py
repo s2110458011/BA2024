@@ -1,10 +1,10 @@
 from tkinter import *
 import customtkinter
-from frontend.page_load import *
-from frontend.page_prepare import *
-from frontend.page_analyze import *
-from frontend.page_print import *
-from frontend.page_save import *
+from frontend.modules.page_load import *
+from frontend.modules.page_prepare import *
+from frontend.modules.page_analyze import *
+from frontend.modules.page_print import *
+from frontend.modules.page_save import *
 
 class Menu(customtkinter.CTkFrame):
     def __init__(self, master, controller, **kwargs):
