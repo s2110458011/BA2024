@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python Debugger: app.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/Users/theresagschweidl/Documents/GitHub/BA2024/src/app.py",
+            "console": "integratedTerminal"
+        }
+        
+    ]
+}

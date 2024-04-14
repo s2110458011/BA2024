@@ -9,3 +9,6 @@ class SurveyLibrary:
     
     def get_survey(self, name: str) -> Survey:
         return self.surveys[name]
+    
+    def get_number_entries(self) -> int:
+        return len(self.surveys)

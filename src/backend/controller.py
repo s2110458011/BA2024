@@ -9,6 +9,8 @@ class Controller:
     def run(self) -> None:
         self.view.mainloop()
     
-    def add_survey_to_library(self, survey):
-        survey_name = '1'
-        self.model.add_survey(survey_name, survey)
+    def add_survey_to_library(self, name, survey) -> None:
+        self.model.add_survey(name, survey)
+    
+    def get_id(self) -> int:
+        return self.model.get_number_entries()
