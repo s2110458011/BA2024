@@ -14,6 +14,8 @@ class Load(customtkinter.CTkFrame):
         super().__init__(master, **kwargs)
         self.controller = controller
         
+        self.grid_columnconfigure(0, weight=1)
+        
         self.create_widgets()
         self.create_layout()
         
@@ -22,11 +24,11 @@ class Load(customtkinter.CTkFrame):
         self.treeview = self.surveylist_widget()
     
     def create_layout(self):
-        self.openfile.grid(row=0, column=0, pady=(10,0), padx=(10,0))
+        self.openfile.grid(row=0, column=0, pady=(10,0), padx=(10,0), sticky='nsew')
         self.treeview.grid(row=2, column=0, pady=(10,0), padx=(10,0), sticky='nsew')
     
     def filedialog_frame(self) -> customtkinter.CTkFrame:
-        frame_openfile = customtkinter.CTkFrame(self, corner_radius=0)
+        frame_openfile = customtkinter.CTkFrame(self, width=800, corner_radius=0)
         
         # filename label
         self.lbl_filepath = customtkinter.CTkLabel(frame_openfile, text='Choose File', width=600)
@@ -49,8 +51,8 @@ class Load(customtkinter.CTkFrame):
         # Define columns
         self.survey_list['columns'] = ('Name', 'Path')
         self.survey_list.column("#0", width=0)
-        self.survey_list.column('Name', anchor='w', width=100)
-        self.survey_list.column('Path', anchor='w', width=580)
+        self.survey_list.column('Name', anchor='w', width=150)
+        self.survey_list.column('Path', anchor='w', width=540)
         
         # Create headings
         self.survey_list.heading('#0')
@@ -68,6 +70,7 @@ class Load(customtkinter.CTkFrame):
         self.txt_filename.delete(0, END)
         self.lbl_filepath.configure(text='Choose File')
         if file_path:
+            #TODO check if file to open is not empty? was sucessful to read, etc.
             data = load_data_from_csv(file_path)
             survey = Survey(data)
             self.controller.add_survey_to_library(name=survey_name, survey=survey)
