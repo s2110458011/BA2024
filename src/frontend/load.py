@@ -2,8 +2,9 @@ from tkinter import *
 import customtkinter
 
 class Load(customtkinter.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controller, **kwargs):
         super().__init__(master, **kwargs)
+        self.controller = controller
         #self.grid(row=0, column=0, sticky='nsew')
         
         self.create_widgets()
@@ -18,7 +19,7 @@ class Load(customtkinter.CTkFrame):
     def filedialog_frame(self):
         frame_openfile = customtkinter.CTkFrame(self, corner_radius=0)
         # filename label
-        self.lbl_filename = customtkinter.CTkLabel(frame_openfile, text='Choose File', bg_color='grey', width=700)
+        self.lbl_filename = customtkinter.CTkLabel(frame_openfile, text='Choose File', width=700)
         self.lbl_filename.grid(row=0, column=0, padx=(10,10), pady=(10,10))
         
         # button open file dialog
@@ -29,3 +30,6 @@ class Load(customtkinter.CTkFrame):
     def selectfile(self):
         filename = customtkinter.filedialog.askopenfilename()
         self.lbl_filename.configure(text=filename, anchor='w', padx=5)
+        
+    def open_load(self):
+        self.load = Load(master=self, width=800)
