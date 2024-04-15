@@ -1,7 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
+        {
+            "name": "Python Debugger: Windows app.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "C:\\Users\\there\\Documents\\GitHub\\BA2024\\src\\app.py",
+            "console": "integratedTerminal"
+        },
         {
             "name": "Python Debugger: app.py",
             "type": "debugpy",
@@ -9,6 +15,5 @@
             "program": "/Users/theresagschweidl/Documents/GitHub/BA2024/src/app.py",
             "console": "integratedTerminal"
         }
-        
     ]
 }
