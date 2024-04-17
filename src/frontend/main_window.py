@@ -1,18 +1,18 @@
 from tkinter import *
-import customtkinter
+import customtkinter as ctk
 
 from frontend.navigation import Navigation
-from frontend.homepage import *
-from frontend.modules.page_load import *
-from frontend.modules.page_prepare import *
-from frontend.modules.page_analyze import *
-from frontend.modules.page_print import *
-from frontend.modules.page_save import *
+from frontend.homepage import HomePage
+from frontend.modules.page_load import Load
+from frontend.modules.page_prepare import Prepare
+from frontend.modules.page_analyze import Analyze
+from frontend.modules.page_print import Print
+from frontend.modules.page_save import Save
 
-customtkinter.set_appearance_mode("system")
-customtkinter.set_default_color_theme("green")
+ctk.set_appearance_mode("system")
+ctk.set_default_color_theme("green")
 
-class MainWindow(customtkinter.CTk):
+class MainWindow(ctk.CTk):
     def __init__(self, controller, title: str, size: tuple[int, int]) -> None:
         
         # main setup
@@ -25,7 +25,7 @@ class MainWindow(customtkinter.CTk):
         
         # navigation and content container
         self.menu = Navigation(master=self, navigation=self, controller=self.controller, width=200)
-        self.container = customtkinter.CTkFrame(self, width=800)
+        self.container = ctk.CTkFrame(self, width=800)
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
         
@@ -39,15 +39,18 @@ class MainWindow(customtkinter.CTk):
         self.show_frame(HomePage)
         
     
-    def create_layout(self):
+    def create_layout(self) -> None:
         self.menu.grid(row=0, column=0, sticky='ns')
         self.container.grid(row=0, column=1, sticky='nsew')
         
     
-    def show_frame(self, cont):
+    def show_frame(self, cont) -> None:
         frame = self.frames[cont]
         frame.tkraise()
     
-    def get_page(self, page_class):
+    def get_page(self, page_class) -> ctk.CTkFrame:
         return self.frames[page_class]
+    
+    def exit(self) -> None:
+        self.controller.exit()
 

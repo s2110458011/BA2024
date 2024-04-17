@@ -9,6 +9,9 @@ class Controller:
     def run(self) -> None:
         self.view.mainloop()
     
+    def exit(self) -> None:
+        self.view.destroy()
+    
     def add_survey_to_library(self, name, survey) -> None:
         self.model.add_survey(name, survey)
     

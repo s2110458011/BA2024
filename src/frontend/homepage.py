@@ -1,7 +1,7 @@
 from tkinter import *
-import customtkinter
+import customtkinter as ctk
 
-class HomePage(customtkinter.CTkFrame):
+class HomePage(ctk.CTkFrame):
     def __init__(self, master, controller, **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller
