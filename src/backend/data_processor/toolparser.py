@@ -12,7 +12,7 @@ def load_data_from_csv(file: str) -> pd.DataFrame:
     """
 
     df = pd.read_csv(file, header=0)
-    df = df.drop(columns='Zeitstempel')
+    #df = df.drop(columns='Zeitstempel')
     return df
 
 def extract_features(df: pd.DataFrame) -> np.array:

@@ -1,8 +1,14 @@
 import pandas as pd
 
 class Survey():
-    def __init__(self, data: pd.DataFrame) -> None:
+    def __init__(self, id:int, name: str, data: pd.DataFrame) -> None:
+        self.id = id
+        self.name = name
         self.raw_data = data
+        self.categorized_questions = {}
+    
+    def get_data(self) -> pd.DataFrame:
+        return self.raw_data
     
     def describe_input_data(self) -> pd.DataFrame:
         return self.raw_data.describe()
@@ -32,4 +38,14 @@ class Survey():
         num_cols = df.shape[1]
         df['completion'] = (df.notnull().sum(axis=1) / num_cols) * 100
         return df
+    
+    def categorize_questions(self, category: str, question: str):
+        if category not in self.categorized_questions:
+            self.categorized_questions[category] = [question]
+        else:
+            self.categorized_questions[category].append(question)
+    
+    def add_new_category(self, category: str):
+        if category not in self.categorized_questions:
+            self.categorized_questions[category] = []
         

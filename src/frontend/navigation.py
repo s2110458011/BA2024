@@ -8,7 +8,7 @@ from frontend.modules.page_save import *
 
 class Navigation(ctk.CTkFrame):
     def __init__(self, master, navigation, controller, **kwargs):
-        super().__init__(master, **kwargs)
+        super().__init__(master, corner_radius=0, **kwargs)
         self.main_window = navigation
         self.controller = controller
         
