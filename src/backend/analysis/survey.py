@@ -6,6 +6,7 @@ class Survey():
         self.name = name
         self.raw_data = data
         self.categorized_questions = {}
+        self.not_categorized_questions = None
     
     def get_data(self) -> pd.DataFrame:
         return self.raw_data
@@ -39,7 +40,14 @@ class Survey():
         df['completion'] = (df.notnull().sum(axis=1) / num_cols) * 100
         return df
     
-    def categorize_questions(self, category: str, question: str):
+    def get_uncategorized_questions(self) -> list:
+        return self.not_categorized_questions
+    
+    def set_uncategorized_questions(self, free_questions: list) -> None:
+        self.not_categorized_questions = free_questions
+        return None
+    
+    def add_question_to_category(self, category: str, question: str):
         if category not in self.categorized_questions:
             self.categorized_questions[category] = [question]
         else:

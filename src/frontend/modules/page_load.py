@@ -115,6 +115,7 @@ class Load(ctk.CTkFrame):
         selected_id = self.survey_list.focus()
         data = self.controller.get_survey_data_raw(selected_id)
         self.controller.set_current_survey_selection(selected_id)
+        self.controller.activate_categorize_button()
         self.draw_table(data)
         
     def draw_table(self, dataframe: pd.DataFrame):

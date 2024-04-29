@@ -5,11 +5,12 @@ from frontend.main_window import MainWindow
 from backend.data_processor.toolparser import *
 from backend.analysis.survey import Survey
 from frontend.modules.page_prepare import Prepare
+from frontend.modules.page_analyze import Analyze
 
-from typing import Type, TYPE_CHECKING
+""" from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from frontend.modules.page_prepare import Prepare
+    from frontend.modules.page_prepare import Prepare """
 
 class Controller:
     def __init__(self) -> None:
@@ -41,24 +42,86 @@ class Controller:
         self.model.set_current_selection(id)
         return None
     
-    def add_question_to_category(self, category, question):
-        self.model.get_survey()
-        
-    def get_questions(self):
+    def check_survey_selected(self) -> bool:
+        current_survey = self.model.current_selected_survey
+        if current_survey is not None:
+            return True
+        else:
+            return False
+    
+    def get_selected_survey(self) -> Survey:
         current_id = self.model.get_current_survey_selection()
-        survey = self.model.get_survey(current_id)
-        questions = extract_features(survey.get_data())
+        if current_id is not None:
+            return self.model.get_survey(current_id)
+        else:
+            return None
+    
+    def add_question_to_category(self, category, question):
+        survey = self.get_selected_survey()
+        survey.add_question_to_category(category, question)
+        
+    def get_questions_to_categorize(self):
+        survey = self.get_selected_survey()
+        if survey.not_categorized_questions is None:
+            questions = extract_features(survey.get_data())
+        else:
+            questions = survey.get_uncategorized_questions()
         return questions
     
+    def get_categorized_questions(self) -> dict:
+        survey = self.get_selected_survey()
+        return survey.categorized_questions
+    
+    def save_not_categorized_questions(self, free_questions: list) -> None:
+        survey = self.get_selected_survey()
+        survey.set_uncategorized_questions(free_questions)
+        return None
+    
     def add_new_category(self, category: str) -> None:
-        current_id = self.model.get_current_survey_selection()
-        survey = self.model.get_survey(current_id)
+        survey = self.get_selected_survey()
         survey.add_new_category(category)
+        view = self.view.get_page(Analyze)
+        view.update_categories_list()
         return None
         
     def get_survey_list(self) -> list:
         return self.model.get_survey_list()
     
-    def update_survey_list(self) -> list:
+    def check_categorized_questions_empty(self) -> bool:
+        survey = self.get_selected_survey()
+        if survey.categorized_questions:
+            return False
+        else:
+            return True
+    
+    def update_survey_list(self) -> None:
         view = self.view.get_page(Prepare)
         view.update_survey_list()
+        return None
+    
+    def activate_categorize_button(self) -> None:
+        view = self.view.get_page(Prepare)
+        view.activate_categorize_button()
+        return None
+    
+    # region AnalysisController
+    def get_questions_by_category(self, category: str) -> list:
+        survey = self.get_selected_survey()
+        category_dict = survey.categorized_questions
+        return category_dict[category]
+    
+    def get_categories(self) -> list:
+        survey = self.get_selected_survey()
+        if survey:
+            category_dict = survey.categorized_questions
+            categories = list(category_dict.keys())
+        else:
+            categories = []
+        return categories
+    
+    def update_category_list(self) ->  None:
+        view = self.view.get_page(Analyze)
+        view.update_categories_list()
+        return None
+    
+    # endregion 

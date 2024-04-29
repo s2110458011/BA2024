@@ -3,7 +3,7 @@ from backend.analysis.survey import *
 class SurveyLibrary:
     def __init__(self) -> None:
         self.surveys  = {}
-        self.current_selected_survey = str
+        self.current_selected_survey = None
     
     def add_survey(self, id: int, survey: Survey) -> None:
         self.surveys[id] = survey
