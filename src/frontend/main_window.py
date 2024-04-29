@@ -6,6 +6,7 @@ from frontend.homepage import HomePage
 from frontend.modules.page_load import Load
 from frontend.modules.page_prepare import Prepare
 from frontend.modules.page_analyze import Analyze
+from frontend.modules.page_report import Report
 from frontend.modules.page_print import Print
 from frontend.modules.page_save import Save
 
@@ -32,7 +33,7 @@ class MainWindow(ctk.CTk):
         self.create_layout()
         
         self.frames = {}
-        for F in (HomePage, Load, Prepare, Analyze, Print, Save):
+        for F in (HomePage, Load, Prepare, Analyze, Report, Print, Save):
             frame = F(self.container, controller=controller, width=800)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')

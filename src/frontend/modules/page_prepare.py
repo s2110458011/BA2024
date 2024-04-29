@@ -20,7 +20,7 @@ class Prepare(ctk.CTkFrame):
         self.check_survey_selection()
     
     def create_widgets(self) -> None:
-        self.dropdown_survey_list = ctk.CTkComboBox(self, values=self.cb_surveys_values)
+        self.dropdown_survey_list = ctk.CTkComboBox(self, values=self.cb_surveys_values, command=self.select_survey)
         self.dropdown_survey_list.set('Choose survey')
         self.button_categorize = ctk.CTkButton(self, text='Categorize', state='disabled', command=self.action_button_categorize)
         
@@ -52,4 +52,20 @@ class Prepare(ctk.CTkFrame):
     
     def activate_categorize_button(self) -> None:
         self.button_categorize.configure(state='normal')
+        return None
+    
+    def select_survey(self, survey) -> None:
+        #TODO get survey Id, set current selected survey, activate categorize button
+        id = self.controller.get_survey_id(survey)
+        self.controller.set_current_survey_selection(id)
+        self.button_categorize.configure(state='normal')
+        
+        return None
+    
+    def set_combobox_selected_value(self) -> None:
+        if self.controller.check_survey_selected():
+            survey = self.controller.get_selected_survey()
+            self.dropdown_survey_list.set(survey.name)
+        else:
+            self.dropdown_survey_list.set('Choose survey')
         return None

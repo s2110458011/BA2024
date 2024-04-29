@@ -1,9 +1,9 @@
 import pandas as pd
 import uuid
-from backend.survey_library import SurveyLibrary
+from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
 from backend.data_processor.toolparser import *
-from backend.analysis.survey import Survey
+from backend.model.survey import Survey
 from frontend.modules.page_prepare import Prepare
 from frontend.modules.page_analyze import Analyze
 
@@ -29,8 +29,8 @@ class Controller:
         self.model.add_survey(id, survey)
         return id
     
-    def get_id(self) -> int:
-        return self.model.get_number_entries()
+    def get_survey_id(self, survey_name: str) -> str:
+        return self.model.get_survey_id_by_name(survey_name)
     
     def get_survey_data_raw(self, id: int) -> pd.DataFrame:
         return self.model.get_survey(id).get_data()
@@ -56,6 +56,7 @@ class Controller:
         else:
             return None
     
+    # region Prepare
     def add_question_to_category(self, category, question):
         survey = self.get_selected_survey()
         survey.add_question_to_category(category, question)
@@ -104,6 +105,13 @@ class Controller:
         view.activate_categorize_button()
         return None
     
+    def set_cb_survey_list_to_selected_survey(self) -> None:
+        view = self.view.get_page(Prepare)
+        view.set_combobox_selected_value()
+        return None
+    
+    # endregion
+    
     # region AnalysisController
     def get_questions_by_category(self, category: str) -> list:
         survey = self.get_selected_survey()
@@ -124,4 +132,9 @@ class Controller:
         view.update_categories_list()
         return None
     
-    # endregion 
+    # endregion
+    
+    # region Report
+    
+    
+    # endregion

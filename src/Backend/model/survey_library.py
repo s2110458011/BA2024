@@ -1,4 +1,4 @@
-from backend.analysis.survey import *
+from backend.model.survey import *
 
 class SurveyLibrary:
     def __init__(self) -> None:
@@ -16,9 +16,6 @@ class SurveyLibrary:
         self.current_selected_survey = id
         return None
     
-    def get_number_entries(self) -> int:
-        return len(self.surveys)
-    
     def get_current_survey_selection(self) -> str:
         return self.current_selected_survey
     
@@ -31,8 +28,8 @@ class SurveyLibrary:
         survey_names = [survey.name for survey in self.surveys.values()]
         return survey_names
     
-    def get_survey_by_name(self, search_name: str) -> str:
+    def get_survey_id_by_name(self, search_name: str) -> str:
         #TODO if name is not found
-        for id, name in self.surveys.items():
-            if name == search_name:
+        for id, survey in self.surveys.items():
+            if survey.name == search_name:
                 return id
