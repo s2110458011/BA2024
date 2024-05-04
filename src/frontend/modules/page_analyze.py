@@ -11,6 +11,7 @@ class Analyze(ctk.CTkFrame):
         super().__init__(master, corner_radius=0, **kwargs)
         self.controller = controller
         self.categories_list = self.controller.get_categories()
+        self.charts_list = self.controller.get_chart_options()
         
         self.create_widgets()
         self.create_layout()
@@ -36,6 +37,9 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_categories.set('Choose Category')
         self.listbox_questions_frame = ctk.CTkFrame(self.settings_frame, corner_radius=0, bg_color='gray20')
         self.listbox_questions = tk.Listbox(self.listbox_questions_frame, background='gray20', borderwidth=0)
+        
+        self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280)
+        self.dropdown_charts.set('Choose Chart')
         
         return None
     

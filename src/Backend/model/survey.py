@@ -1,4 +1,5 @@
 import pandas as pd
+import backend.data_processor.cleaner as cl
 
 class Survey():
     def __init__(self, id:int, name: str, data: pd.DataFrame) -> None:
@@ -47,13 +48,19 @@ class Survey():
         self.not_categorized_questions = free_questions
         return None
     
-    def add_question_to_category(self, category: str, question: str):
+    def add_question_to_category(self, category: str, question: str) -> None:
         if category not in self.categorized_questions:
             self.categorized_questions[category] = [question]
         else:
             self.categorized_questions[category].append(question)
+        return None
     
-    def add_new_category(self, category: str):
+    def add_new_category(self, category: str) -> None:
         if category not in self.categorized_questions:
             self.categorized_questions[category] = []
-        
+        return None
+    
+    def get_data_from_category(self, category: str) -> pd.DataFrame:
+        category_columns = self.categorized_questions[category]
+        df = cl.extract_columns_by_name(category_columns)
+        return df

@@ -1,5 +1,6 @@
 import pandas as pd
 import uuid
+import backend.analysis.chart_logic as lgc
 from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
 from backend.data_processor.toolparser import *
@@ -131,6 +132,15 @@ class Controller:
         view = self.view.get_page(Analyze)
         view.update_categories_list()
         return None
+    
+    def get_chart_options(self, category: str) -> list:
+        questions = self.get_questions_by_category(category)
+        if not questions:
+            return []
+        else:
+            # Get DataFrame with columns from category
+            
+            return lgc.get_chart_options_single()
     
     # endregion
     
