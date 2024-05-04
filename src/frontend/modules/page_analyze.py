@@ -3,12 +3,15 @@ import customtkinter as ctk
 from tkinter import ttk
 from typing import Type, TYPE_CHECKING
 
+from frontend.modules.window_create_chart import CreateChart
+
 if TYPE_CHECKING:
     from backend.controller import Controller
 
 class Analyze(ctk.CTkFrame):
     def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
+        self.master = master
         self.controller = controller
         self.categories_list = self.controller.get_categories()
         self.charts_list = []
@@ -17,6 +20,8 @@ class Analyze(ctk.CTkFrame):
         self.create_main_layout()
         
         return None
+    
+    #region Layout
     
     def create_widgets(self) -> None:
         # Main setup
@@ -41,7 +46,7 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list)
         self.dropdown_charts.set('Choose Chart')
         
-        self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart')
+        self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', command=self.action_create_chart_button)
         self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report')
         
         return None
@@ -72,9 +77,17 @@ class Analyze(ctk.CTkFrame):
         
         return None
     
+    #endregion
+    
+    #region Eventbindings
+    
     def on_entry_click(self, e) -> None:
         self.text_entry.delete('0.0', 'end')
         return None
+    
+    #endregion
+    
+    #region Update methods
     
     def get_questions_by_category(self, category) -> None:
         self.listbox_questions.delete(0, 'end')
@@ -87,3 +100,13 @@ class Analyze(ctk.CTkFrame):
         self.categories_list = self.controller.get_categories()
         self.dropdown_categories.configure(values=self.categories_list)
         return None
+    
+    #endregion
+    
+    #region Button commands
+    
+    def action_create_chart_button(self) -> None:
+        CreateChart(self.master, self.controller)
+        return None
+    
+    #endregion
