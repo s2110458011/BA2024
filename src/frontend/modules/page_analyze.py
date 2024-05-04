@@ -11,10 +11,10 @@ class Analyze(ctk.CTkFrame):
         super().__init__(master, corner_radius=0, **kwargs)
         self.controller = controller
         self.categories_list = self.controller.get_categories()
-        self.charts_list = self.controller.get_chart_options()
+        self.charts_list = []
         
         self.create_widgets()
-        self.create_layout()
+        self.create_main_layout()
         
         return None
     
@@ -38,8 +38,11 @@ class Analyze(ctk.CTkFrame):
         self.listbox_questions_frame = ctk.CTkFrame(self.settings_frame, corner_radius=0, bg_color='gray20')
         self.listbox_questions = tk.Listbox(self.listbox_questions_frame, background='gray20', borderwidth=0)
         
-        self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280)
+        self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list)
         self.dropdown_charts.set('Choose Chart')
+        
+        self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart')
+        self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report')
         
         return None
     
@@ -50,9 +53,13 @@ class Analyze(ctk.CTkFrame):
         self.listbox_questions_frame.grid_columnconfigure(0, weight=1)
         self.listbox_questions.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
         
+        self.dropdown_charts.grid(row=2, column=0, padx=10, pady=10)
+        self.button_create_chart.grid(row=3, column=0, padx=10, pady=10)
+        self.button_add_to_report.grid(row=4, column=0, padx=10, pady=10)
+        
         return None
     
-    def create_layout(self) -> None:
+    def create_main_layout(self) -> None:
         self.settings_frame.grid(row=0, column=0, sticky='ns', padx=10, pady=10)
         self.grid_rowconfigure(0, weight=1)
         
