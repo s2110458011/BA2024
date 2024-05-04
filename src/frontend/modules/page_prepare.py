@@ -16,19 +16,50 @@ class Prepare(ctk.CTkFrame):
         self.cb_surveys_values = self.controller.get_survey_list()
         
         self.create_widgets()
-        self.create_layout()
+        self.create_main_layout()
         self.check_survey_selection()
     
     def create_widgets(self) -> None:
         self.dropdown_survey_list = ctk.CTkComboBox(self, values=self.cb_surveys_values, command=self.select_survey)
         self.dropdown_survey_list.set('Choose survey')
-        self.button_categorize = ctk.CTkButton(self, text='Categorize', state='disabled', command=self.action_button_categorize)
+        
+        self.create_preprocessing_frame_widgets()
+        self.create_categorizing_frame_widgets()
         
         return None
     
-    def create_layout(self) -> None:
-        self.dropdown_survey_list.grid(row=0, column=0, padx=20, pady=20)
-        self.button_categorize.grid(row=1, column=0, padx=20, pady=20)
+    def create_preprocessing_frame_widgets(self) -> None:
+        self.preprocessing_frame = ctk.CTkFrame(self)
+        self.preprocessing_frame.grid(row=1, column=0, padx=20, pady=(0,5), sticky='nsew')
+        
+        self.label_preprocessing = ctk.CTkLabel(self.preprocessing_frame, text='Preprocessing Data')
+        self.label_preprocessing.grid(row=0, column=0, padx=20)
+        
+        self.button_set_dtypes = ctk.CTkButton(self.preprocessing_frame, text='Set Datatypes')
+        self.button_set_dtypes.grid(row=1, column=0, padx=20, pady=(10,20))
+        self.button_drop_columns = ctk.CTkButton(self.preprocessing_frame, text='Drop Columns')
+        self.button_drop_columns.grid(row=1, column=1, padx=(0,20), pady=(10,20))
+        self.button_drop_rows = ctk.CTkButton(self.preprocessing_frame, text='Drop Rows')
+        self.button_drop_rows.grid(row=1, column=2, padx=(0,20), pady=(10,20))
+        
+        return None
+    
+    def create_categorizing_frame_widgets(self) -> None:
+        self.categorizing_frame = ctk.CTkFrame(self)
+        self.categorizing_frame.grid(row=2, column=0, padx=20, pady=5, sticky='nsew')
+        
+        self.label_categorizing = ctk.CTkLabel(self.categorizing_frame, text='Categorizing Questions')
+        self.label_categorizing.grid(row=0, column=0, padx=20)
+        
+        self.button_categorize = ctk.CTkButton(self.categorizing_frame, text='Categorize', state='disabled', command=self.action_button_categorize)
+        self.button_categorize.grid(row=1, column=0, padx=20, pady=(10,20))
+        
+        return None
+    
+    def create_main_layout(self) -> None:
+        self.grid_columnconfigure(0, weight=1)
+        self.dropdown_survey_list.grid(row=0, column=0, padx=20, pady=20, sticky='w')
+        
         return None
     
     def action_button_categorize(self) -> None:
