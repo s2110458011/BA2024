@@ -42,9 +42,11 @@ class Report(ctk.CTkFrame):
         return None
     
     def create_preview_widget(self) -> None:
-        preview_frame = ctk.CTkScrollableFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
-        preview_frame.grid(row=0, column=0, sticky='nsew')
+        self.preview_frame = ctk.CTkScrollableFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
+        self.preview_frame.grid(row=0, column=0, sticky='nsew')
         self.right_side_frame.grid_rowconfigure(0, weight=1)
+        
+        # Place preview labels
         
         preview_buttons_frame = ctk.CTkFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
         preview_buttons_frame.grid(row=1, column=0, sticky='nsew')
@@ -69,9 +71,9 @@ class Report(ctk.CTkFrame):
     def create_options_widget(self) -> None:
         label_options = ctk.CTkLabel(self.left_side_frame, text='Add Header', anchor='w')
         label_options.grid(row=0, column=0, columnspan=2, padx=(20,0), pady=(20,0), sticky='ew')
-        text_entry_header = ctk.CTkEntry(self.left_side_frame, width=400)
-        text_entry_header.grid(row=1, column=0, padx=(20,0), pady=(10,0), sticky='w')
-        button_add_header = ctk.CTkButton(self.left_side_frame, text='Add Header')
+        self.text_entry_header = ctk.CTkEntry(self.left_side_frame, width=400)
+        self.text_entry_header.grid(row=1, column=0, padx=(20,0), pady=(10,0), sticky='w')
+        button_add_header = ctk.CTkButton(self.left_side_frame, text='Add Header', command=self.create_new_heading_label)
         button_add_header.grid(row=1, column=1, padx=(0,20), pady=(10,0), sticky='w')
         
         frame_items_list = ctk.CTkFrame(self.left_side_frame, corner_radius=0, fg_color='#1E1E1E')
@@ -89,16 +91,14 @@ class Report(ctk.CTkFrame):
     
     #region Button commands
     
-    def create_new_heading_label(self) -> ctk.CTkLabel:
-        
-        pass
+    def create_new_heading_label(self) -> None:
+        label_text = self.text_entry_header.get()
+        self.text_entry_header.delete(0, 'end')
+        self.add_label_to_list(label_text)
+        None
     
     def create_new_report_item_label(self) -> ctk.CTkLabel:
         pass
-    
-    def add_label_to_list(self, preview_item: ctk.CTkLabel) -> None:
-        self.labels_list_preview.append(preview_item)
-        return None
     
     def preview_report(self) -> None:
         
@@ -109,5 +109,30 @@ class Report(ctk.CTkFrame):
     
     #region Helper functions
     
+    def add_label_to_list(self, preview_item: str) -> None:
+        self.labels_list_preview.append(preview_item)
+        self.remove_preview_labels()
+        self.place_preview_labels()
+        return None
+    
+    def remove_preview_labels(self) -> None:
+        for item in self.preview_frame.winfo_children():
+            item.destroy()
+        return None
+    
+    def place_preview_labels(self) -> None:
+        
+        for idx, item in enumerate(self.labels_list_preview):
+            
+            new_label = ctk.CTkLabel(self.preview_frame, text=item, width=50)
+            new_label.grid(row=idx, column=0, padx=10, pady=20)
+            #new_label.bind('<Button-1>', self.add_border)
+        
+        return None
+    
+    def add_border(self, event) -> None:
+        # TODO get it working
+        event.widget.configure(fg_color='gray')
+        return None
     
     #endregion
