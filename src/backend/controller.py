@@ -111,6 +111,10 @@ class Controller:
         view.set_combobox_selected_value()
         return None
     
+    def get_responses_to_question(self, question) -> list:
+        survey = self.get_selected_survey()
+        return survey.get_responses_to_question(question)
+    
     # endregion
     
     # region AnalysisController

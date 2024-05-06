@@ -4,6 +4,7 @@ from tkinter import ttk
 from typing import Type, TYPE_CHECKING
 
 from frontend.modules.window_categorize import Categorize
+from frontend.modules.window_datatypes import AssignDatatypes
 
 if TYPE_CHECKING:
     from backend.controller import Controller
@@ -18,6 +19,8 @@ class Prepare(ctk.CTkFrame):
         self.create_widgets()
         self.create_main_layout()
         self.check_survey_selection()
+    
+    #region Layout
     
     def create_widgets(self) -> None:
         self.dropdown_survey_list = ctk.CTkComboBox(self, values=self.cb_surveys_values, command=self.select_survey)
@@ -35,7 +38,7 @@ class Prepare(ctk.CTkFrame):
         self.label_preprocessing = ctk.CTkLabel(self.preprocessing_frame, text='Preprocessing Data')
         self.label_preprocessing.grid(row=0, column=0, padx=20)
         
-        self.button_set_dtypes = ctk.CTkButton(self.preprocessing_frame, text='Set Datatypes')
+        self.button_set_dtypes = ctk.CTkButton(self.preprocessing_frame, text='Set Datatypes', command=self.action_button_datatypes)
         self.button_set_dtypes.grid(row=1, column=0, padx=20, pady=(10,20))
         self.button_drop_columns = ctk.CTkButton(self.preprocessing_frame, text='Drop Columns')
         self.button_drop_columns.grid(row=1, column=1, padx=(0,20), pady=(10,20))
@@ -62,9 +65,19 @@ class Prepare(ctk.CTkFrame):
         
         return None
     
+    #endregion Layout
+    
+    #region Action commands
+    
     def action_button_categorize(self) -> None:
         Categorize(self.master, self.controller)
         return None
+    
+    def action_button_datatypes(self) -> None:
+        AssignDatatypes(self.master, self.controller)
+        return None
+    
+    #endregion
     
     def update_survey_list(self) -> None:
         """When a new survey is loaded the combobox in 'Prepare' is updated to include the newly loaded survey.

@@ -64,3 +64,6 @@ class Survey():
         category_columns = self.categorized_questions[category]
         df = cl.extract_columns_by_name(category_columns)
         return df
+    
+    def get_responses_to_question(self, question: str):
+        return self.raw_data[question]
