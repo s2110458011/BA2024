@@ -5,8 +5,8 @@ from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
 from backend.data_processor.toolparser import *
 from backend.model.survey import Survey
-from frontend.modules.page_prepare import Prepare
-from frontend.modules.page_analyze import Analyze
+from frontend.pages.page_prepare import Prepare
+from frontend.pages.page_analyze import Analyze
 
 """ from typing import Type, TYPE_CHECKING
 
@@ -24,7 +24,7 @@ class Controller:
     def exit(self) -> None:
         self.view.destroy()
     
-    def add_survey_to_library(self, survey_name: str, data: pd.DataFrame):
+    def add_survey_to_library(self, survey_name: str, data: pd.DataFrame) -> str:
         id = str(uuid.uuid4())
         survey = Survey(id, survey_name, data)
         self.model.add_survey(id, survey)
@@ -36,7 +36,7 @@ class Controller:
     def get_survey_data_raw(self, id: int) -> pd.DataFrame:
         return self.model.get_survey(id).get_data()
     
-    def load_data_from_file(self, path):
+    def load_data_from_file(self, path) -> pd.DataFrame:
         return load_data_from_csv(path)
     
     def set_current_survey_selection(self, id: str) -> None:
@@ -58,11 +58,13 @@ class Controller:
             return None
     
     # region Prepare
-    def add_question_to_category(self, category, question):
+    def add_question_to_category(self, category, question) -> None:
         survey = self.get_selected_survey()
         survey.add_question_to_category(category, question)
+        return None
         
     def get_questions_to_categorize(self):
+        #TODO type hint return type
         survey = self.get_selected_survey()
         if survey.not_categorized_questions is None:
             questions = extract_features(survey.get_data())

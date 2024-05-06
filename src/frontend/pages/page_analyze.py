@@ -3,7 +3,7 @@ import customtkinter as ctk
 from tkinter import ttk
 from typing import Type, TYPE_CHECKING
 
-from frontend.modules.window_create_chart import CreateChart
+from frontend.windows.window_create_chart import CreateChart
 
 if TYPE_CHECKING:
     from backend.controller import Controller

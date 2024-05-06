@@ -3,8 +3,8 @@ import customtkinter as ctk
 from tkinter import ttk
 from typing import Type, TYPE_CHECKING
 
-from frontend.modules.window_categorize import Categorize
-from frontend.modules.window_datatypes import AssignDatatypes
+from frontend.windows.window_categorize import Categorize
+from frontend.windows.window_datatypes import AssignDatatypes
 
 if TYPE_CHECKING:
     from backend.controller import Controller

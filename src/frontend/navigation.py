@@ -1,11 +1,11 @@
 import tkinter as ttk
 import customtkinter as ctk
-from frontend.modules.page_load import Load
-from frontend.modules.page_prepare import Prepare
-from frontend.modules.page_analyze import Analyze
-from frontend.modules.page_print import Print
-from frontend.modules.page_save import Save
-from frontend.modules.page_report import Report
+from frontend.pages.page_load import Load
+from frontend.pages.page_prepare import Prepare
+from frontend.pages.page_analyze import Analyze
+from frontend.pages.page_print import Print
+from frontend.pages.page_save import Save
+from frontend.pages.page_report import Report
 
 class Navigation(ctk.CTkFrame):
     def __init__(self, master, navigation, controller, **kwargs):

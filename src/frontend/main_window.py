@@ -2,13 +2,13 @@ from tkinter import *
 import customtkinter as ctk
 
 from frontend.navigation import Navigation
-from frontend.homepage import HomePage
-from frontend.modules.page_load import Load
-from frontend.modules.page_prepare import Prepare
-from frontend.modules.page_analyze import Analyze
-from frontend.modules.page_report import Report
-from frontend.modules.page_print import Print
-from frontend.modules.page_save import Save
+from frontend.pages.homepage import HomePage
+from frontend.pages.page_load import Load
+from frontend.pages.page_prepare import Prepare
+from frontend.pages.page_analyze import Analyze
+from frontend.pages.page_report import Report
+from frontend.pages.page_print import Print
+from frontend.pages.page_save import Save
 
 ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("green")
