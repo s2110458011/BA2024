@@ -36,7 +36,7 @@ class AssignDatatypes(ctk.CTkToplevel):
         self.right_frame = ctk.CTkFrame(self, corner_radius=0)
         self.dropdown_datatypes = ctk.CTkComboBox(self.right_frame, values=self.datatypes_list)
         self.dropdown_datatypes.set('Choose datatype')
-        self.button_apply = ctk.CTkButton(self.right_frame, text='Apply')
+        self.button_apply = ctk.CTkButton(self.right_frame, text='Apply', command=self.action_button_apply)
         self.button_drop_column = ctk.CTkButton(self.right_frame, text='Drop Column')
         
         return None
@@ -94,10 +94,15 @@ class AssignDatatypes(ctk.CTkToplevel):
     #region Action commands
     
     def on_item_click(self, event) -> None:
-        current_index = self.listbox_questions.curselection()
-        if current_index:
-            question = self.listbox_questions.get(current_index)
+        question = self.get_selected_question()
+        if question is not None:
             self.fill_values(question)
+        return None
+    
+    def action_button_apply(self) -> None:
+        selected_datatype = self.dropdown_datatypes.get()
+        question = self.get_selected_question()
+        self.controller.set_datatype_by_question(question, selected_datatype)
         return None
     
     #endregion
@@ -115,5 +120,13 @@ class AssignDatatypes(ctk.CTkToplevel):
         responses = self.controller.get_responses_to_question(question)
         for idx, row in enumerate(responses):
             self.listbox_values.insert(idx, row)
+    
+    def get_selected_question(self) -> str | None:
+        current_index = self.listbox_questions.curselection()
+        if current_index:
+            question = self.listbox_questions.get(current_index)
+            return question
+        else:
+            return None
     
     #endregion

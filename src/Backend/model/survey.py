@@ -6,11 +6,37 @@ class Survey():
         self.id = id
         self.name = name
         self.raw_data = data
+        self.prepared_data = data
         self.categorized_questions = {}
         self.not_categorized_questions = None
     
+    #region getter & setter
+    
     def get_data(self) -> pd.DataFrame:
         return self.raw_data
+    
+    def set_datatype_by_question(self, question, datatype) -> None:
+        # insert if -> check if conversion to int/float = parse
+        self.prepared_data[question] = self.prepared_data[question].astype(datatype)
+        print(self.prepared_data[question].dtype)
+        return None
+    
+    def set_uncategorized_questions(self, free_questions: list) -> None:
+        self.not_categorized_questions = free_questions
+        return None
+    
+    def get_uncategorized_questions(self) -> list:
+        return self.not_categorized_questions
+    
+    def get_data_from_category(self, category: str) -> pd.DataFrame:
+        category_columns = self.categorized_questions[category]
+        df = cl.extract_columns_by_name(category_columns)
+        return df
+    
+    def get_responses_to_question(self, question: str):
+        return self.raw_data[question]
+    
+    #endregion
     
     def describe_input_data(self) -> pd.DataFrame:
         return self.raw_data.describe()
@@ -41,13 +67,6 @@ class Survey():
         df['completion'] = (df.notnull().sum(axis=1) / num_cols) * 100
         return df
     
-    def get_uncategorized_questions(self) -> list:
-        return self.not_categorized_questions
-    
-    def set_uncategorized_questions(self, free_questions: list) -> None:
-        self.not_categorized_questions = free_questions
-        return None
-    
     def add_question_to_category(self, category: str, question: str) -> None:
         if category not in self.categorized_questions:
             self.categorized_questions[category] = [question]
@@ -60,10 +79,3 @@ class Survey():
             self.categorized_questions[category] = []
         return None
     
-    def get_data_from_category(self, category: str) -> pd.DataFrame:
-        category_columns = self.categorized_questions[category]
-        df = cl.extract_columns_by_name(category_columns)
-        return df
-    
-    def get_responses_to_question(self, question: str):
-        return self.raw_data[question]

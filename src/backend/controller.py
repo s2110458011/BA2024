@@ -117,6 +117,11 @@ class Controller:
         survey = self.get_selected_survey()
         return survey.get_responses_to_question(question)
     
+    def set_datatype_by_question(self, question: str, datatype: str) -> None:
+        survey = self.get_selected_survey()
+        survey.set_datatype_by_question(question, datatype)
+        return None
+    
     # endregion
     
     # region AnalysisController
