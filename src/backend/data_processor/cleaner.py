@@ -29,7 +29,7 @@ def set_index_column_by_name(data: pd.DataFrame, index_column: str) -> pd.DataFr
 def drop_time_component(data: pd.DataFrame, column: str) -> pd.DataFrame:
     if column == 'index':
         try:
-            data.index = pd.to_datetime(data.index)
+            data.index = pd.to_datetime(data.index, dayfirst=True)
             data.index = data.index.date
         except ValueError:
             #TODO catch error
