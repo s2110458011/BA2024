@@ -1,6 +1,8 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import ttk
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from typing import Type, TYPE_CHECKING
 
 from frontend.windows.window_create_chart import CreateChart
@@ -27,7 +29,6 @@ class Analyze(ctk.CTkFrame):
         # Main setup
         self.settings_frame = ctk.CTkFrame(self, width=300, corner_radius=0)
         self.display_frame = ctk.CTkFrame(self, corner_radius=0)
-        self.chart_canvas = ctk.CTkCanvas(self.display_frame)
         self.text_entry = ctk.CTkTextbox(self.display_frame, corner_radius=0)
         self.text_entry.insert('0.0', 'Enter chart description here...')
         self.text_entry.bind('<FocusIn>', command=self.on_entry_click)
@@ -44,7 +45,7 @@ class Analyze(ctk.CTkFrame):
         self.listbox_questions = tk.Listbox(self.listbox_questions_frame, selectmode='browse', background='gray20', borderwidth=0)
         self.listbox_questions.bind('<<ListboxSelect>>', self.on_click_question_list)
         
-        self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list)
+        self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list, command=self.display_chart)
         self.dropdown_charts.set('Choose Chart')
         
         self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', command=self.action_create_chart_button)
@@ -71,7 +72,6 @@ class Analyze(ctk.CTkFrame):
         
         self.display_frame.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self.grid_columnconfigure(1, weight=1)
-        self.chart_canvas.grid(row=0, column=0, sticky='nsew', pady=(0,10))
         self.text_entry.grid(row=1, column=0, sticky='ew')
         self.display_frame.grid_columnconfigure(0, weight=1)
         self.display_frame.grid_rowconfigure(0, weight=1)
@@ -88,10 +88,8 @@ class Analyze(ctk.CTkFrame):
     
     def on_click_question_list(self, e) -> None:
         self.dropdown_categories.configure(values=['Choose Chart'])
-        selected_idx = self.listbox_questions.curselection()
-        if selected_idx:
-            selected_question = self.listbox_questions.get(selected_idx)
-            self.update_chart_options_list(selected_question)
+        selected_question = self.get_selected_question()
+        self.update_chart_options_list(selected_question)
         return None
     
     #endregion
@@ -113,6 +111,24 @@ class Analyze(ctk.CTkFrame):
     def update_chart_options_list(self, question) -> None:
         chart_options = self.controller.get_chart_options_by_question(question)
         self.dropdown_charts.configure(values=chart_options)
+        return None
+    
+    def display_chart(self, chart_type) -> None:
+        question = self.get_selected_question()
+        fig = self.controller.get_figure(chart_type, question)
+        canvas = FigureCanvasTkAgg(fig, self.display_frame)
+        canvas.get_tk_widget().grid(row=0, column=0, sticky='nsew')
+        canvas.draw()
+        return None
+    
+    #endregion
+    
+    #region Utils
+    
+    def get_selected_question(self) -> str | None:
+        selected_idx = self.listbox_questions.curselection()
+        if selected_idx:
+            return self.listbox_questions.get(selected_idx)
         return None
     
     #endregion

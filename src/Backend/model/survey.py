@@ -1,5 +1,6 @@
 import pandas as pd
 import backend.data_processor.cleaner as cl
+from matplotlib.figure import Figure
 from backend.analysis.chart_logic import ChartLogic
 
 class Survey():
@@ -88,3 +89,7 @@ class Survey():
             self.categorized_questions[category] = []
         return None
     
+    def create_chart(self, chart_type, question) -> Figure:
+        match chart_type:
+            case 'line':
+                return self.chart_logic.create_simple_line_chart(question)

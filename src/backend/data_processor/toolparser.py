@@ -11,7 +11,7 @@ def load_data_from_csv(file: str) -> pd.DataFrame:
         pd.DataFrame: Dataframe with survey data. Columns headers are the questions
     """
 
-    df = pd.read_csv(file, header=0, parse_dates=[0])
+    df = pd.read_csv(file, header=0, parse_dates=[0], dayfirst=True)
     df = infer_datatypes(df)
     #df = df.drop(columns='Zeitstempel')
     return df

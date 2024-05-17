@@ -2,6 +2,7 @@ import pandas as pd
 import uuid
 import backend.analysis.chart_logic as lgc
 import backend.data_processor.toolparser as tp
+from matplotlib.figure import Figure
 from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
 from backend.model.survey import Survey
@@ -154,6 +155,10 @@ class Controller:
     def get_chart_options_by_question(self, question: str) -> list:
         survey = self.get_selected_survey()
         return survey.get_chart_options_by_question(question)
+    
+    def get_figure(self, chart_type, question) -> Figure:
+        survey = self.get_selected_survey()
+        return survey.create_chart(chart_type, question)
     
     # endregion
     
