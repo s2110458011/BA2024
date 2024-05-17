@@ -1,5 +1,6 @@
 import pandas as pd
 import backend.data_processor.cleaner as cl
+from backend.analysis.chart_logic import ChartLogic
 
 class Survey():
     def __init__(self, id:int, name: str, data: pd.DataFrame) -> None:
@@ -9,6 +10,8 @@ class Survey():
         self.prepared_data = data
         self.categorized_questions = {}
         self.not_categorized_questions = None
+        self.chart_logic = ChartLogic(data)
+        self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
     
     #region getter & setter
     
@@ -36,7 +39,13 @@ class Survey():
     def get_responses_to_question(self, question: str):
         return self.raw_data[question]
     
+    def get_chart_options_by_question(self, question: str) -> list:
+        return self.simple_charts_by_question[question]
+    
     #endregion
+    
+    def questions_categorized(self) -> bool:
+        return self.categorized_questions
     
     def describe_input_data(self) -> pd.DataFrame:
         return self.raw_data.describe()

@@ -1,9 +1,9 @@
 import pandas as pd
 import uuid
 import backend.analysis.chart_logic as lgc
+import backend.data_processor.toolparser as tp
 from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
-from backend.data_processor.toolparser import *
 from backend.model.survey import Survey
 from frontend.pages.page_prepare import Prepare
 from frontend.pages.page_analyze import Analyze
@@ -37,10 +37,11 @@ class Controller:
         return self.model.get_survey(id).get_data()
     
     def load_data_from_file(self, path) -> pd.DataFrame:
-        return load_data_from_csv(path)
+        return tp.load_data_from_csv(path)
     
     def set_current_survey_selection(self, id: str) -> None:
         self.model.set_current_selection(id)
+        self.update_category_list()
         return None
     
     def check_survey_selected(self) -> bool:
@@ -67,7 +68,7 @@ class Controller:
         #TODO type hint return type
         survey = self.get_selected_survey()
         if survey.not_categorized_questions is None:
-            questions = extract_features(survey.get_data())
+            questions = tp.extract_features(survey.get_data())
         else:
             questions = survey.get_uncategorized_questions()
         return questions
@@ -127,14 +128,20 @@ class Controller:
     # region AnalysisController
     def get_questions_by_category(self, category: str) -> list:
         survey = self.get_selected_survey()
-        category_dict = survey.categorized_questions
-        return category_dict[category]
+        if category == 'All':
+            return self.get_questions_to_categorize()
+        else:
+            category_dict = survey.categorized_questions
+            return category_dict[category]
     
     def get_categories(self) -> list:
         survey = self.get_selected_survey()
         if survey:
-            category_dict = survey.categorized_questions
-            categories = list(category_dict.keys())
+            if survey.questions_categorized():
+                category_dict = survey.categorized_questions
+                categories = ['All'] + list(category_dict.keys())
+            else:
+                categories = ['All']
         else:
             categories = []
         return categories
@@ -144,14 +151,9 @@ class Controller:
         view.update_categories_list()
         return None
     
-    def get_chart_options(self, category: str) -> list:
-        questions = self.get_questions_by_category(category)
-        if not questions:
-            return []
-        else:
-            # Get DataFrame with columns from category
-            
-            return lgc.get_chart_options_single()
+    def get_chart_options_by_question(self, question: str) -> list:
+        survey = self.get_selected_survey()
+        return survey.get_chart_options_by_question(question)
     
     # endregion
     

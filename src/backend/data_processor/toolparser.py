@@ -11,8 +11,28 @@ def load_data_from_csv(file: str) -> pd.DataFrame:
         pd.DataFrame: Dataframe with survey data. Columns headers are the questions
     """
 
-    df = pd.read_csv(file, header=0)
+    df = pd.read_csv(file, header=0, parse_dates=[0])
+    df = infer_datatypes(df)
     #df = df.drop(columns='Zeitstempel')
+    return df
+
+def infer_datatypes(df: pd.DataFrame) -> pd.DataFrame:
+    for column_name, column in df.items():
+        print(column.dtype)
+        idx = 0
+        if column.dtype =='object':
+            sample_value = column.iloc[idx]
+            while sample_value != sample_value:
+                idx += 1
+                sample_value = column.iloc[idx]
+            if isinstance(sample_value, str):
+                df[column_name]= df[column_name].astype('category')
+            elif isinstance(sample_value, int):
+                df[column_name]= df[column_name].astype('int32')
+            elif isinstance(sample_value, float):
+                df[column_name]= df[column_name].astype('float')
+
+            print(df.dtypes)
     return df
 
 def extract_features(df: pd.DataFrame) -> np.array:

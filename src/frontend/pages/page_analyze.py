@@ -41,7 +41,8 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_categories = ctk.CTkComboBox(self.settings_frame, width=280, values=self.categories_list, command=self.get_questions_by_category)
         self.dropdown_categories.set('Choose Category')
         self.listbox_questions_frame = ctk.CTkFrame(self.settings_frame, corner_radius=0, bg_color='gray20')
-        self.listbox_questions = tk.Listbox(self.listbox_questions_frame, background='gray20', borderwidth=0)
+        self.listbox_questions = tk.Listbox(self.listbox_questions_frame, selectmode='browse', background='gray20', borderwidth=0)
+        self.listbox_questions.bind('<<ListboxSelect>>', self.on_click_question_list)
         
         self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list)
         self.dropdown_charts.set('Choose Chart')
@@ -85,6 +86,14 @@ class Analyze(ctk.CTkFrame):
         self.text_entry.delete('0.0', 'end')
         return None
     
+    def on_click_question_list(self, e) -> None:
+        self.dropdown_categories.configure(values=['Choose Chart'])
+        selected_idx = self.listbox_questions.curselection()
+        if selected_idx:
+            selected_question = self.listbox_questions.get(selected_idx)
+            self.update_chart_options_list(selected_question)
+        return None
+    
     #endregion
     
     #region Update methods
@@ -99,6 +108,11 @@ class Analyze(ctk.CTkFrame):
     def update_categories_list(self) -> None:
         self.categories_list = self.controller.get_categories()
         self.dropdown_categories.configure(values=self.categories_list)
+        return None
+    
+    def update_chart_options_list(self, question) -> None:
+        chart_options = self.controller.get_chart_options_by_question(question)
+        self.dropdown_charts.configure(values=chart_options)
         return None
     
     #endregion

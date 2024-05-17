@@ -110,6 +110,7 @@ class Load(ctk.CTkFrame):
             id = self.controller.add_survey_to_library(survey_name, data)
             self.survey_list.insert(parent='', index='end', iid=id, text='', values=(survey_name, file_path))
             self.controller.update_survey_list()
+        return None
     
     def display_preview(self, e) -> None:
         selected_id = self.survey_list.focus()
@@ -118,6 +119,7 @@ class Load(ctk.CTkFrame):
         self.controller.activate_categorize_button()
         self.draw_table(data)
         self.controller.set_cb_survey_list_to_selected_survey()
+        return None
         
     def draw_table(self, dataframe: pd.DataFrame):
         self.data_table.delete(*self.data_table.get_children())
