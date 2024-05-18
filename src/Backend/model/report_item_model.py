@@ -5,9 +5,10 @@ from PIL import Image
 
 
 class ReportItem():
-    def __init__(self, item_number: int, fig: Figure, description: str) -> None:
+    def __init__(self, item_number: int, fig: Figure, short_description: str,  description: str) -> None:
         self.item_number = item_number
         self.fig = fig
+        self.short_description = short_description
         self.description = description
         return None
     

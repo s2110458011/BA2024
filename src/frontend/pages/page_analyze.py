@@ -228,7 +228,12 @@ class Analyze(ctk.CTkFrame):
     
     def action_add_to_report_item_list(self) -> None:
         description_text = self.text_entry_description.get('1.0', 'end')
-        self.controller.add_item_to_report(self.fig, description_text)
+        short_description = self.text_entry_short_description.get()
+        self.text_entry_short_description.delete(0, 'end')
+        if not short_description:
+            tk.messagebox.showerror(title='error', message='A short description must be provided to add the report item.')
+        if not self.controller.add_item_to_report(self.fig, short_description, description_text):
+            tk.messagebox.showerror(title='error', message='Short description must be unique. This is short description already exists.')
         self.controller.update_report_item_list()
         return None
     

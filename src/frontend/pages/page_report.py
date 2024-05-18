@@ -136,6 +136,7 @@ class Report(ctk.CTkFrame):
         return None
     
     def update_report_items_list(self, items_list: list) -> None:
+        self.report_items_list.delete(0, 'end')
         for idx, report_item in enumerate(items_list):
             self.report_items_list.insert(idx, report_item)
         return None

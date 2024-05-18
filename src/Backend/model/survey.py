@@ -16,7 +16,7 @@ class Survey():
         self.chart_logic = ChartLogic(data)
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
         self.next_report_item_number = 1
-        self.report_items = []
+        self.report_items = {}
         
     
     #region getter & setter
@@ -52,7 +52,7 @@ class Survey():
         return self.next_report_item_number
     
     def get_report_items_list(self) -> list:
-        return self.report_items
+        return self.report_items.keys()
     
     #endregion
     
@@ -116,7 +116,9 @@ class Survey():
         self.chart_logic.set_current_question(question)
         return None
     
-    def add_item_to_report(self, item: ReportItem) -> None:
-        self.report_items.append(item)
+    def add_item_to_report_items_list(self, short_description: str,  item: ReportItem) -> bool:
+        if short_description in self.report_items:
+            return False
+        self.report_items[short_description] = item
         self.next_report_item_number += 1
-        return None
+        return True

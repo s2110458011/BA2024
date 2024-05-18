@@ -171,12 +171,13 @@ class Controller:
         survey.set_current_chart_question(question)
         return None
     
-    def add_item_to_report(self, figure: Figure, description: str) -> None:
+    def add_item_to_report(self, figure: Figure, short_description:str, description: str) -> bool:
         survey = self.get_selected_survey()
         item_no = survey.get_next_report_item_number()
-        new_item = ReportItem(item_no, figure, description)
-        survey.add_item_to_report(new_item)
-        return None
+        new_item = ReportItem(item_no, figure, short_description, description)
+        if not survey.add_item_to_report_items_list(short_description, new_item):
+            return False
+        return True
     
     # endregion
     
@@ -184,9 +185,9 @@ class Controller:
     
     def update_report_item_list(self) -> None:
         survey = self.get_selected_survey()
-        report_item_list = survey.get_report_items_list
+        report_item_list = survey.get_report_items_list()
         view = self.view.get_page(Report)
-        
+        view.update_report_items_list(report_item_list)
         return None
     
     # endregion
