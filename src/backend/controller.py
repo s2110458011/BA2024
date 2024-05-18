@@ -160,6 +160,10 @@ class Controller:
         survey = self.get_selected_survey()
         return survey.create_chart(chart_type, question)
     
+    def switch_axes(self) -> Figure:
+        survey = self.get_selected_survey()
+        return survey.switch_axes()
+    
     # endregion
     
     # region Report

@@ -93,3 +93,8 @@ class Survey():
         match chart_type:
             case 'line':
                 return self.chart_logic.create_simple_line_chart(question)
+            case 'bar':
+                return self.chart_logic.create_simple_bar_chart(question)
+    
+    def switch_axes(self) -> Figure:
+        return self.chart_logic.switch_axes_simple_bar_chart()
