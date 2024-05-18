@@ -164,6 +164,11 @@ class Controller:
         survey = self.get_selected_survey()
         return survey.switch_axes()
     
+    def set_current_simple_chart_question(self, question) -> None:
+        survey = self.get_selected_survey()
+        survey.set_current_chart_question(question)
+        return None
+    
     # endregion
     
     # region Report

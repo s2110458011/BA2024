@@ -14,6 +14,7 @@ class ChartLogic():
         self.ax = self.figure.subplots()
         self.chart_simple_x = None
         self.chart_simple_y = 'count'
+        self.current_question = None
         self.chart_data = None
         self.barchart_init_axes = True
         
@@ -25,6 +26,10 @@ class ChartLogic():
         self.charts_per_question_simple = {question: default_value for question in question_list}
         self.create_chart_options_list_per_question()
         return self.charts_per_question_simple
+    
+    def set_current_question(self, question) -> None:
+        self.current_question = question
+        return None
     
     def create_chart_options_list_per_question(self) -> dict:
         for key in self.charts_per_question_simple.keys():
@@ -50,6 +55,8 @@ class ChartLogic():
                 return ['bar', 'line']
     
     def create_simple_line_chart(self, question) -> Figure:
+        self.figure = Figure()
+        self.ax = self.figure.subplots()
         self.chart_data = self.get_data_for_simple_chart(question)
         self.chart_simple_x = question
         self.ax.clear()
@@ -57,6 +64,8 @@ class ChartLogic():
         return self.figure
     
     def create_simple_bar_chart(self, question) -> Figure:
+        self.figure = Figure()
+        self.ax = self.figure.subplots()
         self.chart_data = self.get_data_for_simple_chart(question)
         self.chart_simple_x = question
         self.barchart_init_axes = True
@@ -80,10 +89,20 @@ class ChartLogic():
             self.barchart_init_axes = True
         return self.figure
     
+    def create_simple_pie_chart(self, question) -> Figure:
+        self.figure = Figure()
+        self.ax = self.figure.subplots()
+        self.ax.clear()
+        self.chart_data = self.get_data_for_simple_chart(question)
+        self.ax.pie(self.chart_data[self.chart_simple_y], labels=self.chart_data[question], autopct='%1.1f%%', startangle=140)
+        
+        return self.figure
+    
     def get_data_for_simple_chart(self, question) -> pd.DataFrame:
         data = self.raw_data[question]
         if pd.api.types.is_datetime64_any_dtype(data):
             data = pd.DataFrame(data.dt.date)
         result_df = data.value_counts().sort_index().reset_index()
+        print(result_df)
         return result_df
         

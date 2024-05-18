@@ -95,6 +95,12 @@ class Survey():
                 return self.chart_logic.create_simple_line_chart(question)
             case 'bar':
                 return self.chart_logic.create_simple_bar_chart(question)
+            case 'pie':
+                return self.chart_logic.create_simple_pie_chart(question)
     
     def switch_axes(self) -> Figure:
         return self.chart_logic.switch_axes_simple_bar_chart()
+    
+    def set_current_chart_question(self, question) -> None:
+        self.chart_logic.set_current_question(question)
+        return None

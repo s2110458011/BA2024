@@ -18,6 +18,7 @@ class Analyze(ctk.CTkFrame):
         self.categories_list = self.controller.get_categories()
         self.charts_list = []
         self.canvas = None
+        self.fig = None
         
         self.create_widgets()
         self.create_main_layout()
@@ -28,7 +29,7 @@ class Analyze(ctk.CTkFrame):
     
     def create_widgets(self) -> None:
         # Main setup
-        self.settings_frame = ctk.CTkFrame(self, width=300, corner_radius=0)
+        self.settings_frame = ctk.CTkScrollableFrame(self, width=300, corner_radius=0)
         self.display_frame = ctk.CTkFrame(self, corner_radius=0)
         self.text_entry = ctk.CTkTextbox(self.display_frame, corner_radius=0)
         self.text_entry.insert('0.0', 'Enter chart description here...')
@@ -109,9 +110,15 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def on_click_question_list(self, e) -> None:
-        self.dropdown_categories.configure(values=['Choose Chart'])
+        #self.dropdown_charts.set('Choose Chart')
         selected_question = self.get_selected_question()
+        self.controller.set_current_simple_chart_question(selected_question)
+        chart_type = self.dropdown_charts.get()
         self.update_chart_options_list(selected_question)
+        if chart_type not in self.charts_list:
+            self.dropdown_charts.set('Choose Chart')
+        else:
+            self.action_create_chart(chart_type)
         return None
     
     #endregion
@@ -131,8 +138,8 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def update_chart_options_list(self, question) -> None:
-        chart_options = self.controller.get_chart_options_by_question(question)
-        self.dropdown_charts.configure(values=chart_options)
+        self.charts_list = self.controller.get_chart_options_by_question(question)
+        self.dropdown_charts.configure(values=self.charts_list)
         return None
     
     def display_chart(self) -> None:
@@ -189,6 +196,7 @@ class Analyze(ctk.CTkFrame):
     
     def action_create_chart(self, chart_type) -> None:
         question = self.get_selected_question()
+        self.fig = None
         self.fig = self.controller.get_figure(chart_type, question)
         self.display_chart()
         return None
