@@ -79,9 +79,10 @@ class Report(ctk.CTkFrame):
         frame_items_list = ctk.CTkFrame(self.left_side_frame, corner_radius=0, fg_color='#1E1E1E')
         frame_items_list.grid(row=2, column=0, padx=20, pady=20, sticky='w')
         label_report_items = ctk.CTkLabel(frame_items_list, text='Report items', width=380, anchor='w')
+        label_report_items.cget('font').configure(underline=True)
         label_report_items.grid(row=0, column=0, padx=10, sticky='ew')
         self.report_items_list = tk.Listbox(frame_items_list, borderwidth=0)
-        self.report_items_list.grid(row=1, column=0, padx=10, pady=10)
+        self.report_items_list.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
         button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item')
         button_add_item.grid(row=2, column=1, pady=50, sticky='nw')
         
