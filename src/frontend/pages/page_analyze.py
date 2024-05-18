@@ -31,9 +31,9 @@ class Analyze(ctk.CTkFrame):
         # Main setup
         self.settings_frame = ctk.CTkScrollableFrame(self, width=300, corner_radius=0)
         self.display_frame = ctk.CTkFrame(self, corner_radius=0)
-        self.text_entry = ctk.CTkTextbox(self.display_frame, corner_radius=0)
-        self.text_entry.insert('0.0', 'Enter chart description here...')
-        self.text_entry.bind('<FocusIn>', command=self.on_entry_click)
+        self.text_entry_description = ctk.CTkTextbox(self.display_frame, corner_radius=0)
+        self.text_entry_description.insert('0.0', 'Enter chart description here...')
+        self.text_entry_description.bind('<FocusIn>', command=self.on_entry_click)
         
         self.create_settings_widget()
         self.create_settings_layout()
@@ -59,8 +59,9 @@ class Analyze(ctk.CTkFrame):
         self.button_update_chart = ctk.CTkButton(self.chart_settings_frame, text='Update', command=self.action_update_chart_labels_font)
         self.button_switch_axes = ctk.CTkButton(self.chart_settings_frame, text='Switch axes', command=self.action_switch_axes)
         
+        self.text_entry_short_description = ctk.CTkEntry(self.settings_frame, placeholder_text='Short description')
         self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', command=self.action_create_chart_button)
-        self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report')
+        self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report', command=self.action_add_to_report_item_list)
         
         return None
     
@@ -84,8 +85,10 @@ class Analyze(ctk.CTkFrame):
         self.button_update_chart.grid(row=3, column=0, pady=10)
         self.button_switch_axes.grid(row=3, column=1, padx=10, pady=10)
         
-        self.button_create_chart.grid(row=4, column=0, padx=10, pady=10)
+        self.text_entry_short_description.grid(row=4, column=0, padx=10, pady=10, sticky='nsew')
         self.button_add_to_report.grid(row=5, column=0, padx=10, pady=10)
+        self.button_create_chart.grid(row=6, column=0, padx=10, pady=10)
+        
         
         return None
     
@@ -95,7 +98,7 @@ class Analyze(ctk.CTkFrame):
         
         self.display_frame.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self.grid_columnconfigure(1, weight=1)
-        self.text_entry.grid(row=1, column=0, sticky='ew')
+        self.text_entry_description.grid(row=1, column=0, sticky='ew')
         self.display_frame.grid_columnconfigure(0, weight=1)
         self.display_frame.grid_rowconfigure(0, weight=1)
         
@@ -106,7 +109,7 @@ class Analyze(ctk.CTkFrame):
     #region Eventbindings
     
     def on_entry_click(self, e) -> None:
-        self.text_entry.delete('0.0', 'end')
+        self.text_entry_description.delete('0.0', 'end')
         return None
     
     def on_click_question_list(self, e) -> None:
@@ -206,11 +209,14 @@ class Analyze(ctk.CTkFrame):
         font_xlabel_value = self.font_xlable.get()
         font_ylabel_value = self.font_ylable.get()
         title_str = self.text_entry_title.get()
-        self.text_entry_title.delete(0, 'end')
+        if title_str:
+            self.text_entry_title.delete(0, 'end')
         xlable_str = self.text_entry_xlable.get()
-        self.text_entry_xlable.delete(0, 'end')
+        if xlable_str:
+            self.text_entry_xlable.delete(0, 'end')
         ylable_str = self.text_entry_ylable.get()
-        self.text_entry_ylable.delete(0, 'end')
+        if ylable_str:
+            self.text_entry_ylable.delete(0, 'end')
         self.set_chart_labels(font_title_value, font_xlabel_value, font_ylabel_value, title_str, xlable_str, ylable_str)
         self.canvas.draw()
         return None
@@ -218,6 +224,12 @@ class Analyze(ctk.CTkFrame):
     def action_switch_axes(self) -> None:
         self.fig = self.controller.switch_axes()
         self.display_chart()
+        return None
+    
+    def action_add_to_report_item_list(self) -> None:
+        description_text = self.text_entry_description.get('1.0', 'end')
+        self.controller.add_item_to_report(self.fig, description_text)
+        self.controller.update_report_item_list()
         return None
     
     #endregion

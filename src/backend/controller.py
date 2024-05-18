@@ -6,8 +6,10 @@ from matplotlib.figure import Figure
 from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
 from backend.model.survey import Survey
+from backend.model.report_item_model import ReportItem
 from frontend.pages.page_prepare import Prepare
 from frontend.pages.page_analyze import Analyze
+from frontend.pages.page_report import Report
 
 """ from typing import Type, TYPE_CHECKING
 
@@ -169,9 +171,22 @@ class Controller:
         survey.set_current_chart_question(question)
         return None
     
+    def add_item_to_report(self, figure: Figure, description: str) -> None:
+        survey = self.get_selected_survey()
+        item_no = survey.get_next_report_item_number()
+        new_item = ReportItem(item_no, figure, description)
+        survey.add_item_to_report(new_item)
+        return None
+    
     # endregion
     
     # region Report
     
+    def update_report_item_list(self) -> None:
+        survey = self.get_selected_survey()
+        report_item_list = survey.get_report_items_list
+        view = self.view.get_page(Report)
+        
+        return None
     
     # endregion

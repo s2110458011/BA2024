@@ -3,15 +3,12 @@ import numpy as np
 import seaborn as sns
 import backend.data_processor.toolparser as tp
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 
 class ChartLogic():
     def __init__(self, raw_data: pd.DataFrame) -> None:
         self.raw_data = raw_data
         self.charts_per_question_simple = self.initialize_simple_chart_options()
         sns.set_theme(style='darkgrid')
-        self.figure = Figure()
-        self.ax = self.figure.subplots()
         self.chart_simple_x = None
         self.chart_simple_y = 'count'
         self.current_question = None

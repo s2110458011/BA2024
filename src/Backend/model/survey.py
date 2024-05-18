@@ -2,6 +2,8 @@ import pandas as pd
 import backend.data_processor.cleaner as cl
 from matplotlib.figure import Figure
 from backend.analysis.chart_logic import ChartLogic
+from backend.model.report_model import PDFReport
+from backend.model.report_item_model import ReportItem
 
 class Survey():
     def __init__(self, id:int, name: str, data: pd.DataFrame) -> None:
@@ -13,6 +15,9 @@ class Survey():
         self.not_categorized_questions = None
         self.chart_logic = ChartLogic(data)
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
+        self.next_report_item_number = 1
+        self.report_items = []
+        
     
     #region getter & setter
     
@@ -42,6 +47,12 @@ class Survey():
     
     def get_chart_options_by_question(self, question: str) -> list:
         return self.simple_charts_by_question[question]
+    
+    def get_next_report_item_number(self) -> int:
+        return self.next_report_item_number
+    
+    def get_report_items_list(self) -> list:
+        return self.report_items
     
     #endregion
     
@@ -103,4 +114,9 @@ class Survey():
     
     def set_current_chart_question(self, question) -> None:
         self.chart_logic.set_current_question(question)
+        return None
+    
+    def add_item_to_report(self, item: ReportItem) -> None:
+        self.report_items.append(item)
+        self.next_report_item_number += 1
         return None

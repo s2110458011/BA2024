@@ -80,8 +80,8 @@ class Report(ctk.CTkFrame):
         frame_items_list.grid(row=2, column=0, padx=20, pady=20, sticky='w')
         label_report_items = ctk.CTkLabel(frame_items_list, text='Report items', width=380, anchor='w')
         label_report_items.grid(row=0, column=0, padx=10, sticky='ew')
-        report_items_list = tk.Listbox(frame_items_list, borderwidth=0)
-        report_items_list.grid(row=1, column=0, padx=10, pady=10)
+        self.report_items_list = tk.Listbox(frame_items_list, borderwidth=0)
+        self.report_items_list.grid(row=1, column=0, padx=10, pady=10)
         button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item')
         button_add_item.grid(row=2, column=1, pady=50, sticky='nw')
         
@@ -133,6 +133,11 @@ class Report(ctk.CTkFrame):
     def add_border(self, event) -> None:
         # TODO get it working
         event.widget.configure(fg_color='gray')
+        return None
+    
+    def update_report_items_list(self, items_list: list) -> None:
+        for idx, report_item in enumerate(items_list):
+            self.report_items_list.insert(idx, report_item)
         return None
     
     #endregion
