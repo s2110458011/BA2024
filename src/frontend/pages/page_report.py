@@ -131,10 +131,10 @@ class Report(ctk.CTkFrame):
         
         return None
     
-    def add_border(self, event) -> None:
-        # TODO get it working
-        event.widget.configure(fg_color='gray')
-        return None
+    # def add_border(self, event) -> None:
+    #     # TODO get it working
+    #     event.widget.configure(fg_color='gray')
+    #     return None
     
     def update_report_items_list(self, items_list: list) -> None:
         self.report_items_list.delete(0, 'end')
