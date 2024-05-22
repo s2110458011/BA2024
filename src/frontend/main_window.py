@@ -38,20 +38,24 @@ class MainWindow(ctk.CTk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')
         self.show_frame(HomePage)
+        return None
         
     
     def create_layout(self) -> None:
         self.menu.grid(row=0, column=0, sticky='ns')
         self.container.grid(row=0, column=1, sticky='nsew')
+        return None
         
     
     def show_frame(self, cont) -> None:
         frame = self.frames[cont]
         frame.tkraise()
+        return None
     
     def get_page(self, page_class) -> ctk.CTkFrame:
         return self.frames[page_class]
     
     def exit(self) -> None:
         self.controller.exit()
+        return None
 
