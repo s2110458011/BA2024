@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from backend.controller import Controller
 
 class Load(ctk.CTkFrame):
-    def __init__(self, master, controller: Type['Controller'], **kwargs):
+    def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
         self.controller = controller
         
@@ -19,15 +19,19 @@ class Load(ctk.CTkFrame):
         self.create_widgets()
         self.create_layout()
         
+        return None
+        
     def create_widgets(self) -> None:
         self.openfile = self.filedialog_frame()
         self.treeview = self.surveylist_widget()
         self.preview = self.survey_preview_frame()
+        return None
     
     def create_layout(self) -> None:
         self.openfile.grid(row=0, column=0, pady=(10,0), padx=(10,0), sticky='nsew')
         self.treeview.grid(row=2, column=0, pady=(10,0), padx=(10,0), sticky='nsew')
         self.preview.grid(row=3, column=0, pady=(10,0), padx=(10,0), sticky='nsew')
+        return None
     
     def filedialog_frame(self) -> ctk.CTkFrame:
         frame_openfile = ctk.CTkFrame(self, width=800, corner_radius=0)
@@ -35,7 +39,7 @@ class Load(ctk.CTkFrame):
         # filename label
         self.lbl_filepath = ctk.CTkLabel(frame_openfile, text='Choose File', width=600)
         self.lbl_filepath.grid(row=0, column=0, padx=(10,10), pady=(10,10))
-        self.txt_filename = ctk.CTkEntry(frame_openfile, placeholder_text='Survey name', width=600)
+        self.txt_filename = ctk.CTkEntry(frame_openfile, placeholder_text='Survey name', width=600, corner_radius=0)
         self.txt_filename.grid(row=1, column=0, padx=(10,10), pady=(0,10))
         
         # button open file dialog
@@ -98,6 +102,7 @@ class Load(ctk.CTkFrame):
     def select_file(self) -> None:
         file_path = ctk.filedialog.askopenfilename(filetypes=[('CSV files', '*.csv')])
         self.lbl_filepath.configure(text=file_path, anchor='w', padx=5)
+        return None
     
     def open_file(self) -> None:
         file_path = self.lbl_filepath.cget('text')

@@ -20,12 +20,16 @@ class Controller:
     def __init__(self) -> None:
         self.model = SurveyLibrary()
         self.view = MainWindow(controller=self, title='AutoGraph', size=(1000,600))
+        return None
+        
     
     def run(self) -> None:
         self.view.mainloop()
+        return None
     
     def exit(self) -> None:
         self.view.destroy()
+        return None
     
     def add_survey_to_library(self, survey_name: str, data: pd.DataFrame) -> str:
         id = str(uuid.uuid4())
@@ -178,6 +182,16 @@ class Controller:
         if not survey.add_item_to_report_items_list(short_description, new_item):
             return False
         return True
+    
+    def set_navigation_button_state(self, button_name: str, state: str) -> None:
+        navigation = self.view.get_navigation()
+        match button_name:
+            case 'Save':
+                navigation.set_save_button_state(state)
+            case 'Print':
+                navigation.set_print_button_state(state)
+        return None
+            
     
     # endregion
     

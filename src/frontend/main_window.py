@@ -15,7 +15,6 @@ ctk.set_default_color_theme("green")
 
 class MainWindow(ctk.CTk):
     def __init__(self, controller, title: str, size: tuple[int, int]) -> None:
-        
         # main setup
         super().__init__()
         self.controller = controller
@@ -54,6 +53,9 @@ class MainWindow(ctk.CTk):
     
     def get_page(self, page_class) -> ctk.CTkFrame:
         return self.frames[page_class]
+    
+    def get_navigation(self) -> Navigation:
+        return self.menu
     
     def exit(self) -> None:
         self.controller.exit()
