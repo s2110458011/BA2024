@@ -205,3 +205,35 @@ class Controller:
         return None
     
     # endregion
+    
+    #region Save
+    
+    def valid_to_save(self) -> bool:
+        view = self.view.get_page(Analyze)
+        figure = view.get_current_figure()
+        if figure:
+            return True
+        else:
+            return False
+    
+    def get_current_chart_to_save(self, include_text: bool) -> Figure:
+        view = self.view.get_page(Analyze)
+        figure = view.get_current_figure()
+        if include_text:
+            description = view.get_description_text()
+            ax = figure.axes[0]
+            ax.text(-0.05, -0.05, description, ha='left', va='top', fontsize=10, transform=ax.transAxes)
+            figure.tight_layout()
+            figure.subplots_adjust(bottom=0.2)
+        return figure
+    
+    def save_chart_to_image(self, file_path, include_description) -> None:
+        if include_description:
+            figure = self.get_current_chart_to_save(True)
+        else:
+            figure = self.get_current_chart_to_save(False)
+        figure.savefig(file_path)
+        return None
+        
+    
+    #endregion

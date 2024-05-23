@@ -21,6 +21,8 @@ class Load(ctk.CTkFrame):
         
         return None
         
+    #region Widgets & Layout
+    
     def create_widgets(self) -> None:
         self.openfile = self.filedialog_frame()
         self.treeview = self.surveylist_widget()
@@ -79,7 +81,9 @@ class Load(ctk.CTkFrame):
         self.label_number_questions = ctk.CTkLabel(description_frame, text='')
         self.label_number_questions.pack()
         self.cb_var = tk.IntVar()
-        self.cb_exclude_columns = ctk.CTkCheckBox(description_frame, text='Exclude', variable=self.cb_var, onvalue=1, offvalue=0, command=self.cb_calculate)
+        self.cb_exclude_columns = ctk.CTkCheckBox(description_frame, text='Exclude', state='disabled',
+                                                  corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, 
+                                                  variable=self.cb_var, onvalue=1, offvalue=0, command=self.cb_calculate)
         self.cb_exclude_columns.pack(pady_=(10,0))
         self.spinbox_number_cols = tk.Spinbox(description_frame, from_=0, to=20)
         self.spinbox_number_cols.pack(pady=10)
@@ -99,10 +103,52 @@ class Load(ctk.CTkFrame):
         scroll_X.pack(side='bottom', fill='x')
         return frame_preview
     
+    #endregion
+    
+    #region Commands
+    
     def select_file(self) -> None:
         file_path = ctk.filedialog.askopenfilename(filetypes=[('CSV files', '*.csv')])
         self.lbl_filepath.configure(text=file_path, anchor='w', padx=5)
         return None
+    
+    def check_path_and_entry(self) -> None:
+        if self.lbl_filepath.cget(attribute_name='text') == 'Choose File':
+            tk.messagebox.showerror(title='error', message='Please open a file to load.')
+        elif self.txt_filename.get():
+            self.open_file()
+        else:
+            tk.messagebox.showerror(title='error', message='Please enter a survey name.')
+        return None
+    
+    def display_preview(self, e) -> None:
+        self.cb_exclude_columns.configure(state='normal')
+        selected_id = self.survey_list.focus()
+        data = self.controller.get_survey_data_raw(selected_id)
+        self.controller.set_current_survey_selection(selected_id)
+        self.controller.activate_categorize_button()
+        self.draw_table(data)
+        self.controller.set_cb_survey_list_to_selected_survey()
+        return None
+    
+    def cb_calculate(self) -> None:
+        if self.cb_var.get() == 1:
+            self.spinbox_number_cols.configure(state='disabled')
+            questions = self.label_number_questions.cget('text')
+            exclude = int(self.spinbox_number_cols.get())
+            num = questions - exclude
+            self.label_number_questions.configure(text=num)
+        elif self.cb_var.get() == 0:
+            questions = self.label_number_questions.cget('text')
+            exclude = int(self.spinbox_number_cols.get())
+            num = questions + exclude
+            self.label_number_questions.configure(text=num)
+            self.spinbox_number_cols.configure(state='normal')
+        return None
+    
+    #endregion
+    
+    #region Utils
     
     def open_file(self) -> None:
         file_path = self.lbl_filepath.cget('text')
@@ -117,15 +163,6 @@ class Load(ctk.CTkFrame):
             self.controller.update_survey_list()
         return None
     
-    def display_preview(self, e) -> None:
-        selected_id = self.survey_list.focus()
-        data = self.controller.get_survey_data_raw(selected_id)
-        self.controller.set_current_survey_selection(selected_id)
-        self.controller.activate_categorize_button()
-        self.draw_table(data)
-        self.controller.set_cb_survey_list_to_selected_survey()
-        return None
-        
     def draw_table(self, dataframe: pd.DataFrame):
         self.data_table.delete(*self.data_table.get_children())
         columns = list(dataframe.columns)
@@ -147,31 +184,10 @@ class Load(ctk.CTkFrame):
         self.label_number_questions.configure(text=len(dataframe.columns) - questions)
         return None
     
-    def check_path_and_entry(self) -> None:
-        if self.lbl_filepath.cget(attribute_name='text') == 'Choose File':
-            tk.messagebox.showerror(title='error', message='Please open a file to load.')
-        elif self.txt_filename.get():
-            self.open_file()
-        else:
-            tk.messagebox.showerror(title='error', message='Please enter a survey name.')
-        return None
-    
-    def calculate_number_of_questions(self):
+    def calculate_number_of_questions(self) -> int:
         if self.cb_var.get() == 1:
             return self.spinbox_number_cols.get()
         else:
             return 0
     
-    def cb_calculate(self):
-        if self.cb_var.get() == 1:
-            self.spinbox_number_cols.configure(state='disabled')
-            questions = self.label_number_questions.cget('text')
-            exclude = int(self.spinbox_number_cols.get())
-            num = questions - exclude
-            self.label_number_questions.configure(text=num)
-        elif self.cb_var.get() == 0:
-            questions = self.label_number_questions.cget('text')
-            exclude = int(self.spinbox_number_cols.get())
-            num = questions + exclude
-            self.label_number_questions.configure(text=num)
-            self.spinbox_number_cols.configure(state='normal')
+    #endregion

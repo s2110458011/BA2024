@@ -51,7 +51,7 @@ class MainWindow(ctk.CTk):
         frame.tkraise()
         return None
     
-    def get_page(self, page_class) -> ctk.CTkFrame:
+    def get_page(self, page_class) -> HomePage | Load | Prepare | Analyze | Report | Print | Save:
         return self.frames[page_class]
     
     def get_navigation(self) -> Navigation:

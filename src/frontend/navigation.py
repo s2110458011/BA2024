@@ -1,5 +1,7 @@
 import tkinter as ttk
 import customtkinter as ctk
+from tkinter import filedialog, messagebox
+from frontend.pages.homepage import HomePage
 from frontend.pages.page_load import Load
 from frontend.pages.page_prepare import Prepare
 from frontend.pages.page_analyze import Analyze
@@ -13,14 +15,17 @@ if TYPE_CHECKING:
     from frontend.navigation import Navigation
 
 class Navigation(ctk.CTkFrame):
-    def __init__(self, master, navigation: type['Navigation'], controller: type['Controller'], **kwargs) -> None:
+    def __init__(self, master, navigation: Type['Navigation'], controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
         self.main_window = navigation
         self.controller = controller
         
         self.create_widgets()
         self.create_layout()
+        self.current_page = 'HomePage'
         return None
+    
+    #region Widgets & Layout
     
     def create_menu_button(self, name, btn_height, btn_corner_radius, action=None, **kwargs) -> ctk.CTkButton:
         return ctk.CTkButton(
@@ -55,6 +60,67 @@ class Navigation(ctk.CTkFrame):
         self.btn_exit.grid(row=7)
         return None
     
+    #endregion
+    
+    #region Button Commands
+        
+    def load_click(self) -> None:
+        self.main_window.show_frame(Load)
+        #self.set_print_button_state('disabled')
+        self.set_save_button_state('disabled')
+        self.current_page = 'Load'
+        return None
+    
+    def prepare_click(self) -> None:
+        self.main_window.show_frame(Prepare)
+        #self.set_print_button_state('disabled')
+        self.set_save_button_state('disabled')
+        self.current_page = 'Prepare'
+        return None
+        
+    def analyze_click(self) -> None:
+        self.main_window.show_frame(Analyze)
+        #self.set_print_button_state('normal')
+        self.set_save_button_state('normal')
+        self.current_page = 'Analyze'
+        return None
+    
+    def report_click(self) -> None:
+        self.main_window.show_frame(Report)
+        #self.set_print_button_state('normal')
+        self.set_save_button_state('normal')
+        self.current_page = 'Report'
+        return None
+    
+    def print_click(self) -> None:
+        # maybe remove
+        self.main_window.show_frame(Print)
+        return None
+    
+    def save_click(self) -> None:
+        #self.main_window.show_frame(Save)
+        if self.current_page == 'Analyze':
+            if self.controller.valid_to_save():
+                response = messagebox.askyesno("Confirmation", "Do you want to save the plot with the description text?")
+            else:
+                messagebox.showerror('Error', 'Please select a chart to save.')
+                return None
+            
+            file_path = filedialog.asksaveasfilename(defaultextension='.png', filetypes=[('PNG files', '*.png'), ('JPG files', '*.jpg'), ('All files' ,'*.*')])
+            if file_path:
+                self.controller.save_chart_to_image(file_path, response)
+        else:
+            self.save_pdf_report()
+        return None
+    
+    def exit_click(self) -> None:
+        self.main_window.exit()
+        return None
+    
+    #endregion
+    
+    #region Utils
+    
     def set_save_button_state(self, state: str) -> None:
         self.btn_save.configure(state=state)
         if state == 'normal':
@@ -70,44 +136,9 @@ class Navigation(ctk.CTkFrame):
         else:
             self.btn_print.configure(fg_color='gray30')
         return None
-        
-    def load_click(self) -> None:
-        self.main_window.show_frame(Load)
-        #self.set_print_button_state('disabled')
-        self.set_save_button_state('disabled')
+    
+    def save_pdf_report(self) -> None:
+        print('Not yet implemented')
         return None
     
-    def prepare_click(self) -> None:
-        self.main_window.show_frame(Prepare)
-        #self.set_print_button_state('disabled')
-        self.set_save_button_state('disabled')
-        return None
-        
-    def analyze_click(self) -> None:
-        self.main_window.show_frame(Analyze)
-        #self.set_print_button_state('normal')
-        self.set_save_button_state('normal')
-        return None
-    
-    def report_click(self) -> None:
-        self.main_window.show_frame(Report)
-        #self.set_print_button_state('normal')
-        self.set_save_button_state('normal')
-        return None
-    
-    def print_click(self) -> None:
-        # maybe remove
-        self.main_window.show_frame(Print)
-        return None
-    
-    def save_click(self) -> None:
-        #self.main_window.show_frame(Save)
-        # get current page from controller
-        # open file dialogue
-        # if analyze save current chart png/jpg
-        # if report save current report as pdf
-        return None
-    
-    def exit_click(self) -> None:
-        self.main_window.exit()
-        return None
+    #endregion
