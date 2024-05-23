@@ -125,10 +125,12 @@ class Analyze(ctk.CTkFrame):
     
     def on_click_question_list(self, e) -> None:
         #self.dropdown_charts.set('Choose Chart')
-        selected_question = self.get_selected_question()
-        self.controller.set_current_simple_chart_question(selected_question)
+        current_selection = self.get_selected_question()
+        if current_selection:
+            self.selected_question = current_selection
+        self.controller.set_current_simple_chart_question(self.selected_question)
         chart_type = self.dropdown_charts.get()
-        self.update_chart_options_list(selected_question)
+        self.update_chart_options_list(self.selected_question)
         if chart_type not in self.charts_list:
             self.dropdown_charts.set('Choose Chart')
         else:
@@ -215,7 +217,8 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def action_create_chart(self, chart_type) -> None:
-        question = self.get_selected_question()
+        question = self.selected_question
+        #question = self.get_selected_question()
         self.fig = None
         self.fig = self.controller.get_figure(chart_type, question)
         self.display_chart()
@@ -251,7 +254,7 @@ class Analyze(ctk.CTkFrame):
             tk.messagebox.showerror(title='error', message='A short description must be provided to add the report item.')
         if not self.controller.add_item_to_report(self.fig, short_description, description_text):
             tk.messagebox.showerror(title='error', message='Short description must be unique. This is short description already exists.')
-        self.controller.update_report_item_list()
+        self.controller.update_report_item_listbox()
         return None
     
     #endregion

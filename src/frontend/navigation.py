@@ -110,7 +110,8 @@ class Navigation(ctk.CTkFrame):
             if file_path:
                 self.controller.save_chart_to_image(file_path, response)
         else:
-            self.save_pdf_report()
+            file_path = filedialog.asksaveasfilename(defaultextension='.pdf', filetypes=[('PDF files', '*.pdf')])
+            self.controller.save_report_to_pdf(file_path)
         return None
     
     def exit_click(self) -> None:

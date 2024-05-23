@@ -58,6 +58,6 @@ class MainWindow(ctk.CTk):
         return self.menu
     
     def exit(self) -> None:
-        self.controller.exit()
+        self.destroy()
         return None
 

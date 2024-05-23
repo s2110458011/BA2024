@@ -12,6 +12,8 @@ class Report(ctk.CTkFrame):
         super().__init__(master, corner_radius=0, **kwargs)
         self.controller = controller
         self.labels_list_preview = []
+        self.preview_labels: list[ctk.CTkLabel] = []
+        self.current_item: ctk.CTkLabel = None
         
         self.create_widgets()
         self.create_main_layout()
@@ -45,6 +47,7 @@ class Report(ctk.CTkFrame):
         self.preview_frame = ctk.CTkScrollableFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
         self.preview_frame.grid(row=0, column=0, sticky='nsew')
         self.right_side_frame.grid_rowconfigure(0, weight=1)
+        self.preview_frame.grid_columnconfigure(0, weight=1)
         
         # Place preview labels
         
@@ -69,22 +72,30 @@ class Report(ctk.CTkFrame):
         return None
     
     def create_options_widget(self) -> None:
-        label_options = ctk.CTkLabel(self.left_side_frame, text='Add Header', anchor='w')
-        label_options.grid(row=0, column=0, columnspan=2, padx=(20,0), pady=(20,0), sticky='ew')
-        self.text_entry_header = ctk.CTkEntry(self.left_side_frame, width=400)
-        self.text_entry_header.grid(row=1, column=0, padx=(20,0), pady=(10,0), sticky='w')
-        button_add_header = ctk.CTkButton(self.left_side_frame, text='Add Header', command=self.create_new_heading_label)
-        button_add_header.grid(row=1, column=1, padx=(0,20), pady=(10,0), sticky='w')
+        self.left_side_frame.grid_columnconfigure(1, weight=1)
+        label_report_title = ctk.CTkLabel(self.left_side_frame, text='Report Title', anchor='w')
+        label_report_title.grid(row=0, column=0, padx=(20,0), pady=(20,0), sticky='w')
+        self.text_entry_title = ctk.CTkEntry(self.left_side_frame, corner_radius=0)
+        self.text_entry_title.grid(row=0, column=1, padx=(10,20), pady=(20,0), sticky='ew')
+        self.button_add_title = ctk.CTkButton(self.left_side_frame, text='Add Title', corner_radius=0, command=self.create_new_report)
+        self.button_add_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
+        
+        label_header = ctk.CTkLabel(self.left_side_frame, text='Add Header', anchor='w')
+        label_header.grid(row=1, column=0, padx=(20,0), pady=(20,0), sticky='w')
+        self.text_entry_header = ctk.CTkEntry(self.left_side_frame, corner_radius=0)
+        self.text_entry_header.grid(row=1, column=1, padx=(10,20), pady=(20,0), sticky='ew')
+        button_add_header = ctk.CTkButton(self.left_side_frame, text='Add Header', corner_radius=0, command=self.create_new_heading_label)
+        button_add_header.grid(row=1, column=2, padx=(0,20), pady=(20,0), sticky='w')
         
         frame_items_list = ctk.CTkFrame(self.left_side_frame, corner_radius=0, fg_color='#1E1E1E')
-        frame_items_list.grid(row=2, column=0, padx=20, pady=20, sticky='w')
-        label_report_items = ctk.CTkLabel(frame_items_list, text='Report items', width=380, anchor='w')
+        frame_items_list.grid(row=3, column=0, columnspan=2, padx=20, pady=20, sticky='w')
+        label_report_items = ctk.CTkLabel(frame_items_list, text='Report items', width=400, anchor='w')
         label_report_items.cget('font').configure(underline=True)
         label_report_items.grid(row=0, column=0, padx=10, sticky='ew')
         self.report_items_list = tk.Listbox(frame_items_list, borderwidth=0)
         self.report_items_list.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
-        button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item')
-        button_add_item.grid(row=2, column=1, pady=50, sticky='nw')
+        button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item', corner_radius=0, command=self.add_item_to_report)
+        button_add_item.grid(row=3, column=2, pady=50, sticky='nw')
         
         return None
     
@@ -95,46 +106,73 @@ class Report(ctk.CTkFrame):
     def create_new_heading_label(self) -> None:
         label_text = self.text_entry_header.get()
         self.text_entry_header.delete(0, 'end')
-        self.add_label_to_list(label_text)
-        None
+        self.add_label_to_list(label_text, '#228B22')
+        self.controller.update_final_report_items_list(label_text, 'heading')
+        return None
     
-    def create_new_report_item_label(self) -> ctk.CTkLabel:
-        pass
+    def add_item_to_report(self) -> None:
+        selected_idx = self.report_items_list.curselection()
+        if selected_idx:
+            item = self.report_items_list.get(selected_idx)
+            self.add_label_to_list(item, '#6E8B3D')
+            self.controller.update_final_report_items_list(item, 'plot')
+        return None
     
     def preview_report(self) -> None:
         
         
         return None
     
+    def create_new_report(self) -> None:
+        title = self.text_entry_title.get()
+        self.text_entry_title.delete(0, 'end')
+        self.controller.create_new_report(title)
+        self.add_title_to_preview(title)
+        
+        self.button_add_title.grid_forget()
+        change_title = ctk.CTkButton(self.left_side_frame, text='Change Title', corner_radius=0, command=self.update_report_title)
+        change_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
+        return None
+    
+    def update_report_title(self) -> None:
+        new_title = self.text_entry_title.get()
+        self.text_entry_title.delete(0, 'end')
+        if self.controller.update_report_title(new_title):
+            self.preview_label_title.configure(text=new_title)
+        return None
+    
+    def add_title_to_preview(self, title) -> None:
+        self.preview_label_title = ctk.CTkLabel(self.preview_frame, text=title, fg_color='#006400')
+        self.preview_label_title.grid(row=0, column=0, padx=10, pady=20, sticky='ew')
+        return None
+    
     #endregion
     
     #region Helper functions
     
-    def add_label_to_list(self, preview_item: str) -> None:
-        self.labels_list_preview.append(preview_item)
-        self.remove_preview_labels()
+    def add_label_to_list(self, preview_item: str, label_color: str) -> None:
+        preview_label = ctk.CTkLabel(self.preview_frame, text=preview_item, fg_color=label_color)
+        preview_label.bind('<Button-1>', self.on_label_click)
+        self.preview_labels.append(preview_label)
         self.place_preview_labels()
         return None
     
     def remove_preview_labels(self) -> None:
         for item in self.preview_frame.winfo_children():
-            item.destroy()
+            item.grid_forget
         return None
     
     def place_preview_labels(self) -> None:
-        
-        for idx, item in enumerate(self.labels_list_preview):
-            
-            new_label = ctk.CTkLabel(self.preview_frame, text=item, width=50)
-            new_label.grid(row=idx, column=0, padx=10, pady=20)
-            #new_label.bind('<Button-1>', self.add_border)
+        for idx, item in enumerate(self.preview_labels):
+            idx+=1 # add one because title label is in row=0
+            item.grid(row=idx, column=0, padx=10, pady=5, sticky='ew')
         
         return None
     
-    # def add_border(self, event) -> None:
-    #     # TODO get it working
-    #     event.widget.configure(fg_color='gray')
-    #     return None
+    def on_label_click(self, e) -> None:
+        clicked_label = e.widget
+        self.current_item = clicked_label
+        return None
     
     def update_report_items_list(self, items_list: list) -> None:
         self.report_items_list.delete(0, 'end')

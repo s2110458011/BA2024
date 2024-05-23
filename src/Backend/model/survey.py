@@ -17,6 +17,7 @@ class Survey():
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
         self.next_report_item_number = 1
         self.report_items = {}
+        self.pdf_report = None
         
     
     #region getter & setter
@@ -53,6 +54,12 @@ class Survey():
     
     def get_report_items_list(self) -> list:
         return self.report_items.keys()
+    
+    def get_report_item(self, key) -> ReportItem:
+        return self.report_items[key]
+    
+    def get_pdf_report(self) -> PDFReport:
+        return self.pdf_report
     
     #endregion
     
@@ -122,3 +129,7 @@ class Survey():
         self.report_items[short_description] = item
         self.next_report_item_number += 1
         return True
+    
+    def create_new_pdf_report(self, survey_title) -> None:
+        self.pdf_report = PDFReport(survey_title)
+        return None

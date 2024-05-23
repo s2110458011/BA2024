@@ -27,10 +27,6 @@ class Controller:
         self.view.mainloop()
         return None
     
-    def exit(self) -> None:
-        self.view.destroy()
-        return None
-    
     def add_survey_to_library(self, survey_name: str, data: pd.DataFrame) -> str:
         id = str(uuid.uuid4())
         survey = Survey(id, survey_name, data)
@@ -197,11 +193,34 @@ class Controller:
     
     # region Report
     
-    def update_report_item_list(self) -> None:
+    def update_report_item_listbox(self) -> None:
         survey = self.get_selected_survey()
         report_item_list = survey.get_report_items_list()
         view = self.view.get_page(Report)
         view.update_report_items_list(report_item_list)
+        return None
+    
+    def create_new_report(self, report_title: str) -> None:
+        survey = self.get_selected_survey()
+        survey.create_new_pdf_report(report_title)
+        return None
+    
+    def update_report_title(self, new_title: str) -> bool | None:
+        survey = self.get_selected_survey()
+        report = survey.get_pdf_report()
+        if report:
+            report.update_title(new_title)
+            return True
+        return None
+    
+    def update_final_report_items_list(self, item: str, type: str) -> None:
+        survey = self.get_selected_survey()
+        report = survey.get_pdf_report()
+        if type == 'heading':
+            report.add_report_item(item)
+        elif type == 'plot':
+            plot = survey.get_report_item(item)
+            report.add_report_item(plot)
         return None
     
     # endregion
@@ -227,12 +246,17 @@ class Controller:
             figure.subplots_adjust(bottom=0.2)
         return figure
     
-    def save_chart_to_image(self, file_path, include_description) -> None:
+    def save_chart_to_image(self, file_path: str, include_description: bool) -> None:
         if include_description:
             figure = self.get_current_chart_to_save(True)
         else:
             figure = self.get_current_chart_to_save(False)
         figure.savefig(file_path)
+        return None
+    
+    def save_report_to_pdf(self, file_path: str) -> None:
+        report = self.get_selected_survey().get_pdf_report()
+        report.print_report_as_pdf(file_path)
         return None
         
     
