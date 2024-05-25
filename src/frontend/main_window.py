@@ -1,7 +1,7 @@
 from tkinter import *
 import customtkinter as ctk
 
-from frontend.pages.navigation import Navigation
+from frontend.navigation import Navigation
 from frontend.pages.homepage import HomePage
 from frontend.pages.page_load import Load
 from frontend.pages.page_prepare import Prepare
@@ -24,8 +24,8 @@ class MainWindow(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         
         # navigation and content container
-        self.menu = Navigation(master=self, navigation=self, controller=self.controller, width=200)
-        self.container = ctk.CTkFrame(self, width=800)
+        self.menu = Navigation(master=self, controller=self.controller, width=200)
+        self.container = ctk.CTkFrame(self)
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
         
@@ -33,7 +33,7 @@ class MainWindow(ctk.CTk):
         
         self.frames = {}
         for F in (HomePage, Load, Prepare, Analyze, Report, Print, Save):
-            frame = F(self.container, controller=controller, width=800)
+            frame = F(self.container, controller=controller)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')
         self.show_frame(HomePage)

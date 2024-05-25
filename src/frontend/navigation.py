@@ -12,12 +12,12 @@ from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from backend.controller import Controller
-    from frontend.pages.navigation import Navigation
+    from frontend.main_window import MainWindow
 
 class Navigation(ctk.CTkFrame):
-    def __init__(self, master, navigation: Type['Navigation'], controller: Type['Controller'], **kwargs) -> None:
+    def __init__(self, master: Type['MainWindow'], controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
-        self.main_window = navigation
+        self.main_window = master
         self.controller = controller
         
         self.create_widgets()
@@ -136,10 +136,6 @@ class Navigation(ctk.CTkFrame):
             self.btn_print.configure(fg_color=['#2CC985', '#2FA572'])
         else:
             self.btn_print.configure(fg_color='gray30')
-        return None
-    
-    def save_pdf_report(self) -> None:
-        print('Not yet implemented')
         return None
     
     #endregion
