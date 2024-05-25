@@ -12,7 +12,7 @@ from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from backend.controller import Controller
-    from frontend.navigation import Navigation
+    from frontend.pages.navigation import Navigation
 
 class Navigation(ctk.CTkFrame):
     def __init__(self, master, navigation: Type['Navigation'], controller: Type['Controller'], **kwargs) -> None:

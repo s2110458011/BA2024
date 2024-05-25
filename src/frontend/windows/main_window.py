@@ -1,7 +1,7 @@
 from tkinter import *
 import customtkinter as ctk
 
-from frontend.navigation import Navigation
+from frontend.pages.navigation import Navigation
 from frontend.pages.homepage import HomePage
 from frontend.pages.page_load import Load
 from frontend.pages.page_prepare import Prepare
