@@ -14,6 +14,7 @@ class Report(ctk.CTkFrame):
         self.labels_list_preview = []
         self.preview_labels: list[ctk.CTkLabel] = []
         self.current_item: ctk.CTkLabel = None
+        self.first_report_item = True
         
         self.create_widgets()
         self.create_main_layout()
@@ -51,23 +52,23 @@ class Report(ctk.CTkFrame):
         
         # Place preview labels
         
-        preview_buttons_frame = ctk.CTkFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
-        preview_buttons_frame.grid(row=1, column=0, sticky='nsew')
-        self.right_side_frame.grid_columnconfigure(0, weight=1)
+        #preview_buttons_frame = ctk.CTkFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
+        #preview_buttons_frame.grid(row=1, column=0, sticky='nsew')
+        #self.right_side_frame.grid_columnconfigure(0, weight=1)
         
         # Buttons
-        up_image = ctk.CTkImage(Image.open('src/assets/button_up.png'), size=(20,20))
-        button_move_up = ctk.CTkButton(preview_buttons_frame, text='', image=up_image, width=30)
-        button_move_up.grid(row=0, column=0, padx=(10,0), pady=10)
-        down_image = ctk.CTkImage(Image.open('src/assets/button_down.png'), size=(20,20))
-        button_move_down = ctk.CTkButton(preview_buttons_frame, text='', image=down_image, width=30)
-        button_move_down.grid(row=0, column=1, padx=(10,0), pady=10)
-        bin_image = ctk.CTkImage(Image.open('src/assets/button_bin.png'), size=(20,20))
-        button_remove = ctk.CTkButton(preview_buttons_frame, text='', image=bin_image, width=30)
-        button_remove.grid(row=0, column=2, padx=(10,0), pady=10)
-        preview_image = ctk.CTkImage(Image.open('src/assets/button_preview.png'), size=(20,20))
-        button_preview_pdf = ctk.CTkButton(preview_buttons_frame, text='', image=preview_image, width=30)
-        button_preview_pdf.grid(row=0, column=3, padx=(10,0), pady=10)
+        # up_image = ctk.CTkImage(Image.open('src/assets/button_up.png'), size=(20,20))
+        # button_move_up = ctk.CTkButton(preview_buttons_frame, text='', image=up_image, width=30)
+        # button_move_up.grid(row=0, column=0, padx=(10,0), pady=10)
+        # down_image = ctk.CTkImage(Image.open('src/assets/button_down.png'), size=(20,20))
+        # button_move_down = ctk.CTkButton(preview_buttons_frame, text='', image=down_image, width=30)
+        # button_move_down.grid(row=0, column=1, padx=(10,0), pady=10)
+        # bin_image = ctk.CTkImage(Image.open('src/assets/button_bin.png'), size=(20,20))
+        # button_remove = ctk.CTkButton(preview_buttons_frame, text='', image=bin_image, width=30)
+        # button_remove.grid(row=0, column=2, padx=(10,0), pady=10)
+        # preview_image = ctk.CTkImage(Image.open('src/assets/button_preview.png'), size=(20,20))
+        # button_preview_pdf = ctk.CTkButton(preview_buttons_frame, text='', image=preview_image, width=30)
+        # button_preview_pdf.grid(row=0, column=3, padx=(10,0), pady=10)
         
         return None
     
@@ -77,15 +78,15 @@ class Report(ctk.CTkFrame):
         label_report_title.grid(row=0, column=0, padx=(20,0), pady=(20,0), sticky='w')
         self.text_entry_title = ctk.CTkEntry(self.left_side_frame, corner_radius=0)
         self.text_entry_title.grid(row=0, column=1, padx=(10,20), pady=(20,0), sticky='ew')
-        self.button_add_title = ctk.CTkButton(self.left_side_frame, text='Add Title', corner_radius=0, command=self.create_new_report)
+        self.button_add_title = ctk.CTkButton(self.left_side_frame, text='Create Report', corner_radius=0, command=self.create_new_report)
         self.button_add_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
         
         label_header = ctk.CTkLabel(self.left_side_frame, text='Add Header', anchor='w')
         label_header.grid(row=1, column=0, padx=(20,0), pady=(20,0), sticky='w')
         self.text_entry_header = ctk.CTkEntry(self.left_side_frame, corner_radius=0)
         self.text_entry_header.grid(row=1, column=1, padx=(10,20), pady=(20,0), sticky='ew')
-        button_add_header = ctk.CTkButton(self.left_side_frame, text='Add Header', corner_radius=0, command=self.create_new_heading_label)
-        button_add_header.grid(row=1, column=2, padx=(0,20), pady=(20,0), sticky='w')
+        self.button_add_header = ctk.CTkButton(self.left_side_frame, text='Add Header', state='disabled', corner_radius=0, command=self.create_new_heading_label)
+        self.button_add_header.grid(row=1, column=2, padx=(0,20), pady=(20,0), sticky='w')
         
         frame_items_list = ctk.CTkFrame(self.left_side_frame, corner_radius=0, fg_color='#1E1E1E')
         frame_items_list.grid(row=3, column=0, columnspan=2, padx=20, pady=20, sticky='w')
@@ -94,8 +95,8 @@ class Report(ctk.CTkFrame):
         label_report_items.grid(row=0, column=0, padx=10, sticky='ew')
         self.report_items_list = tk.Listbox(frame_items_list, borderwidth=0)
         self.report_items_list.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
-        button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item', corner_radius=0, command=self.add_item_to_report)
-        button_add_item.grid(row=3, column=2, pady=50, sticky='nw')
+        self.button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item', state='disabled', corner_radius=0, command=self.add_item_to_report)
+        self.button_add_item.grid(row=3, column=2, pady=50, sticky='nw')
         
         return None
     
@@ -126,12 +127,18 @@ class Report(ctk.CTkFrame):
     def create_new_report(self) -> None:
         title = self.text_entry_title.get()
         self.text_entry_title.delete(0, 'end')
+        while not title:
+            tk.messagebox.showerror(title='error', message='A report title has to be provided before report can be created.')
         self.controller.create_new_report(title)
         self.add_title_to_preview(title)
+        
+        if self.report_items_list.get(0, 'end'):
+            self.button_add_item.configure(state='normal')
         
         self.button_add_title.grid_forget()
         change_title = ctk.CTkButton(self.left_side_frame, text='Change Title', corner_radius=0, command=self.update_report_title)
         change_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
+        self.button_add_header.configure(state='normal')
         return None
     
     def update_report_title(self) -> None:
@@ -175,6 +182,9 @@ class Report(ctk.CTkFrame):
         return None
     
     def update_report_items_list(self, items_list: list) -> None:
+        if self.first_report_item:
+            self.button_add_item.configure(state='normal')
+            self.first_report_item = False
         self.report_items_list.delete(0, 'end')
         for idx, report_item in enumerate(items_list):
             self.report_items_list.insert(idx, report_item)

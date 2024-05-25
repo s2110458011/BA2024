@@ -17,7 +17,7 @@ class Analyze(ctk.CTkFrame):
         self.controller = controller
         self.categories_list = self.controller.get_categories()
         self.charts_list = []
-        self.canvas = None
+        self.canvas = FigureCanvasTkAgg()
         self.fig = None
         
         self.create_widgets()
@@ -31,6 +31,8 @@ class Analyze(ctk.CTkFrame):
         # Main setup
         self.settings_frame = ctk.CTkScrollableFrame(self, width=300, corner_radius=0)
         self.display_frame = ctk.CTkFrame(self, corner_radius=0)
+        #self.chart_canvas_label = ctk.CTkLabel(self.display_frame, text='', corner_radius=0)
+        #self.chart_canvas_label.bind('<Configure>', self.resize_image)
         self.text_entry_description = ctk.CTkTextbox(self.display_frame, corner_radius=0, text_color='gray')
         self.placeholder_text = 'Enter chart description here...'
         self.text_entry_description.insert('0.0', self.placeholder_text)
@@ -39,6 +41,19 @@ class Analyze(ctk.CTkFrame):
         
         self.create_settings_widget()
         self.create_settings_layout()
+        
+        return None
+    
+    def create_main_layout(self) -> None:
+        self.settings_frame.grid(row=0, column=0, sticky='ns', padx=10, pady=10)
+        self.grid_rowconfigure(0, weight=1)
+        
+        self.display_frame.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+        #self.chart_canvas_label.grid(row=0, column=0, sticky='nsew')
+        self.grid_columnconfigure(1, weight=1)
+        self.text_entry_description.grid(row=1, column=0, sticky='ew')
+        self.display_frame.grid_columnconfigure(0, weight=1)
+        self.display_frame.grid_rowconfigure(0, weight=1)
         
         return None
     
@@ -94,21 +109,17 @@ class Analyze(ctk.CTkFrame):
         
         return None
     
-    def create_main_layout(self) -> None:
-        self.settings_frame.grid(row=0, column=0, sticky='ns', padx=10, pady=10)
-        self.grid_rowconfigure(0, weight=1)
-        
-        self.display_frame.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
-        self.grid_columnconfigure(1, weight=1)
-        self.text_entry_description.grid(row=1, column=0, sticky='ew')
-        self.display_frame.grid_columnconfigure(0, weight=1)
-        self.display_frame.grid_rowconfigure(0, weight=1)
-        
-        return None
-    
     #endregion
     
     #region Eventbindings
+    
+    def resize_image(self, e) -> None:
+        label_width = e.width
+        label_height = e.height
+        image = self.controller.get_tk_image(label_height, label_width)
+        self.chart_canvas_label.configure(image=image)
+        return None
+        
     
     def focus_in(self, e) -> None:
         text = self.text_entry_description.get('1.0', 'end-1c')
@@ -161,7 +172,6 @@ class Analyze(ctk.CTkFrame):
     def display_chart(self) -> None:
         if self.canvas is not None:
             self.canvas.get_tk_widget().destroy()
-        #self.fig.tight_layout()
         self.canvas = FigureCanvasTkAgg(self.fig, self.display_frame)
         self.canvas.get_tk_widget().grid(row=0, column=0, sticky='nsew')
         self.canvas.draw()
@@ -217,10 +227,8 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def action_create_chart(self, chart_type) -> None:
-        question = self.selected_question
-        #question = self.get_selected_question()
         self.fig = None
-        self.fig = self.controller.get_figure(chart_type, question)
+        self.fig = self.controller.get_figure(chart_type, False)
         self.display_chart()
         return None
     
@@ -250,9 +258,12 @@ class Analyze(ctk.CTkFrame):
         description_text = self.text_entry_description.get('1.0', 'end')
         short_description = self.text_entry_short_description.get()
         self.text_entry_short_description.delete(0, 'end')
+        chart_type = self.dropdown_charts.get()
+        self.controller.get_figure(chart_type, True)
+        img = self.controller.get_image()
         if not short_description:
             tk.messagebox.showerror(title='error', message='A short description must be provided to add the report item.')
-        if not self.controller.add_item_to_report(self.fig, short_description, description_text):
+        if not self.controller.add_item_to_report(img, short_description, description_text):
             tk.messagebox.showerror(title='error', message='Short description must be unique. This is short description already exists.')
         self.controller.update_report_item_listbox()
         return None

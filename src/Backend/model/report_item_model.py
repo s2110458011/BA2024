@@ -2,12 +2,12 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 from PIL import Image
-
+import matplotlib.pyplot as plt
 
 class ReportItem():
-    def __init__(self, item_number: int, fig: Figure, short_description: str,  description: str) -> None:
+    def __init__(self, item_number: int, img: Image, short_description: str,  description: str) -> None:
         self.item_number = item_number
-        self.fig = fig
+        self.fig = img
         self.short_description = short_description
         self.description = description
         return None
@@ -16,6 +16,7 @@ class ReportItem():
         canvas = FigureCanvas(self.fig)
         canvas.draw()
         img = Image.fromarray(np.asarray(canvas.buffer_rgba()))
+        print(img)
         return img
     
     def get_description(self) -> str:
@@ -24,3 +25,6 @@ class ReportItem():
     def get_plot_image(self) -> Image:
         image = self.convert_figure_to_image()
         return image
+    
+    def get_image(self) -> Image:
+        return self.fig

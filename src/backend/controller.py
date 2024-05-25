@@ -11,6 +11,8 @@ from frontend.pages.page_prepare import Prepare
 from frontend.pages.page_analyze import Analyze
 from frontend.pages.page_report import Report
 
+from PIL import Image, ImageTk
+
 """ from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -158,9 +160,21 @@ class Controller:
         survey = self.get_selected_survey()
         return survey.get_chart_options_by_question(question)
     
-    def get_figure(self, chart_type, question) -> Figure:
+    def get_figure(self, chart_type: str, report_image: bool) -> Figure:
         survey = self.get_selected_survey()
-        return survey.create_chart(chart_type, question)
+        return survey.create_chart(chart_type, report_image)
+    
+    def get_image(self) -> Image:
+        survey = self.get_selected_survey()
+        image = survey.chart_logic.get_image()
+        return image
+    
+    def get_tk_image(self, label_height, label_width) -> ImageTk:
+        survey = self.get_selected_survey()
+        image = survey.chart_logic.get_image()
+        resized_image = image.resize((label_width, label_height))
+        tk_image = ImageTk.PhotoImage(resized_image)
+        return tk_image
     
     def switch_axes(self) -> Figure:
         survey = self.get_selected_survey()
@@ -171,10 +185,10 @@ class Controller:
         survey.set_current_chart_question(question)
         return None
     
-    def add_item_to_report(self, figure: Figure, short_description:str, description: str) -> bool:
+    def add_item_to_report(self, image: Image, short_description:str, description: str) -> bool:
         survey = self.get_selected_survey()
         item_no = survey.get_next_report_item_number()
-        new_item = ReportItem(item_no, figure, short_description, description)
+        new_item = ReportItem(item_no, image, short_description, description)
         if not survey.add_item_to_report_items_list(short_description, new_item):
             return False
         return True

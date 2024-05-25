@@ -35,6 +35,10 @@ class Survey():
         self.not_categorized_questions = free_questions
         return None
     
+    def set_current_chart_question(self, question) -> None:
+        self.chart_logic.set_current_question(question)
+        return None
+    
     def get_uncategorized_questions(self) -> list:
         return self.not_categorized_questions
     
@@ -107,21 +111,18 @@ class Survey():
             self.categorized_questions[category] = []
         return None
     
-    def create_chart(self, chart_type, question) -> Figure:
+    def create_chart(self, chart_type: str, report_image: bool) -> Figure:
         match chart_type:
             case 'line':
-                return self.chart_logic.create_simple_line_chart(question)
+                return self.chart_logic.create_simple_line_chart(report_image)
             case 'bar':
-                return self.chart_logic.create_simple_bar_chart(question)
+                return self.chart_logic.create_simple_bar_chart(report_image)
             case 'pie':
-                return self.chart_logic.create_simple_pie_chart(question)
+                return self.chart_logic.create_simple_pie_chart(report_image)
     
     def switch_axes(self) -> Figure:
         return self.chart_logic.switch_axes_simple_bar_chart()
-    
-    def set_current_chart_question(self, question) -> None:
-        self.chart_logic.set_current_question(question)
-        return None
+
     
     def add_item_to_report_items_list(self, short_description: str,  item: ReportItem) -> bool:
         if short_description in self.report_items:
