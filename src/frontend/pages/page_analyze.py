@@ -74,7 +74,7 @@ class Analyze(ctk.CTkFrame):
         self.text_entry_ylable = ctk.CTkEntry(self.chart_settings_frame, placeholder_text='Enter y label')
         self.font_ylable = ttk.Spinbox(self.chart_settings_frame, from_=8, to=20, width=5)
         self.button_update_chart = ctk.CTkButton(self.chart_settings_frame, text='Update', command=self.action_update_chart_labels_font)
-        self.button_switch_axes = ctk.CTkButton(self.chart_settings_frame, text='Switch axes', command=self.action_switch_axes)
+        self.button_switch_axes = ctk.CTkButton(self.chart_settings_frame, text='Switch Axes', state='disabled', command=self.action_switch_axes)
         
         self.text_entry_short_description = ctk.CTkEntry(self.settings_frame, placeholder_text='Short description')
         self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', command=self.action_create_chart_button)
@@ -228,6 +228,10 @@ class Analyze(ctk.CTkFrame):
     
     def action_create_chart(self, chart_type) -> None:
         self.fig = None
+        if chart_type == 'bar':
+            self.button_switch_axes.configure(state='normal')
+        else:
+            self.button_switch_axes.configure(state='disabled')
         self.fig = self.controller.get_figure(chart_type, False)
         self.display_chart()
         return None
