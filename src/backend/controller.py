@@ -2,6 +2,7 @@ import pandas as pd
 import uuid
 import backend.analysis.chart_logic as lgc
 import backend.data_processor.toolparser as tp
+import backend.constants as constants
 from matplotlib.figure import Figure
 from backend.model.survey_library import SurveyLibrary
 from frontend.main_window import MainWindow
@@ -188,6 +189,8 @@ class Controller:
     def add_item_to_report(self, image: Image, short_description:str, description: str) -> bool:
         survey = self.get_selected_survey()
         item_no = survey.get_next_report_item_number()
+        if description == constants.DESCRIPTION:
+            description = ''
         new_item = ReportItem(item_no, image, short_description, description)
         if not survey.add_item_to_report_items_list(short_description, new_item):
             return False
@@ -198,8 +201,6 @@ class Controller:
         match button_name:
             case 'Save':
                 navigation.set_save_button_state(state)
-            case 'Print':
-                navigation.set_print_button_state(state)
         return None
             
     
@@ -230,9 +231,9 @@ class Controller:
     def update_final_report_items_list(self, item: str, type: str) -> None:
         survey = self.get_selected_survey()
         report = survey.get_pdf_report()
-        if type == 'heading':
+        if type == constants.ItemType.HEADING:
             report.add_report_item(item)
-        elif type == 'plot':
+        elif type == constants.ItemType.PLOT:
             plot = survey.get_report_item(item)
             report.add_report_item(plot)
         return None

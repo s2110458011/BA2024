@@ -1,5 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
+import backend.constants as constants
 from tkinter import ttk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -34,8 +35,7 @@ class Analyze(ctk.CTkFrame):
         #self.chart_canvas_label = ctk.CTkLabel(self.display_frame, text='', corner_radius=0)
         #self.chart_canvas_label.bind('<Configure>', self.resize_image)
         self.text_entry_description = ctk.CTkTextbox(self.display_frame, corner_radius=0, text_color='gray')
-        self.placeholder_text = 'Enter chart description here...'
-        self.text_entry_description.insert('0.0', self.placeholder_text)
+        self.text_entry_description.insert('0.0', constants.DESCRIPTION)
         self.text_entry_description.bind('<FocusIn>', command=self.focus_in)
         self.text_entry_description.bind('<FocusOut>', command=self.focus_out)
         
@@ -113,17 +113,9 @@ class Analyze(ctk.CTkFrame):
     
     #region Eventbindings
     
-    def resize_image(self, e) -> None:
-        label_width = e.width
-        label_height = e.height
-        image = self.controller.get_tk_image(label_height, label_width)
-        self.chart_canvas_label.configure(image=image)
-        return None
-        
-    
     def focus_in(self, e) -> None:
         text = self.text_entry_description.get('1.0', 'end-1c')
-        if text == self.placeholder_text:
+        if text == constants.DESCRIPTION:
             self.text_entry_description.delete('0.0', 'end-1c')
             self.text_entry_description.configure(text_color=['gray10', '#DCE4EE'])
         return None
@@ -131,7 +123,7 @@ class Analyze(ctk.CTkFrame):
     def focus_out(self, e) -> None:
         if not self.text_entry_description.get('1.0', 'end-1c'):
             self.text_entry_description.configure(text_color='gray')
-            self.text_entry_description.insert('0.0', self.placeholder_text)
+            self.text_entry_description.insert('0.0', constants.DESCRIPTION)
         return None
     
     def on_click_question_list(self, e) -> None:
