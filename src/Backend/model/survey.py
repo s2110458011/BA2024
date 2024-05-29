@@ -10,15 +10,14 @@ from backend.model.report_item_model import ReportItem
 class Survey():
     def __init__(self, id:int, name: str, data: pd.DataFrame) -> None:
         self.id = id
-        self.name = name
-        self.raw_data = data
-        self.prepared_data = data
+        self.name: str = name
+        self.raw_data: pd.DataFrame = data
         self.categorized_questions: dict[str, list[str]] = {}
         self.not_categorized_questions: list = tp.extract_features(self.raw_data)
         self.chart_logic = ChartLogic(data)
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
         self.next_report_item_number = 1
-        self.report_items = {}
+        self.report_items: dict = {}
         self.pdf_report = None
         
     
@@ -27,10 +26,15 @@ class Survey():
     def get_data(self) -> pd.DataFrame:
         return self.raw_data
     
-    def set_datatype_by_question(self, question, datatype) -> None:
+    def set_datatype_by_question(self, question: str, datatype: str) -> None:
         # insert if -> check if conversion to int/float = parse
-        self.prepared_data[question] = self.prepared_data[question].astype(datatype)
-        print(self.prepared_data[question].dtype)
+        try:
+            self.raw_data[question] = self.raw_data[question].astype(datatype)
+        except ValueError:
+            if datatype == 'float':
+                self.raw_data = cl.prepare_column_for_float(self.raw_data, question)
+                self.raw_data[question] = self.raw_data[question].astype(datatype)
+        print(self.raw_data[question].dtype)
         return None
     
     def set_uncategorized_questions(self, free_questions: list) -> None:
@@ -71,8 +75,12 @@ class Survey():
         infobox_info = {}
         infobox_info[constants.InfoBoxItem.CURRENT_DATATYPE] = self.raw_data[question].dtype
         infobox_info[constants.InfoBoxItem.COUNT_RESPONSES] = self.count_responses(question)
-        infobox_info[constants.InfoBoxItem.NO_UNIQUE_RESPONES] = self.raw_data[question].unique().count()
+        infobox_info[constants.InfoBoxItem.NO_UNIQUE_RESPONES] = self.count_unique_responses(question)
         return infobox_info
+    
+    def get_unique_resposes(self, question) -> list:
+        column = pd.Series(self.raw_data[question])
+        return column.unique()
     
     #endregion
     
@@ -91,6 +99,10 @@ class Survey():
                         print('Category not found.')
         return None
     
+    def remove_text_in_column(self, question: str, text: str) -> list:
+        self.raw_data = cl.remove_text_in_column(self.raw_data, question, text)
+        return list(self.raw_data[question])
+    
     def questions_categorized(self) -> bool:
         return self.categorized_questions
     
@@ -101,7 +113,12 @@ class Survey():
         return self.raw_data.shape[0]
     
     def count_responses(self, question) -> int:
-        return self.raw_data[question].count()
+        column = pd.Series(self.raw_data[question])
+        return column.count()
+    
+    def count_unique_responses(self, question) -> int:
+        column = pd.Series(self.raw_data[question])
+        return len(column.unique())
     
     def number_of_questions(self) -> tuple[int, int]:
         return self.raw_data.shape[1]

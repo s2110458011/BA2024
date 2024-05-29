@@ -23,7 +23,7 @@ class Prepare(ctk.CTkFrame):
     #region Layout
     
     def create_widgets(self) -> None:
-        self.dropdown_survey_list = ctk.CTkComboBox(self, corner_radius=0, values=self.cb_surveys_values, command=self.select_survey)
+        self.dropdown_survey_list = ctk.CTkComboBox(self, corner_radius=3, values=self.cb_surveys_values, command=self.select_survey)
         self.dropdown_survey_list.set('Choose survey')
         
         self.create_preprocessing_frame_widgets()

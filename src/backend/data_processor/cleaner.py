@@ -43,6 +43,15 @@ def drop_time_component(data: pd.DataFrame, column: str) -> pd.DataFrame:
             pass
     return data
 
+def prepare_column_for_float(data: pd.DataFrame, column) -> pd.DataFrame:
+    values = list(data[column])
+    for idx, val in enumerate(values):
+        if not isinstance(val, float):
+            new = val.replace(',', '.')
+            values[idx] = new
+    data[column] = values
+    return data
+
 def drop_columns_by_name(data: pd.DataFrame, columns: list) -> tuple[int, pd.DataFrame]:
     new_df = data.drop(columns=columns)
     count_dropped = get_count_dropped([data, new_df])
@@ -62,5 +71,15 @@ def drop_rows_by_value(data: pd.DataFrame, column: str, value_condition: str) ->
     new_df = data.drop(data[data[column] == value_condition].index)
     count_dropped = get_count_dropped([data, new_df])
     return count_dropped, new_df
+
+def remove_text_in_column(data: pd.DataFrame, question: str, text: str) -> pd.DataFrame:
+    data[question] = data[question].astype('object')
+    column = list(data[question])
+    for idx, val in enumerate(column):
+        if not pd.isna(val):
+            n_val = val.replace(text, '').strip()
+            column[idx] = n_val
+    data[question] = column
+    return data
 
 # endregion

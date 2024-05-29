@@ -1,7 +1,7 @@
 from enum import Enum
 
 DESCRIPTION = 'Enter chart description here...'
-DATATYPE_LIST = ['datetime', 'category', 'int64', 'float']
+DATATYPE_LIST = ['datetime', 'category', 'float']
 
 class ItemType(Enum):
     HEADING = 1

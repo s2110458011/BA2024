@@ -139,7 +139,15 @@ class Controller:
         survey = self.get_selected_survey()
         return survey.get_prepare_infobox_information(question)
     
-    # endregion
+    def get_unique_responses(self, question) -> list:
+        survey = self.get_selected_survey()
+        return survey.get_unique_resposes(question)
+    
+    def remove_text_in_column(self, question, text) -> list:
+        survey = self.get_selected_survey()
+        return survey.remove_text_in_column(question, text)
+    
+    # endregion Prepare
     
     # region AnalysisController
     def get_questions_by_category(self, category: str) -> list:
