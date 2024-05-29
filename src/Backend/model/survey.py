@@ -1,6 +1,7 @@
 import pandas as pd
 import backend.data_processor.cleaner as cl
 import backend.data_processor.toolparser as tp
+import backend.constants as constants
 from matplotlib.figure import Figure
 from backend.analysis.chart_logic import ChartLogic
 from backend.model.report_model import PDFReport
@@ -66,7 +67,29 @@ class Survey():
     def get_pdf_report(self) -> PDFReport:
         return self.pdf_report
     
+    def get_prepare_infobox_information(self, question) -> dict:
+        infobox_info = {}
+        infobox_info[constants.InfoBoxItem.CURRENT_DATATYPE] = self.raw_data[question].dtype
+        infobox_info[constants.InfoBoxItem.COUNT_RESPONSES] = self.count_responses(question)
+        infobox_info[constants.InfoBoxItem.NO_UNIQUE_RESPONES] = self.raw_data[question].unique().count()
+        return infobox_info
+    
     #endregion
+    
+    def drop_column(self, column: str) -> None:
+        dropped, new_data = cl.drop_columns_by_name(self.raw_data, [column])
+        if dropped > 0:
+            self.raw_data = new_data
+            if column in self.not_categorized_questions:
+                self.not_categorized_questions.remove(column)
+            else:
+                category = self.find_category_by_question(column)
+                if category:
+                    try:
+                        self.categorized_questions[category].remove(column)
+                    except ValueError:
+                        print('Category not found.')
+        return None
     
     def questions_categorized(self) -> bool:
         return self.categorized_questions
@@ -76,6 +99,9 @@ class Survey():
     
     def count_responses(self) -> int:
         return self.raw_data.shape[0]
+    
+    def count_responses(self, question) -> int:
+        return self.raw_data[question].count()
     
     def number_of_questions(self) -> tuple[int, int]:
         return self.raw_data.shape[1]
@@ -116,6 +142,12 @@ class Survey():
                 self.not_categorized_questions.insert(0, question)
             except ValueError:
                 print('Category not found!')
+        return None
+    
+    def find_category_by_question(self, question: str) -> str | None:
+        for category, items in self.categorized_questions.items():
+            if question in items:
+                return category
         return None
     
     def add_new_category(self, category: str) -> None:

@@ -130,6 +130,15 @@ class Controller:
         survey.set_datatype_by_question(question, datatype)
         return None
     
+    def drop_column(self, question: str) -> None:
+        survey = self.get_selected_survey()
+        survey.drop_column(question)
+        return None
+    
+    def get_prepare_infobox(self, question: str) -> dict:
+        survey = self.get_selected_survey()
+        return survey.get_prepare_infobox_information(question)
+    
     # endregion
     
     # region AnalysisController

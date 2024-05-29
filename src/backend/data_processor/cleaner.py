@@ -6,8 +6,8 @@ import pandas as pd
 #region Helper functions
 def get_count_dropped(dataframes: list) -> int:
     if len(dataframes) == 2:
-        df_0 = dataframes[0].shape[0]
-        df_1 = dataframes[1].shape[0]
+        df_0 = dataframes[0].shape[1]
+        df_1 = dataframes[1].shape[1]
         if  df_0 > df_1:
             return df_0 - df_1
         else:

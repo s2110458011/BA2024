@@ -111,8 +111,8 @@ class Navigation(ctk.CTkFrame):
         return None
     
     def exit_click(self) -> None:
-        self.main_window.quit()
         self.main_window.destroy()
+        self.main_window.quit()
         return None
     
     #endregion

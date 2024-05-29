@@ -81,6 +81,18 @@ def count_responses_for_unique_answers(df: pd.DataFrame, question: str) -> pd.Da
     all_answers = all_answers.groupby(question).size().to_frame(name='Count')
     return all_answers
 
+def count_responses_for_question(df: pd.DataFrame, question:str) -> int:
+    """Count the number of responses for a given question. Does not inclue NaN values = no answer was provided.
+
+    Args:
+        df (pd.DataFrame): _description_
+        question (str): _description_
+
+    Returns:
+        int: _description_
+    """
+    return df[question].count()
+
 def get_column_by_name(data: pd.DataFrame, column_name: str) -> np.array:
     column = data[column_name]
     return np.array(column)
