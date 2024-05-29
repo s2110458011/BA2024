@@ -18,7 +18,6 @@ def load_data_from_csv(file: str) -> pd.DataFrame:
 
 def infer_datatypes(df: pd.DataFrame) -> pd.DataFrame:
     for column_name, column in df.items():
-        print(column.dtype)
         idx = 0
         if column.dtype =='object':
             sample_value = column.iloc[idx]
@@ -31,8 +30,6 @@ def infer_datatypes(df: pd.DataFrame) -> pd.DataFrame:
                 df[column_name]= df[column_name].astype('int32')
             elif isinstance(sample_value, float):
                 df[column_name]= df[column_name].astype('float')
-
-            print(df.dtypes)
     return df
 
 def extract_features(df: pd.DataFrame) -> list:

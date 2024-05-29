@@ -131,7 +131,9 @@ class AssignDatatypes(ctk.CTkToplevel):
     #region Action commands
     
     def on_item_click(self, event) -> None:
+        self.dropdown_datatypes.set('Choose datatype')
         question = self.get_selected_question()
+        self.controller.set_selected_question(question)
         if question is not None:
             self.fill_with_response_values(question)
             self.update_infobox(question)
@@ -140,7 +142,13 @@ class AssignDatatypes(ctk.CTkToplevel):
     def action_button_apply(self) -> None:
         selected_datatype = self.dropdown_datatypes.get()
         question = self.get_selected_question()
-        self.controller.set_datatype_by_question(question, selected_datatype)
+        msg = self.controller.set_datatype_by_question(question, selected_datatype)
+        if msg:
+            response = tk.messagebox.askyesno(title='Convertion error', message=msg)
+            if response:
+                self.controller.set_datatype_by_question(question, 'float')
+        self.fill_with_response_values(question)
+        self.update_infobox(question)
         return None
     
     def action_drop_column(self) -> None:
@@ -165,6 +173,7 @@ class AssignDatatypes(ctk.CTkToplevel):
     def action_remove_text(self) -> None:
         question = self.get_selected_question()
         text = self.entry_remove.get()
+        self.entry_remove.delete(0, 'end')
         responses = self.controller.remove_text_in_column(question, text)
         self.fill_listbox_responses(responses)
         self.update_infobox(question)
@@ -202,7 +211,7 @@ class AssignDatatypes(ctk.CTkToplevel):
             question = self.listbox_questions.get(current_index)
             return question
         else:
-            return None
+            return self.controller.get_selected_preparation_question()
         
     def update_infobox(self, question) -> None:
         info = self.controller.get_prepare_infobox(question)

@@ -121,13 +121,15 @@ class Controller:
         view.set_combobox_selected_value()
         return None
     
-    def get_responses_to_question(self, question) -> list:
+    def get_responses_to_question(self, question: str) -> list:
         survey = self.get_selected_survey()
         return survey.get_responses_to_question(question)
     
-    def set_datatype_by_question(self, question: str, datatype: str) -> None:
+    def set_datatype_by_question(self, question: str, datatype: str) -> str | None:
         survey = self.get_selected_survey()
-        survey.set_datatype_by_question(question, datatype)
+        msg = survey.set_datatype_by_question(question, datatype)
+        if msg:
+            return msg
         return None
     
     def drop_column(self, question: str) -> None:
@@ -139,13 +141,22 @@ class Controller:
         survey = self.get_selected_survey()
         return survey.get_prepare_infobox_information(question)
     
-    def get_unique_responses(self, question) -> list:
+    def get_unique_responses(self, question: str) -> list:
         survey = self.get_selected_survey()
         return survey.get_unique_resposes(question)
     
-    def remove_text_in_column(self, question, text) -> list:
+    def remove_text_in_column(self, question: str, text: str) -> list:
         survey = self.get_selected_survey()
         return survey.remove_text_in_column(question, text)
+    
+    def set_selected_question(self, question: str) -> None:
+        survey = self.get_selected_survey()
+        survey.set_current_preparation_question(question)
+        return None
+    
+    def get_selected_preparation_question(self) -> str:
+        survey = self.get_selected_survey()
+        return survey.get_current_preparation_question()
     
     # endregion Prepare
     

@@ -14,6 +14,7 @@ class Survey():
         self.raw_data: pd.DataFrame = data
         self.categorized_questions: dict[str, list[str]] = {}
         self.not_categorized_questions: list = tp.extract_features(self.raw_data)
+        self.selected_question: str = None
         self.chart_logic = ChartLogic(data)
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
         self.next_report_item_number = 1
@@ -44,6 +45,13 @@ class Survey():
     def set_current_chart_question(self, question) -> None:
         self.chart_logic.set_current_question(question)
         return None
+    
+    def set_current_preparation_question(self, question) -> None:
+        self.selected_question = question
+        return None
+    
+    def get_current_preparation_question(self) -> str | None:
+        return self.selected_question
     
     def get_uncategorized_questions(self) -> list:
         return self.not_categorized_questions
