@@ -28,7 +28,6 @@ class Prepare(ctk.CTkFrame):
         
         self.create_preprocessing_frame_widgets()
         self.create_categorizing_frame_widgets()
-        
         return None
     
     def create_preprocessing_frame_widgets(self) -> None:
