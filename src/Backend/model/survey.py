@@ -27,7 +27,7 @@ class Survey():
     def get_data(self) -> pd.DataFrame:
         return self.raw_data
     
-    def set_datatype_by_question(self, question: str, datatype: str) -> None:
+    def set_datatype_by_question(self, question: str, datatype: str) -> str | None:
         # insert if -> check if conversion to int/float = parse
         try:
             self.raw_data[question] = self.raw_data[question].astype(datatype)
@@ -35,7 +35,8 @@ class Survey():
             if datatype == 'float':
                 self.raw_data = cl.prepare_column_for_float(self.raw_data, question)
                 self.raw_data[question] = self.raw_data[question].astype(datatype)
-        print(self.raw_data[question].dtype)
+            if datatype == 'int':
+                return 'Cannot convert to datatype int, convert to float instead?'
         return None
     
     def set_uncategorized_questions(self, free_questions: list) -> None:
