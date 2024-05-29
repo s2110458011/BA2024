@@ -4,19 +4,26 @@ from backend.model.report_item_model import ReportItem
 from PIL import Image
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from typing import Type, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from customtkinter import CTkLabel
 
 class PDFReport():
     def __init__(self, title: str) -> None:
         self.title = title
         self.report_items: list[ReportItem | str] = []
+        self.preview_labels: list[Type['CTkLabel']] = []
         return None
     
-    def add_report_item(self, item: ReportItem | str) -> None:
+    def add_report_item(self, item: ReportItem | str, label: Type['CTkLabel']) -> None:
         self.report_items.append(item)
+        self.preview_labels.append(label)
         return None
     
     def update_title(self, title: str) -> None:
         self.title = title
+        return None
     
     def print_report_as_pdf(self, file_path: str) -> FPDF:
         pdf = FPDF()

@@ -19,7 +19,7 @@ class Survey():
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
         self.next_report_item_number = 1
         self.report_items: dict = {}
-        self.pdf_report = None
+        self.pdf_report: PDFReport = None
         
     
     #region getter & setter

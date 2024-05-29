@@ -14,15 +14,16 @@ from frontend.pages.page_report import Report
 
 from PIL import Image, ImageTk
 
-""" from typing import Type, TYPE_CHECKING
+from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from frontend.modules.page_prepare import Prepare """
+    from customtkinter import CTkLabel
 
 class Controller:
     def __init__(self) -> None:
         self.model = SurveyLibrary()
         self.view = MainWindow(controller=self, title='AutoGraph', size=(1000,600))
+        self.report_init = True
         return None
         
     
@@ -48,6 +49,14 @@ class Controller:
     def set_current_survey_selection(self, id: str) -> None:
         self.model.set_current_selection(id)
         self.update_category_list()
+        if not self.report_init:
+            survey = self.get_selected_survey()
+            view = self.view.get_page(Report)
+            if survey.pdf_report:
+                view.update_report_view_survey_report()
+            else:
+                view.update_report_view_empty_report()
+        #self.report_init = False
         return None
     
     def check_survey_selected(self) -> bool:
@@ -247,9 +256,14 @@ class Controller:
         view.update_report_items_list(report_item_list)
         return None
     
+    def get_report_items_list(self) -> list:
+        survey = self.get_selected_survey()
+        return survey.get_report_items_list()
+    
     def create_new_report(self, report_title: str) -> None:
         survey = self.get_selected_survey()
         survey.create_new_pdf_report(report_title)
+        self.report_init = False
         return None
     
     def update_report_title(self, new_title: str) -> bool | None:
@@ -260,14 +274,23 @@ class Controller:
             return True
         return None
     
-    def update_final_report_items_list(self, item: str, type: str) -> None:
+    def get_report_title(self) -> str:
+        survey = self.get_selected_survey()
+        report = survey.get_pdf_report()
+        return report.title
+    
+    def get_preview_labels(self) -> list:
+        report = self.get_selected_survey().get_pdf_report()
+        return report.preview_labels
+    
+    def update_final_report_items_list(self, item: str, type: str, label: Type['CTkLabel']) -> None:
         survey = self.get_selected_survey()
         report = survey.get_pdf_report()
         if type == constants.ItemType.HEADING:
-            report.add_report_item(item)
+            report.add_report_item(item, label)
         elif type == constants.ItemType.PLOT:
             plot = survey.get_report_item(item)
-            report.add_report_item(plot)
+            report.add_report_item(plot, label)
         return None
     
     # endregion

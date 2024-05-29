@@ -11,7 +11,6 @@ class Report(ctk.CTkFrame):
     def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
         self.controller = controller
-        self.labels_list_preview = []
         self.preview_labels: list[ctk.CTkLabel] = []
         self.current_item: ctk.CTkLabel = None
         self.first_report_item = True
@@ -50,26 +49,6 @@ class Report(ctk.CTkFrame):
         self.right_side_frame.grid_rowconfigure(0, weight=1)
         self.preview_frame.grid_columnconfigure(0, weight=1)
         
-        # Place preview labels
-        
-        #preview_buttons_frame = ctk.CTkFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
-        #preview_buttons_frame.grid(row=1, column=0, sticky='nsew')
-        #self.right_side_frame.grid_columnconfigure(0, weight=1)
-        
-        # Buttons
-        # up_image = ctk.CTkImage(Image.open('src/assets/button_up.png'), size=(20,20))
-        # button_move_up = ctk.CTkButton(preview_buttons_frame, text='', image=up_image, width=30)
-        # button_move_up.grid(row=0, column=0, padx=(10,0), pady=10)
-        # down_image = ctk.CTkImage(Image.open('src/assets/button_down.png'), size=(20,20))
-        # button_move_down = ctk.CTkButton(preview_buttons_frame, text='', image=down_image, width=30)
-        # button_move_down.grid(row=0, column=1, padx=(10,0), pady=10)
-        # bin_image = ctk.CTkImage(Image.open('src/assets/button_bin.png'), size=(20,20))
-        # button_remove = ctk.CTkButton(preview_buttons_frame, text='', image=bin_image, width=30)
-        # button_remove.grid(row=0, column=2, padx=(10,0), pady=10)
-        # preview_image = ctk.CTkImage(Image.open('src/assets/button_preview.png'), size=(20,20))
-        # button_preview_pdf = ctk.CTkButton(preview_buttons_frame, text='', image=preview_image, width=30)
-        # button_preview_pdf.grid(row=0, column=3, padx=(10,0), pady=10)
-        
         return None
     
     def create_options_widget(self) -> None:
@@ -107,21 +86,16 @@ class Report(ctk.CTkFrame):
     def create_new_heading_label(self) -> None:
         label_text = self.text_entry_header.get()
         self.text_entry_header.delete(0, 'end')
-        self.add_label_to_list(label_text, '#228B22')
-        self.controller.update_final_report_items_list(label_text, 'heading')
+        preview_label = self.add_label_to_list(label_text, '#228B22')
+        self.controller.update_final_report_items_list(item=label_text, type='heading', label=preview_label)
         return None
     
     def add_item_to_report(self) -> None:
         selected_idx = self.report_items_list.curselection()
         if selected_idx:
             item = self.report_items_list.get(selected_idx)
-            self.add_label_to_list(item, '#6E8B3D')
-            self.controller.update_final_report_items_list(item, 'plot')
-        return None
-    
-    def preview_report(self) -> None:
-        
-        
+            preview_label = self.add_label_to_list(item, '#6E8B3D')
+            self.controller.update_final_report_items_list(item=item, type='plot', label=preview_label)
         return None
     
     def create_new_report(self) -> None:
@@ -135,10 +109,7 @@ class Report(ctk.CTkFrame):
         if self.report_items_list.get(0, 'end'):
             self.button_add_item.configure(state='normal')
         
-        self.button_add_title.grid_forget()
-        change_title = ctk.CTkButton(self.left_side_frame, text='Change Title', corner_radius=0, command=self.update_report_title)
-        change_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
-        self.button_add_header.configure(state='normal')
+        self.change_create_button()
         return None
     
     def update_report_title(self) -> None:
@@ -157,16 +128,23 @@ class Report(ctk.CTkFrame):
     
     #region Helper functions
     
-    def add_label_to_list(self, preview_item: str, label_color: str) -> None:
+    def change_create_button(self) -> None:
+        self.button_add_title.grid_forget()
+        self.change_title = ctk.CTkButton(self.left_side_frame, text='Change Title', corner_radius=0, command=self.update_report_title)
+        self.change_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
+        self.button_add_header.configure(state='normal')
+        return None
+    
+    def add_label_to_list(self, preview_item: str, label_color: str) -> ctk.CTkLabel:
         preview_label = ctk.CTkLabel(self.preview_frame, text=preview_item, fg_color=label_color)
         preview_label.bind('<Button-1>', self.on_label_click)
         self.preview_labels.append(preview_label)
         self.place_preview_labels()
-        return None
+        return preview_label
     
     def remove_preview_labels(self) -> None:
         for item in self.preview_frame.winfo_children():
-            item.grid_forget
+            item.grid_forget()
         return None
     
     def place_preview_labels(self) -> None:
@@ -188,6 +166,28 @@ class Report(ctk.CTkFrame):
         self.report_items_list.delete(0, 'end')
         for idx, report_item in enumerate(items_list):
             self.report_items_list.insert(idx, report_item)
+        return None
+    
+    def update_report_view_empty_report(self) -> None:
+        self.first_report_item = True
+        self.change_title.grid_forget()
+        self.button_add_title.grid(row=0, column=2, padx=(0,20), pady=(20,0), sticky='w')
+        self.report_items_list.delete(0, 'end')
+        self.preview_labels.clear()
+        self.remove_preview_labels()
+        self.button_add_header.configure(state='disabled')
+        self.button_add_item.configure(state='disabled')
+        return None
+    
+    def update_report_view_survey_report(self) -> None:
+        self.first_report_item = False
+        self.change_create_button()
+        title = self.controller.get_report_title()
+        self.add_title_to_preview(title)
+        self.preview_labels = self.controller.get_preview_labels()
+        self.place_preview_labels()
+        items_list = self.controller.get_report_items_list()
+        self.update_report_items_list(items_list)
         return None
     
     #endregion
