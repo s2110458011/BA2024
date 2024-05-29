@@ -2,6 +2,7 @@ import tkinter as tk
 import customtkinter as ctk
 
 from tkinter import ttk
+from tktooltip import ToolTip
 from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -23,16 +24,21 @@ class Categorize(ctk.CTkToplevel):
         return None
     
     def create_widgets(self) -> None:
-        self.frame_listbox_questions = ctk.CTkFrame(self, fg_color='gray20')
+        self.frame_listbox_questions = ctk.CTkFrame(self, corner_radius=0, fg_color='#333')
         self.frame_listbox_questions.grid_columnconfigure(0, weight=1)
-        self.listbox_questions = tk.Listbox(self.frame_listbox_questions, background='gray20', border=None, borderwidth=0)
+        self.listbox_questions = tk.Listbox(self.frame_listbox_questions, background='#333', border=None, borderwidth=0)
+        self.scroll_Y = ttk.Scrollbar(self.frame_listbox_questions, orient='vertical', command=self.listbox_questions.yview)
+        self.scroll_X = ttk.Scrollbar(self.frame_listbox_questions, orient='horizontal', command=self.listbox_questions.xview)
+        self.listbox_questions.config(yscrollcommand=self.scroll_Y.set, xscrollcommand=self.scroll_X.set)
         self.label_new_category = ctk.CTkLabel(self, text='New Category', anchor='w')
-        self.textentry_new_category = ctk.CTkEntry(self)
-        self.button_new_category = ctk.CTkButton(self, text='New', command=self.action_add_new_category)
-        self.button_add_to_category = ctk.CTkButton(self, text='Add', command=self.action_add_question_to_category)
-        self.button_remove_from_category = ctk.CTkButton(self, text='Remove')
+        self.textentry_new_category = ctk.CTkEntry(self, corner_radius=0)
+        self.button_new_category = ctk.CTkButton(self, text='New', corner_radius=0, command=self.action_add_new_category)
+        self.button_add_to_category = ctk.CTkButton(self, text='Add', corner_radius=0, command=self.action_add_question_to_category)
+        ToolTip(self.button_add_to_category, msg='Select category to add question.', delay=2.0)
+        self.button_remove_from_category = ctk.CTkButton(self, text='Remove', corner_radius=0, command=self.action_remove_question_from_category)
+        ToolTip(self.button_remove_from_category, msg='Select question to remove.', delay=2.0)
         
-        self.treeview_categories = ttk.Treeview(self)
+        self.treeview_categories = ttk.Treeview(self, selectmode='browse')
         self.initialize_treeview_categories()
         
         self.button_save_categories = ctk.CTkButton(self, text='Save', command=self.action_save_categories)
@@ -58,6 +64,8 @@ class Categorize(ctk.CTkToplevel):
     def create_layout(self) -> None:
         self.frame_listbox_questions.grid(row=0, column=0, rowspan=2, sticky='nsew', pady=20, padx=20)
         self.listbox_questions.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+        self.scroll_Y.grid(row=0, column=1, sticky='ns')
+        self.scroll_X.grid(row=1, column=0, sticky='ew')
         self.label_new_category.grid(row=0, column=1, pady=20, sticky='w')
         self.textentry_new_category.grid(row=0, column=2, pady=20, padx=20)
         self.button_new_category.grid(row=0, column=3, padx=(0,20))
@@ -90,6 +98,18 @@ class Categorize(ctk.CTkToplevel):
         selected_category = self.treeview_categories.item(selected_category_id, 'text')
         self.treeview_categories.insert(selected_category_id, 'end', values=[question])
         self.controller.add_question_to_category(selected_category, question)
+        return None
+    
+    def action_remove_question_from_category(self) -> None:
+        selected_item = self.treeview_categories.focus()
+        print(selected_item)
+        if selected_item:
+            parent_id = self.treeview_categories.parent(selected_item)
+            category = self.treeview_categories.item(parent_id, 'text')
+            question = self.treeview_categories.item(selected_item, 'values')[0]
+            self.treeview_categories.delete(selected_item)
+            self.controller.remove_question_from_category(category, question)
+            self.fill_listbox_with_questions()
         return None
     
     def action_save_categories(self) -> None:

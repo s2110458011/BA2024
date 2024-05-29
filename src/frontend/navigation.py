@@ -66,28 +66,24 @@ class Navigation(ctk.CTkFrame):
         
     def load_click(self) -> None:
         self.main_window.show_frame(Load)
-        #self.set_print_button_state('disabled')
         self.set_save_button_state('disabled')
         self.current_page = 'Load'
         return None
     
     def prepare_click(self) -> None:
         self.main_window.show_frame(Prepare)
-        #self.set_print_button_state('disabled')
         self.set_save_button_state('disabled')
         self.current_page = 'Prepare'
         return None
         
     def analyze_click(self) -> None:
         self.main_window.show_frame(Analyze)
-        #self.set_print_button_state('normal')
         self.set_save_button_state('normal')
         self.current_page = 'Analyze'
         return None
     
     def report_click(self) -> None:
         self.main_window.show_frame(Report)
-        #self.set_print_button_state('normal')
         self.set_save_button_state('normal')
         self.current_page = 'Report'
         return None
@@ -129,14 +125,6 @@ class Navigation(ctk.CTkFrame):
             self.btn_save.configure(fg_color=['#2CC985', '#2FA572'])
         else:
             self.btn_save.configure(fg_color='gray30')
-        return None
-    
-    def set_print_button_state(self, state: str) -> None:
-        self.btn_print.configure(state=state)
-        if state == 'normal':
-            self.btn_print.configure(fg_color=['#2CC985', '#2FA572'])
-        else:
-            self.btn_print.configure(fg_color='gray30')
         return None
     
     #endregion

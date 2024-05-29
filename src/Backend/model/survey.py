@@ -1,5 +1,6 @@
 import pandas as pd
 import backend.data_processor.cleaner as cl
+import backend.data_processor.toolparser as tp
 from matplotlib.figure import Figure
 from backend.analysis.chart_logic import ChartLogic
 from backend.model.report_model import PDFReport
@@ -11,8 +12,8 @@ class Survey():
         self.name = name
         self.raw_data = data
         self.prepared_data = data
-        self.categorized_questions = {}
-        self.not_categorized_questions = None
+        self.categorized_questions: dict[str, list[str]] = {}
+        self.not_categorized_questions: list = tp.extract_features(self.raw_data)
         self.chart_logic = ChartLogic(data)
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
         self.next_report_item_number = 1
@@ -102,8 +103,19 @@ class Survey():
     def add_question_to_category(self, category: str, question: str) -> None:
         if category not in self.categorized_questions:
             self.categorized_questions[category] = [question]
+            self.not_categorized_questions.remove(question)
         else:
             self.categorized_questions[category].append(question)
+            self.not_categorized_questions.remove(question)
+        return None
+    
+    def remove_question_from_category(self, category: str, question: str) -> None:
+        if category in self.categorized_questions:
+            try:
+                self.categorized_questions[category].remove(question)
+                self.not_categorized_questions.insert(0, question)
+            except ValueError:
+                print('Category not found!')
         return None
     
     def add_new_category(self, category: str) -> None:

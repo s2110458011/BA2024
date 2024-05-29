@@ -35,20 +35,19 @@ def infer_datatypes(df: pd.DataFrame) -> pd.DataFrame:
             print(df.dtypes)
     return df
 
-def extract_features(df: pd.DataFrame) -> np.array:
+def extract_features(df: pd.DataFrame) -> list:
     """_summary_
 
     Args:
         df (pd.DataFrame): Dataframe with survey data, headers are the questions.
 
     Returns:
-        np.array: _description_
+        list: _description_
     """
 
     features = []
     for column in df:
         features.append(column)
-    features = np.asarray(features)
     return features
 
 def extract_possible_answers(df: pd.DataFrame) -> dict:

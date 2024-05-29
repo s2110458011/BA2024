@@ -1,5 +1,5 @@
-import pandas as pd
 import uuid
+import pandas as pd
 import backend.analysis.chart_logic as lgc
 import backend.data_processor.toolparser as tp
 import backend.constants as constants
@@ -65,18 +65,19 @@ class Controller:
             return None
     
     # region Prepare
-    def add_question_to_category(self, category, question) -> None:
+    def add_question_to_category(self, category: str, question: str) -> None:
         survey = self.get_selected_survey()
         survey.add_question_to_category(category, question)
         return None
-        
-    def get_questions_to_categorize(self):
-        #TODO type hint return type
+    
+    def remove_question_from_category(self, category: str, question: str) -> None:
         survey = self.get_selected_survey()
-        if survey.not_categorized_questions is None:
-            questions = tp.extract_features(survey.get_data())
-        else:
-            questions = survey.get_uncategorized_questions()
+        survey.remove_question_from_category(category, question)
+        return None
+        
+    def get_questions_to_categorize(self) -> list:
+        survey = self.get_selected_survey()
+        questions = survey.get_uncategorized_questions()
         return questions
     
     def get_categorized_questions(self) -> dict:
@@ -135,7 +136,7 @@ class Controller:
     def get_questions_by_category(self, category: str) -> list:
         survey = self.get_selected_survey()
         if category == 'All':
-            return self.get_questions_to_categorize()
+            return tp.extract_features(survey.get_data())
         else:
             category_dict = survey.categorized_questions
             return category_dict[category]

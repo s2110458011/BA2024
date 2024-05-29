@@ -62,6 +62,9 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_categories.set('Choose Category')
         self.listbox_questions_frame = ctk.CTkFrame(self.settings_frame, corner_radius=0, bg_color='gray20')
         self.listbox_questions = tk.Listbox(self.listbox_questions_frame, selectmode='browse', background='gray20', borderwidth=0)
+        self.yscrollbar_questions = ttk.Scrollbar(self.listbox_questions_frame, orient='vertical', command=self.listbox_questions.yview)
+        self.xscrollbar_questions = ttk.Scrollbar(self.listbox_questions_frame, orient='horizontal', command=self.listbox_questions.xview)
+        self.listbox_questions.config(yscrollcommand=self.yscrollbar_questions.set, xscrollcommand=self.xscrollbar_questions.set)
         self.listbox_questions.bind('<<ListboxSelect>>', self.on_click_question_list)
         
         self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list, command=self.action_create_chart)
@@ -87,7 +90,10 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_categories.grid(row=0, column=0, padx=10, pady=10)
         self.listbox_questions_frame.grid(row=1, column=0, padx=10, pady=10, sticky='ew')
         self.listbox_questions_frame.grid_columnconfigure(0, weight=1)
+        self.listbox_questions.pack(side='left', fill='both', expand=True)
         self.listbox_questions.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+        self.yscrollbar_questions.grid(row=0, column=1, sticky='ns')
+        self.xscrollbar_questions.grid(row=1, column=0, sticky='ew')
         
         self.dropdown_charts.grid(row=2, column=0, padx=10, pady=10)
         self.chart_settings_frame.grid(row=3, column=0, padx=10, pady=10, sticky='nsew')
