@@ -31,10 +31,12 @@ class Survey():
         # insert if -> check if conversion to int/float = parse
         try:
             self.raw_data[question] = self.raw_data[question].astype(datatype)
+            self.chart_logic.update_simple_chart_options(self.raw_data)
         except ValueError:
             if datatype == 'float':
                 self.raw_data = cl.prepare_column_for_float(self.raw_data, question)
                 self.raw_data[question] = self.raw_data[question].astype(datatype)
+                self.chart_logic.update_simple_chart_options(self.raw_data)
             if datatype == 'int':
                 return 'Cannot convert to datatype int, convert to float instead?'
         return None
@@ -184,11 +186,11 @@ class Survey():
     def create_chart(self, chart_type: str, report_image: bool) -> Figure:
         match chart_type:
             case 'line':
-                return self.chart_logic.create_simple_line_chart(report_image)
+                return self.chart_logic.create_simple_line_chart(self.raw_data, report_image)
             case 'bar':
-                return self.chart_logic.create_simple_bar_chart(report_image)
+                return self.chart_logic.create_simple_bar_chart(self.raw_data, report_image)
             case 'pie':
-                return self.chart_logic.create_simple_pie_chart(report_image)
+                return self.chart_logic.create_simple_pie_chart(self.raw_data, report_image)
     
     def switch_axes(self) -> Figure:
         return self.chart_logic.switch_axes_simple_bar_chart()

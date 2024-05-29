@@ -231,7 +231,10 @@ class Controller:
             case 'Save':
                 navigation.set_save_button_state(state)
         return None
-            
+    
+    def get_advanced_chart_options(self, first_question: str, second_question: str) -> list:
+        survey = self.get_selected_survey()
+        
     
     # endregion
     
