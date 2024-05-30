@@ -53,11 +53,13 @@ class Controller:
         self.update_third_question_list()
         if not self.report_init:
             survey = self.get_selected_survey()
-            view = self.view.get_page(Report)
+            report_page = self.view.get_page(Report)
             if survey.pdf_report:
-                view.update_report_view_survey_report()
+                report_page.update_report_view_survey_report()
             else:
-                view.update_report_view_empty_report()
+                report_page.update_report_view_empty_report()
+        analyze = self.view.get_page(Analyze)
+        analyze.empty_analyze()
         #self.report_init = False
         return None
     
@@ -244,7 +246,7 @@ class Controller:
     def add_item_to_report(self, image: Image, short_description:str, description: str) -> bool:
         survey = self.get_selected_survey()
         item_no = survey.get_next_report_item_number()
-        if description == constants.DESCRIPTION:
+        if description[:-1] == constants.DESCRIPTION:
             description = ''
         new_item = ReportItem(item_no, image, short_description, description)
         if not survey.add_item_to_report_items_list(short_description, new_item):
@@ -301,7 +303,7 @@ class Controller:
         report = self.get_selected_survey().get_pdf_report()
         return report.preview_labels
     
-    def update_final_report_items_list(self, item: str, type: str, label: Type['CTkLabel']) -> None:
+    def update_final_report_items_list(self, item: str, type: constants.ItemType, label: Type['CTkLabel']) -> None:
         survey = self.get_selected_survey()
         report = survey.get_pdf_report()
         if type == constants.ItemType.HEADING:

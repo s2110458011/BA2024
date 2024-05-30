@@ -323,6 +323,17 @@ class Analyze(ctk.CTkFrame):
     def get_description_text(self) -> str:
         return self.text_entry_description.get('1.0', 'end')
     
+    def empty_analyze(self) -> None:
+        self.dropdown_charts.set('Choose Chart')
+        self.listbox_questions.delete(0, 'end')
+        self.fig = None
+        self.img = None
+        if self.canvas is not None:
+            self.canvas.get_tk_widget().destroy()
+        if self.more_options:
+            self.action_show_more_options()
+        return None
+    
     #endregion
     
     #region Button commands

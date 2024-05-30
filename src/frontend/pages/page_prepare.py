@@ -39,11 +39,6 @@ class Prepare(ctk.CTkFrame):
         
         self.button_set_dtypes = ctk.CTkButton(self.preprocessing_frame, text='Set Datatypes', corner_radius=0, command=self.action_button_datatypes)
         self.button_set_dtypes.grid(row=1, column=0, padx=20, pady=(10,20))
-        self.button_drop_columns = ctk.CTkButton(self.preprocessing_frame, text='Drop Columns', corner_radius=0)
-        self.button_drop_columns.grid(row=1, column=1, padx=(0,20), pady=(10,20))
-        self.button_drop_rows = ctk.CTkButton(self.preprocessing_frame, text='Drop Rows', corner_radius=0)
-        self.button_drop_rows.grid(row=1, column=2, padx=(0,20), pady=(10,20))
-        
         return None
     
     def create_categorizing_frame_widgets(self) -> None:
@@ -55,7 +50,6 @@ class Prepare(ctk.CTkFrame):
         
         self.button_categorize = ctk.CTkButton(self.categorizing_frame, text='Categorize', state='disabled', corner_radius=0, command=self.action_button_categorize)
         self.button_categorize.grid(row=1, column=0, padx=20, pady=(10,20))
-        
         return None
     
     def create_main_layout(self) -> None:

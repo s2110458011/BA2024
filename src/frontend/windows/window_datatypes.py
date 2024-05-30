@@ -121,7 +121,6 @@ class AssignDatatypes(ctk.CTkToplevel):
         # Layout
         frame_listbox_values.grid(row=1, column=1, rowspan=2, sticky='nsew', pady=(0,10), padx=(10,10))
         self.listbox_values.grid(row=0, column=0, padx=10, pady=5, sticky='nsew')
-        #self.listbox_values.pack(side='left', fill='both', expand=True)
         scroll_Y.grid(row=0, column=1, sticky='ns')
         scroll_X.grid(row=1, column=0, sticky='ew')
         return None

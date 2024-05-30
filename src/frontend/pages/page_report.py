@@ -1,5 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
+import backend.constants as constants
 from tkinter import ttk
 from PIL import Image, ImageTk
 from typing import Type, TYPE_CHECKING
@@ -88,7 +89,7 @@ class Report(ctk.CTkFrame):
         label_text = self.text_entry_header.get()
         self.text_entry_header.delete(0, 'end')
         preview_label = self.add_label_to_list(label_text, '#228B22')
-        self.controller.update_final_report_items_list(item=label_text, type='heading', label=preview_label)
+        self.controller.update_final_report_items_list(item=label_text, type=constants.ItemType.HEADING, label=preview_label)
         return None
     
     def add_item_to_report(self) -> None:
@@ -96,7 +97,7 @@ class Report(ctk.CTkFrame):
         if selected_idx:
             item = self.report_items_list.get(selected_idx)
             preview_label = self.add_label_to_list(item, '#6E8B3D')
-            self.controller.update_final_report_items_list(item=item, type='plot', label=preview_label)
+            self.controller.update_final_report_items_list(item=item, type=constants.ItemType.PLOT, label=preview_label)
         return None
     
     def create_new_report(self) -> None:

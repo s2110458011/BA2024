@@ -95,7 +95,7 @@ class ChartLogic():
         self.ax.clear()
         sns.barplot(self.chart_data, x=self.current_question, y=self.chart_simple_y, ax=self.ax)
         if self.chart_data[self.current_question].size > 5:
-            self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=90, ha='right')
+            self.ax.tick_params(axis='x', rotation=55)
         if report_image:
             self.create_image()
         return self.figure
@@ -109,16 +109,12 @@ class ChartLogic():
             sns.barplot(self.chart_data, x=self.chart_simple_y, y=self.chart_simple_x, ax=self.ax)
             if self.chart_data[self.chart_simple_y].size > 5:
                 self.ax.tick_params(axis='x', rotation=55)
-                #self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=55, ha='right')
             self.barchart_init_axes = False
         else:
             sns.barplot(self.chart_data, x=self.chart_simple_x, y=self.chart_simple_y, ax=self.ax)
             if self.chart_data[self.chart_simple_x].size > 5:
                 self.ax.tick_params(axis='x', rotation=55)
-                #self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=55, ha='right')
             self.barchart_init_axes = True
-        
-        #self.create_image()
         return self.figure
     
     def create_simple_pie_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
@@ -195,9 +191,7 @@ class ChartLogic():
         x = self.advanced_chart_dimensions['x']
         y = self.advanced_chart_dimensions['y']
         df = self.compute_counts_of_observation(raw_data, x, y)
-        scatterplot = sns.scatterplot(data=df, x=x, y=y, size='count', ax=self.ax)
-        #plt.xticks(rotation=55, ha='right')
-        #plt.close(scatterplot.figure)
+        sns.scatterplot(data=df, x=x, y=y, size='count', ax=self.ax)
         self.ax.tick_params(axis='x', rotation=55)
         if report_image:
             self.create_image()

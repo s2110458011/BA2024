@@ -103,7 +103,6 @@ class Categorize(ctk.CTkToplevel):
     def action_remove_question_from_category(self) -> None:
         # Only removes one question at a time, does nothing if category is selected
         selected_item = self.treeview_categories.focus()
-        print(selected_item)
         if selected_item:
             parent_id = self.treeview_categories.parent(selected_item)
             category = self.treeview_categories.item(parent_id, 'text')
