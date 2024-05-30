@@ -18,6 +18,8 @@ class Analyze(ctk.CTkFrame):
         self.controller: Type['Controller'] = controller
         self.categories_list: list = self.controller.get_categories()
         self.questions_list: list = []
+        self.chart_col_threshold = 2
+        self.col_questions_list: list = self.controller.get_col_questions(self.chart_col_threshold)
         self.charts_list: list = []
         self.canvas = FigureCanvasTkAgg()
         self.fig: Figure = None
@@ -135,13 +137,15 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_hue_question.set('Choose Color Question')
         self.cb_var_hue = tk.IntVar()
         self.cb_hue_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_hue, onvalue=1, offvalue=0)
-        self.dropdown_col_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_by_category)
-        self.dropdown_col_category.set('Choose Column Category')
-        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.get_questions_by_category)
+        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list, command=self.get_questions_by_category)
         self.dropdown_col_question.set('Choose Column Question')
         self.cb_var_col = tk.IntVar()
         self.cb_col_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_col, onvalue=1, offvalue=0)
-        
+        self.rb_var = tk.IntVar()
+        self.rb_frame = ctk.CTkFrame(self.frame_more_options, corner_radius=0, fg_color='transparent')
+        self.rb_two = ctk.CTkRadioButton(self.rb_frame, text='2', value=2, variable=self.rb_var, command=self.on_radiobutton_select)
+        self.rb_three = ctk.CTkRadioButton(self.rb_frame, text='3', value=3, variable=self.rb_var, command=self.on_radiobutton_select)
+        self.rb_var.set(2)
         
         return None
     
@@ -152,9 +156,11 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_hue_category.grid(row=2, column=0, padx=10)
         self.dropdown_hue_question.grid(row=3, column=0, padx=10, pady=(5,10))
         self.cb_hue_question.grid(row=3, column=1, padx=10, pady=(5,10))
-        self.dropdown_col_category.grid(row=4, column=0, padx=10)
-        self.dropdown_col_question.grid(row=5, column=0, padx=10, pady=(5,10))
-        self.cb_col_question.grid(row=5, column=1, padx=10, pady=(5,10))
+        self.dropdown_col_question.grid(row=4, column=0, padx=10, pady=(5,10))
+        self.cb_col_question.grid(row=4, column=1, padx=10, pady=(5,5))
+        self.rb_frame.grid(row=5, column=0, columnspan=2, sticky='nsew')
+        self.rb_two.grid(row=0, column=0, padx=(20,0), pady=(0,10), sticky='w')
+        self.rb_three.grid(row=0, column=1, padx=0, pady=(0,10), sticky='w')
         
         
         return None
@@ -191,6 +197,9 @@ class Analyze(ctk.CTkFrame):
             self.action_create_chart(chart_type)
         return None
     
+    def on_radiobutton_select(self) -> None:
+        self.chart_col_threshold = 2
+    
     #endregion
     
     #region Update methods
@@ -205,6 +214,11 @@ class Analyze(ctk.CTkFrame):
     def update_categories_list(self) -> None:
         self.categories_list = self.controller.get_categories()
         self.dropdown_categories.configure(values=self.categories_list)
+        return None
+    
+    def update_col_questions_list(self) -> None:
+        self.col_questions_list = self.controller.get_col_questions()
+        self.dropdown_col_question.configure(values=self.col_questions_list)
         return None
     
     def update_chart_options_list_simple(self, question) -> None:

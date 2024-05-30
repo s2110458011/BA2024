@@ -134,6 +134,14 @@ class Survey():
     def number_of_questions(self) -> tuple[int, int]:
         return self.raw_data.shape[1]
     
+    def get_columns_with_unique_values_by_threshold(self, threshold: int) -> list:
+        unique_responses = tp.extract_possible_answers(self.raw_data)
+        columns = []
+        for key, value in unique_responses.items():
+            if len(value) <= threshold:
+                columns.append(key)
+        return columns
+    
     def surveycompletion_counts(self, percentages: list) -> pd.DataFrame:
         row_counts = self.raw_data.notnull().sum(axis=1)
         total_cols = self.raw_data.shape[1]

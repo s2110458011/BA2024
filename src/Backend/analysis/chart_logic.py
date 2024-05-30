@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
+import backend.constants as constants
 import backend.data_processor.toolparser as tp
 from matplotlib.figure import Figure
 
@@ -19,6 +20,8 @@ class ChartLogic():
         self.current_question: str = None
         self.chart_data: pd.DataFrame = None
         self.barchart_init_axes: bool = True
+        self.advanced_chart_axed: dict[str: str] = {'x': None, 'y': None, 'hue': None, 'col': None, 'kind': None}
+        self.advanced_chart_data: pd.DataFrame = None
         self.img: Image = None
         
         return None
@@ -133,7 +136,6 @@ class ChartLogic():
         if pd.api.types.is_datetime64_any_dtype(data):
             data = pd.DataFrame(data.dt.date)
         result_df = data.value_counts().sort_index().reset_index()
-        print(result_df)
         return result_df
     
     def create_image(self) -> None:
@@ -146,6 +148,59 @@ class ChartLogic():
     
     #region Advanced Charts
     
+    def update_plot_dimensions(self, df_column: str, dimension: str) -> None:
+        self.advanced_chart_axed[dimension] = df_column
+        return None
+    
+    def get_data_for_advanced_chart(self, raw_data: pd.DataFrame, dimensions: list) -> None:
+        columns = self.get_columns_from_dimensions(dimensions)
+        self.advanced_chart_data = raw_data[columns]
+        return None
+    
+    def custom_sort_data_by_column(self, column: str, custom_order: list) -> None:
+        self.advanced_chart_data[column] = pd.Categorical(self.advanced_chart_data[column], categories=custom_order, ordered=True)
+        self.advanced_chart_data = self.advanced_chart_data.sort_values(column)
+        return None
+        
+    def get_columns_from_dimensions(self, dimensions: list) -> list:
+        columns = []
+        for dim in dimensions:
+            column = self.advanced_chart_axed[dim]
+            columns.append(column)
+        return columns
+    
+    def create_catplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
+        if report_image:
+            self.figure = Figure(figsize=(6, 4), dpi=300, tight_layout=True)
+        else:
+            self.figure = Figure(tight_layout=True)
+        self.ax = self.figure.subplots()
+        self.ax.clear()
+        
+        
+        return self.figure
+    
+    def plot_2_categories_scatterplot(self, raw_data: pd.DataFrame) -> None:
+        x = self.advanced_chart_axed['x']
+        y = self.advanced_chart_axed['y']
+        df = self.compute_counts_of_observation(raw_data, x, y)
+        scale = 50*df['count'].size
+        size = df['count']/df['count'].sum()*scale
+        scatter = self.ax.scatter(x, y, size, data=df, zorder=2, color='#2A788E')
+        kw = dict(prop="sizes", color=scatter.cmap(0.4), fmt="{x}", func=lambda s: s/50)
+        self.ax.legend(*scatter.legend_elements(**kw), bbox_to_anchor=(1.17, 1.0), loc="best", title="Sizes", labelspacing=2)
+        self.ax.margins(.1)
+        return None
+    
+    def compute_counts_of_observation(self, raw_data: pd.DataFrame, cat1: str, cat2: str) -> pd.DataFrame:
+        df_counts = raw_data.groupby([cat1, cat2]).size().reset_index()
+        df_counts.columns.values[df_counts.columns==0] = 'count'
+        return df_counts
+    
+    def plot_3_categories_catplot(self, raw_data: pd.DataFrame) -> None:
+        x = self.advanced_chart_axed['x']
+        hue = self.advanced_chart_axed['hue']
+        return None
     
     #endregion Advanced Charts
         
