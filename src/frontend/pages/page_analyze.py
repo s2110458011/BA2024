@@ -76,19 +76,19 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_charts = ctk.CTkComboBox(self.settings_frame, width=280, values=self.charts_list, command=self.action_create_chart)
         self.dropdown_charts.set('Choose Chart')
         self.chart_settings_frame = ctk.CTkFrame(self.settings_frame, corner_radius=0, fg_color='transparent')
-        self.text_entry_title = ctk.CTkEntry(self.chart_settings_frame, placeholder_text='Enter chart title')
+        self.text_entry_title = ctk.CTkEntry(self.chart_settings_frame, corner_radius=0, placeholder_text='Enter chart title')
         self.font_title = ttk.Spinbox(self.chart_settings_frame, from_=8, to=20, width=5)
-        self.text_entry_xlable = ctk.CTkEntry(self.chart_settings_frame, placeholder_text='Enter x label')
+        self.text_entry_xlable = ctk.CTkEntry(self.chart_settings_frame, corner_radius=0, placeholder_text='Enter x label')
         self.font_xlable = ttk.Spinbox(self.chart_settings_frame, from_=8, to=20, width=5)
-        self.text_entry_ylable = ctk.CTkEntry(self.chart_settings_frame, placeholder_text='Enter y label')
+        self.text_entry_ylable = ctk.CTkEntry(self.chart_settings_frame, corner_radius=0, placeholder_text='Enter y label')
         self.font_ylable = ttk.Spinbox(self.chart_settings_frame, from_=8, to=20, width=5)
-        self.button_update_chart = ctk.CTkButton(self.chart_settings_frame, text='Update', command=self.action_update_chart_labels_font)
-        self.button_switch_axes = ctk.CTkButton(self.chart_settings_frame, text='Switch Axes', state='disabled', command=self.action_switch_axes)
+        self.button_update_chart = ctk.CTkButton(self.chart_settings_frame, text='Update', corner_radius=0, command=self.action_update_chart_labels_font)
+        self.button_switch_axes = ctk.CTkButton(self.chart_settings_frame, text='Switch Axes', corner_radius=0, state='disabled', command=self.action_switch_axes)
         
-        self.text_entry_short_description = ctk.CTkEntry(self.settings_frame, placeholder_text='Short description')
-        self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', command=self.action_create_chart_button)
-        self.button_more_options = ctk.CTkButton(self.settings_frame, text='More Options', command=self.action_show_more_options)
-        self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report', command=self.action_add_to_report_item_list)
+        self.text_entry_short_description = ctk.CTkEntry(self.settings_frame, corner_radius=0, placeholder_text='Short description')
+        self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', corner_radius=0, command=self.action_create_chart_button)
+        self.button_more_options = ctk.CTkButton(self.settings_frame, text='More Options', corner_radius=0, command=self.action_show_more_options)
+        self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report', corner_radius=0, command=self.action_add_to_report_item_list)
         
         return None
     
@@ -117,7 +117,6 @@ class Analyze(ctk.CTkFrame):
         
         self.text_entry_short_description.grid(row=4, column=0, padx=10, pady=10, sticky='nsew')
         self.button_add_to_report.grid(row=5, column=0, padx=10, pady=10)
-        #self.button_create_chart.grid(row=6, column=0, padx=10, pady=10)
         self.button_more_options.grid(row=6, column=0, padx=10, pady=10)
         
         
@@ -125,26 +124,27 @@ class Analyze(ctk.CTkFrame):
     
     def create_more_options_widget(self) -> None:
         self.frame_more_options = ctk.CTkFrame(self.settings_frame, corner_radius=0, fg_color='transparent')
-        self.dropdown_second_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_by_category)
+        self.dropdown_second_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_second_category)
         self.dropdown_second_category.set('Choose Second Category')
         self.dropdown_second_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.update_chart_options_list_advanced)
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_var_second = tk.IntVar()
         self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0)
-        self.dropdown_hue_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_by_category)
+        self.dropdown_hue_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_color_category)
         self.dropdown_hue_category.set('Choose Color Category')
         self.dropdown_hue_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list)
         self.dropdown_hue_question.set('Choose Color Question')
         self.cb_var_hue = tk.IntVar()
         self.cb_hue_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_hue, onvalue=1, offvalue=0)
-        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list, command=self.get_questions_by_category)
+        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list, command=self.get_questions_hue_category)
         self.dropdown_col_question.set('Choose Column Question')
         self.cb_var_col = tk.IntVar()
         self.cb_col_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_col, onvalue=1, offvalue=0)
         self.rb_var = tk.IntVar()
         self.rb_frame = ctk.CTkFrame(self.frame_more_options, corner_radius=0, fg_color='transparent')
-        self.rb_two = ctk.CTkRadioButton(self.rb_frame, text='2', value=2, variable=self.rb_var, command=self.on_radiobutton_select)
-        self.rb_three = ctk.CTkRadioButton(self.rb_frame, text='3', value=3, variable=self.rb_var, command=self.on_radiobutton_select)
+        self.rb_label = ctk.CTkLabel(self.rb_frame, text='Chart Columns:')
+        self.rb_two = ctk.CTkRadioButton(self.rb_frame, text='2', corner_radius=0, value=2, variable=self.rb_var, command=self.on_radiobutton_select)
+        self.rb_three = ctk.CTkRadioButton(self.rb_frame, text='3', corner_radius=0, value=3, variable=self.rb_var, command=self.on_radiobutton_select)
         self.rb_var.set(2)
         
         return None
@@ -159,8 +159,9 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_col_question.grid(row=4, column=0, padx=10, pady=(5,10))
         self.cb_col_question.grid(row=4, column=1, padx=10, pady=(5,5))
         self.rb_frame.grid(row=5, column=0, columnspan=2, sticky='nsew')
-        self.rb_two.grid(row=0, column=0, padx=(20,0), pady=(0,10), sticky='w')
-        self.rb_three.grid(row=0, column=1, padx=0, pady=(0,10), sticky='w')
+        self.rb_label.grid(row=0, column=0, padx=(10,0), pady=(0,10), sticky='w')
+        self.rb_two.grid(row=0, column=1, padx=(10,0), pady=(0,10), sticky='w')
+        self.rb_three.grid(row=0, column=2, padx=0, pady=(0,10), sticky='w')
         
         
         return None
@@ -214,9 +215,21 @@ class Analyze(ctk.CTkFrame):
             self.listbox_questions.insert(idx, question)
         return None
     
+    def get_questions_second_category(self, category) -> None:
+        questions = self.controller.get_questions_by_category(category)
+        self.dropdown_second_question.configure(values=questions)
+        return None
+    
+    def get_questions_hue_category(self, category) -> None:
+        questions = self.controller.get_questions_by_category(category)
+        self.dropdown_hue_question.configure(values=questions)
+        return None
+    
     def update_categories_list(self) -> None:
         self.categories_list = self.controller.get_categories()
         self.dropdown_categories.configure(values=self.categories_list)
+        self.dropdown_second_category.configure(values=self.categories_list)
+        self.dropdown_hue_category.configure(values=self.categories_list)
         return None
     
     def update_col_questions_list(self) -> None:
