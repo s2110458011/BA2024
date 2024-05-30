@@ -49,7 +49,7 @@ class Controller:
     def set_current_survey_selection(self, id: str) -> None:
         self.model.set_current_selection(id)
         self.update_category_list()
-        
+        self.update_col_questions_list()
         if not self.report_init:
             survey = self.get_selected_survey()
             view = self.view.get_page(Report)
