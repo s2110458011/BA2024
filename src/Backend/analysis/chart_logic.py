@@ -3,6 +3,7 @@ import numpy as np
 import seaborn as sns
 import backend.constants as constants
 import backend.data_processor.toolparser as tp
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
 from PIL import Image
@@ -176,7 +177,9 @@ class ChartLogic():
         y = self.advanced_chart_dimensions['y']
         hue = self.advanced_chart_dimensions['hue']
         self.chart_data = raw_data[[x, y, hue]]
-        sns.catplot(data=self.chart_data, x=x, y=y, hue=hue, ax=self.ax)
+        catplot = sns.catplot(data=self.chart_data, x=x, y=y, hue=hue, ax=self.ax)
+        plt.close(catplot.figure)
+        self.figure = catplot.figure
         return self.figure
     
     def create_scatterplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
