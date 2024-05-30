@@ -180,21 +180,20 @@ class ChartLogic():
         catplot = sns.catplot(data=self.chart_data, x=x, y=y, hue=hue, ax=self.ax)
         plt.close(catplot.figure)
         self.figure = catplot.figure
+        if report_image:
+            self.create_image()
         return self.figure
     
-    def create_scatterplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
+    def create_sns_scatterplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
         self.set_up_figure(report_image)
-            
+        
         x = self.advanced_chart_dimensions['x']
         y = self.advanced_chart_dimensions['y']
         df = self.compute_counts_of_observation(raw_data, x, y)
-        scale = 100*df['count'].size
-        size = df['count']/df['count'].sum()*scale
-        scatter = self.ax.scatter(x, y, size, data=df, zorder=2, color='#2A788E')
-        kw = dict(prop="sizes", color=scatter.cmap(0.4), fmt="{x}", func=lambda s: s/100)
-        #self.ax.legend(*scatter.legend_elements(**kw), bbox_to_anchor=(1.1, 1.0), loc="best", title="Sizes", labelspacing=2)
-        self.ax.legend(*scatter.legend_elements(**kw), bbox_to_anchor=(0.5, -0.3), loc="lower center", title="Sizes", labelspacing=2, ncols=3)
-        self.ax.margins(.1)
+        sns.scatterplot(data=df, x=x, y=y, size='count', ax=self.ax)
+        plt.xticks(rotation=55, ha='right')
+        if report_image:
+            self.create_image()
         return self.figure
     
     def compute_counts_of_observation(self, raw_data: pd.DataFrame, cat1: str, cat2: str) -> pd.DataFrame:
@@ -209,6 +208,8 @@ class ChartLogic():
         hue = self.advanced_chart_dimensions['hue']
         self.chart_data = raw_data[[x, hue]]
         sns.countplot(data=self.chart_data, x=x, hue=hue, ax=self.ax)
+        if report_image:
+            self.create_image()
         return self.figure
     
     def set_up_figure(self, report_image: bool) -> None:

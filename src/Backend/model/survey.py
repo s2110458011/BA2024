@@ -204,7 +204,7 @@ class Survey():
             case 'pie':
                 return self.chart_logic.create_simple_pie_chart(self.raw_data, report_image)
             case 'scatterplot':
-                return self.chart_logic.create_scatterplot_chart(self.raw_data, report_image)
+                return self.chart_logic.create_sns_scatterplot_chart(self.raw_data, report_image)
             case 'catplot':
                 return self.chart_logic.create_catplot_chart(self.raw_data, report_image)
             case 'countplot':

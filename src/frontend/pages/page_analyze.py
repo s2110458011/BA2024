@@ -128,10 +128,10 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_var_second = tk.IntVar()
         self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', state='disabled', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0, command=self.on_click_cb_second)
-        self.dropdown_hue_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
-        self.dropdown_hue_category.set('Choose Color Category')
-        self.dropdown_hue_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_hue)
-        self.dropdown_hue_question.set('Choose Color Question')
+        self.dropdown_third_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
+        self.dropdown_third_category.set('Choose Third Category')
+        self.dropdown_third_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_hue)
+        self.dropdown_third_question.set('Choose Third Question')
         self.cb_var_hue = tk.IntVar()
         self.cb_hue_question = ctk.CTkCheckBox(self.frame_more_options, text='include', state='disabled', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_hue, onvalue=1, offvalue=0, command=self.on_click_cb_hue)
         
@@ -141,8 +141,8 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_category.grid(row=0, column=0, padx=10, pady=(10,0), sticky='w')
         self.dropdown_second_question.grid(row=1, column=0, padx=10, pady=(5,10), sticky='w')
         self.cb_second_question.grid(row=1, column=1, padx=5, pady=(5,10))
-        self.dropdown_hue_category.grid(row=2, column=0, padx=10)
-        self.dropdown_hue_question.grid(row=3, column=0, padx=10, pady=(5,10))
+        self.dropdown_third_category.grid(row=2, column=0, padx=10)
+        self.dropdown_third_question.grid(row=3, column=0, padx=10, pady=(5,10))
         self.cb_hue_question.grid(row=3, column=1, padx=10, pady=(5,10))  
         
         return None
@@ -204,8 +204,8 @@ class Analyze(ctk.CTkFrame):
     
     def get_questions_hue_category(self, category) -> None:
         questions = self.controller.get_questions_by_category(category)
-        self.dropdown_hue_question.configure(values=questions)
-        self.dropdown_hue_question.set('Choose Color Question')
+        self.dropdown_third_question.configure(values=questions)
+        self.dropdown_third_question.set('Choose Color Question')
         self.cb_hue_question.configure(state='diabled')
         return None
     
@@ -213,7 +213,7 @@ class Analyze(ctk.CTkFrame):
         self.categories_list = self.controller.get_categories()
         self.dropdown_categories.configure(values=self.categories_list)
         self.dropdown_second_category.configure(values=self.categories_list)
-        self.dropdown_hue_category.configure(values=self.categories_list)
+        self.dropdown_third_category.configure(values=self.categories_list)
         return None
     
     def update_chart_options_list_simple(self, question) -> None:
