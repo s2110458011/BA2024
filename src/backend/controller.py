@@ -50,6 +50,7 @@ class Controller:
         # reset analyze widgets
         self.model.set_current_selection(id)
         self.update_category_list()
+        self.update_third_question_list()
         if not self.report_init:
             survey = self.get_selected_survey()
             view = self.view.get_page(Report)
@@ -194,6 +195,21 @@ class Controller:
     def update_category_list(self) ->  None:
         view = self.view.get_page(Analyze)
         view.update_categories_list()
+        return None
+    
+    def get_third_questions(self, col_count: int) -> list:
+        survey = self.get_selected_survey()
+        if survey:
+            questions = survey.get_columns_with_unique_values_by_threshold(col_count)
+        else:
+            questions = []
+        return questions
+    
+    def update_third_question_list(self) -> None:
+        view = self.view.get_page(Analyze)
+        threshold = view.col_threshold
+        questions = self.get_third_questions(threshold)
+        view.update_third_questions_list(questions)
         return None
     
     def get_chart_options_by_question(self, question: str) -> list:

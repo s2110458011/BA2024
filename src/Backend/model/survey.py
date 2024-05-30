@@ -221,6 +221,6 @@ class Survey():
         self.next_report_item_number += 1
         return True
     
-    def create_new_pdf_report(self, survey_title) -> None:
+    def create_new_pdf_report(self, survey_title: str) -> None:
         self.pdf_report = PDFReport(survey_title)
         return None

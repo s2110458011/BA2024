@@ -21,7 +21,7 @@ class ChartLogic():
         self.current_question: str = None
         self.chart_data: pd.DataFrame = None
         self.barchart_init_axes: bool = True
-        self.advanced_chart_dimensions: dict[str: str] = {'x': None, 'y': None, 'hue': None, 'col': None, 'kind': None}
+        self.advanced_chart_dimensions: dict[str: str] = {'x': None, 'y': None, 'z': None}
         self.advanced_chart_data: pd.DataFrame = None
         self.img: Image = None
         
@@ -108,12 +108,14 @@ class ChartLogic():
         if self.barchart_init_axes:
             sns.barplot(self.chart_data, x=self.chart_simple_y, y=self.chart_simple_x, ax=self.ax)
             if self.chart_data[self.chart_simple_y].size > 5:
-                self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=90, ha='right')
+                self.ax.tick_params(axis='x', rotation=55)
+                #self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=55, ha='right')
             self.barchart_init_axes = False
         else:
             sns.barplot(self.chart_data, x=self.chart_simple_x, y=self.chart_simple_y, ax=self.ax)
             if self.chart_data[self.chart_simple_x].size > 5:
-                self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=90, ha='right')
+                self.ax.tick_params(axis='x', rotation=55)
+                #self.ax.set_xticklabels(self.ax.get_xticklabels(), rotation=55, ha='right')
             self.barchart_init_axes = True
         
         #self.create_image()
@@ -175,9 +177,12 @@ class ChartLogic():
         
         x = self.advanced_chart_dimensions['x']
         y = self.advanced_chart_dimensions['y']
-        hue = self.advanced_chart_dimensions['hue']
-        self.chart_data = raw_data[[x, y, hue]]
-        catplot = sns.catplot(data=self.chart_data, x=x, y=y, hue=hue, ax=self.ax)
+        z = self.advanced_chart_dimensions['z']
+        self.chart_data = raw_data[[x, y, z]]
+        catplot = sns.catplot(data=self.chart_data, x=x, y=y, col=z)
+        if self.chart_data[x].size > 3:
+            for ax in catplot.axes.flat:
+                ax.tick_params(axis='x', rotation=55)
         plt.close(catplot.figure)
         self.figure = catplot.figure
         if report_image:
@@ -190,8 +195,10 @@ class ChartLogic():
         x = self.advanced_chart_dimensions['x']
         y = self.advanced_chart_dimensions['y']
         df = self.compute_counts_of_observation(raw_data, x, y)
-        sns.scatterplot(data=df, x=x, y=y, size='count', ax=self.ax)
-        plt.xticks(rotation=55, ha='right')
+        scatterplot = sns.scatterplot(data=df, x=x, y=y, size='count', ax=self.ax)
+        #plt.xticks(rotation=55, ha='right')
+        #plt.close(scatterplot.figure)
+        self.ax.tick_params(axis='x', rotation=55)
         if report_image:
             self.create_image()
         return self.figure
@@ -205,9 +212,9 @@ class ChartLogic():
         self.set_up_figure(report_image)
         
         x = self.advanced_chart_dimensions['x']
-        hue = self.advanced_chart_dimensions['hue']
-        self.chart_data = raw_data[[x, hue]]
-        sns.countplot(data=self.chart_data, x=x, hue=hue, ax=self.ax)
+        y = self.advanced_chart_dimensions['y']
+        self.chart_data = raw_data[[x, y]]
+        sns.countplot(data=self.chart_data, x=x, hue=y, ax=self.ax)
         if report_image:
             self.create_image()
         return self.figure

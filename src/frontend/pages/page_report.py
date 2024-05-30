@@ -47,6 +47,7 @@ class Report(ctk.CTkFrame):
         self.preview_frame = ctk.CTkScrollableFrame(self.right_side_frame, corner_radius=0, fg_color='transparent')
         self.preview_frame.grid(row=0, column=0, sticky='nsew')
         self.right_side_frame.grid_rowconfigure(0, weight=1)
+        self.right_side_frame.grid_columnconfigure(0, weight=1)
         self.preview_frame.grid_columnconfigure(0, weight=1)
         
         return None

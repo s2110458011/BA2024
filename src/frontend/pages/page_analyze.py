@@ -17,6 +17,8 @@ class Analyze(ctk.CTkFrame):
         self.master = master
         self.controller: Type['Controller'] = controller
         self.categories_list: list = self.controller.get_categories()
+        self.col_threshold: int = 2
+        self.third_question_list: list = self.controller.get_third_questions(self.col_threshold)
         self.questions_list: list = []
         self.selected_question: str = None
         self.charts_list: list = []
@@ -128,23 +130,31 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_var_second = tk.IntVar()
         self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', state='disabled', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0, command=self.on_click_cb_second)
-        self.dropdown_third_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
-        self.dropdown_third_category.set('Choose Third Category')
-        self.dropdown_third_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_hue)
+        #self.dropdown_third_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
+        #self.dropdown_third_category.set('Choose Third Category')
+        self.dropdown_third_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_third)
         self.dropdown_third_question.set('Choose Third Question')
-        self.cb_var_hue = tk.IntVar()
-        self.cb_hue_question = ctk.CTkCheckBox(self.frame_more_options, text='include', state='disabled', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_hue, onvalue=1, offvalue=0, command=self.on_click_cb_hue)
-        
+        self.cb_var_third = tk.IntVar()
+        self.cb_third_question = ctk.CTkCheckBox(self.frame_more_options, text='include', state='disabled', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_third, onvalue=1, offvalue=0, command=self.on_click_cb_third)
+        self.rb_frame = ctk.CTkFrame(self.frame_more_options, corner_radius=0, fg_color='transparent')
+        self.rb_var = tk.IntVar()
+        self.rb_label = ctk.CTkLabel(self.rb_frame, text='Chart Columns:')
+        self.rb_two = ctk.CTkRadioButton(self.rb_frame, text='2', value=2, variable=self.rb_var, command=self.on_click_radiobutton)
+        self.rb_three = ctk.CTkRadioButton(self.rb_frame, text='3', value=3, variable=self.rb_var, command=self.on_click_radiobutton)
+        self.rb_var.set(2)
         return None
     
     def create_more_options_layout(self) -> None:
         self.dropdown_second_category.grid(row=0, column=0, padx=10, pady=(10,0), sticky='w')
         self.dropdown_second_question.grid(row=1, column=0, padx=10, pady=(5,10), sticky='w')
         self.cb_second_question.grid(row=1, column=1, padx=5, pady=(5,10))
-        self.dropdown_third_category.grid(row=2, column=0, padx=10)
+        #self.dropdown_third_category.grid(row=2, column=0, padx=10)
         self.dropdown_third_question.grid(row=3, column=0, padx=10, pady=(5,10))
-        self.cb_hue_question.grid(row=3, column=1, padx=10, pady=(5,10))  
-        
+        self.cb_third_question.grid(row=3, column=1, padx=10, pady=(5,10))  
+        self.rb_frame.grid(row=4, column=0, columnspan=2, sticky='nsew')
+        self.rb_label.grid(row=0, column=0, padx=10, pady=(5,10), sticky='w')
+        self.rb_two.grid(row=0, column=1, padx=5, pady=(5,10))
+        self.rb_three.grid(row=0, column=2, padx=5, pady=(5,10))
         return None
     
     
@@ -170,7 +180,7 @@ class Analyze(ctk.CTkFrame):
         if current_selection:
             self.selected_question = current_selection
             self.controller.update_chart_dimensions(current_selection, 'x')
-        hue = self.cb_var_hue.get()
+        hue = self.cb_var_third.get()
         second = self.cb_var_second.get()
         if hue == 1 or second == 1:
             self.update_chart_options_list_advanced(hue, second)
@@ -182,6 +192,11 @@ class Analyze(ctk.CTkFrame):
             self.dropdown_charts.set('Choose Chart')
         else:
             self.action_create_chart(chart_type)
+        return None
+    
+    def on_click_radiobutton(self) -> None:
+        self.col_threshold = self.rb_var.get()
+        self.controller.update_third_question_list()
         return None
     
     #endregion
@@ -206,14 +221,13 @@ class Analyze(ctk.CTkFrame):
         questions = self.controller.get_questions_by_category(category)
         self.dropdown_third_question.configure(values=questions)
         self.dropdown_third_question.set('Choose Color Question')
-        self.cb_hue_question.configure(state='diabled')
+        self.cb_third_question.configure(state='diabled')
         return None
     
     def update_categories_list(self) -> None:
         self.categories_list = self.controller.get_categories()
         self.dropdown_categories.configure(values=self.categories_list)
         self.dropdown_second_category.configure(values=self.categories_list)
-        self.dropdown_third_category.configure(values=self.categories_list)
         return None
     
     def update_chart_options_list_simple(self, question) -> None:
@@ -224,22 +238,22 @@ class Analyze(ctk.CTkFrame):
     def set_chart_dimension_second(self, question) -> None:
         self.cb_second_question.configure(state='normal')
         self.controller.update_chart_dimensions(question, 'y')
-        hue = self.cb_var_hue.get()
+        third = self.cb_var_third.get()
         second = self.cb_var_second.get()
-        if hue == 1 or second == 1:
-            self.update_chart_options_list_advanced(hue, second)
+        if second == 1:
+            self.update_chart_options_list_advanced(second, third)
         else:
             self.update_chart_options_list_simple(self.selected_question)
         self.dropdown_charts.set('Choose Chart')
         return None
     
-    def set_chart_dimension_hue(self, question) -> None:
-        self.cb_hue_question.configure(state='normal')
-        self.controller.update_chart_dimensions(question, 'hue')
-        hue = self.cb_var_hue.get()
+    def set_chart_dimension_third(self, question) -> None:
+        self.controller.update_chart_dimensions(question, 'z')
         second = self.cb_var_second.get()
-        if hue == 1 or second == 1:
-            self.update_chart_options_list_advanced(hue, second)
+        third = self.cb_var_third.get()
+        if second == 1:
+            self.cb_third_question.configure(state='normal')
+            self.update_chart_options_list_advanced(second, third)
         else:
             self.update_chart_options_list_simple(self.selected_question)
         self.dropdown_charts.set('Choose Chart')
@@ -253,16 +267,19 @@ class Analyze(ctk.CTkFrame):
         self.canvas.draw()
         return None
     
-    def update_chart_options_list_advanced(self, hue_state: int, second_state: int) -> None:
-        if hue_state == 1 and second_state == 0:
-            self.dropdown_charts.configure(values=constants.HUE_DIMENSION)
-        elif hue_state == 1 and second_state == 1:
-            self.dropdown_charts.configure(values=constants.THREE_DIMENSIONS)
-        elif hue_state == 0 and second_state == 1:
-            self.dropdown_charts.configure(values=constants.TWO_DIMENSIONS)
-        elif hue_state == 0 and second_state == 0:
+    def update_chart_options_list_advanced(self, second_state: int, third_state: int) -> None:
+        # third can only be 1 if second is 1
+        if second_state == 0:
             self.update_chart_options_list_simple(self.selected_question)
             self.dropdown_charts.set('Choose Chart')
+        elif second_state == 1 and third_state == 0:
+            self.dropdown_charts.configure(values=constants.TWO_DIMENSIONS)
+        elif second_state == 1 and third_state == 1:
+            self.dropdown_charts.configure(values=constants.THREE_DIMENSIONS)
+        return None
+    
+    def update_third_questions_list(self, questions: list) -> None:
+        self.dropdown_third_question.configure(values=questions)
         return None
                 
     #endregion
@@ -372,23 +389,29 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def on_click_cb_second(self) -> None:
-        second_state = self.cb_second_question.get()
-        hue_state= self.cb_hue_question.get()
         if self.selected_question:
-            self.update_chart_options_list_advanced(hue_state, second_state)
+            second_state = self.cb_second_question.get()
+            third_state= self.cb_third_question.get()
+            if second_state == 1:
+                self.update_chart_options_list_advanced(second_state, third_state)
+                self.dropdown_charts.set('Choose Chart')
+                if self.dropdown_third_question.get() == 'Choose Third Question':
+                    self.cb_third_question.configure(state='disabled')
+                else:
+                    self.cb_third_question.configure(state='normal')
+            else:
+                self.update_chart_options_list_simple(self.selected_question)
+                self.dropdown_charts.set('Choose Chart')
+                self.cb_third_question.configure(state='disabled')
         else:
             self.cb_var_second.set(0)
             tk.messagebox.showerror(title='error', message='Please select a question from the list above first.')
         return None
     
-    def on_click_cb_hue(self) -> None:
-        hue_state= self.cb_hue_question.get()
+    def on_click_cb_third(self) -> None:
+        third_state= self.cb_third_question.get()
         second_state = self.cb_second_question.get()
-        if self.selected_question:
-            self.update_chart_options_list_advanced(hue_state, second_state)
-        else:
-            self.cb_var_hue(0)
-            tk.messagebox.showerror(title='error', message='Please select a question from the list above first.')
+        self.update_chart_options_list_advanced(second_state, third_state)
         return None
     
     #endregion
