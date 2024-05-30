@@ -130,13 +130,13 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_var_second = tk.IntVar()
         self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0)
-        self.dropdown_hue_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_color_category)
+        self.dropdown_hue_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
         self.dropdown_hue_category.set('Choose Color Category')
         self.dropdown_hue_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list)
         self.dropdown_hue_question.set('Choose Color Question')
         self.cb_var_hue = tk.IntVar()
         self.cb_hue_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_hue, onvalue=1, offvalue=0)
-        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list, command=self.get_questions_hue_category)
+        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list)
         self.dropdown_col_question.set('Choose Column Question')
         self.cb_var_col = tk.IntVar()
         self.cb_col_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_col, onvalue=1, offvalue=0)
@@ -244,7 +244,7 @@ class Analyze(ctk.CTkFrame):
     
     def update_chart_options_list_advanced(self, second_question) -> None:
         first_question = self.get_selected_question()
-        self.charts_list = self.charts_list + self.controller.get_advanced_chart_options(first_question, second_question)
+        self.charts_list = self.charts_list
         self.dropdown_charts.configure(values   =self.charts_list)
         return None
     
