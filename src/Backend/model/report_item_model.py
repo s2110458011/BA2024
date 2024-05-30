@@ -22,9 +22,5 @@ class ReportItem():
     def get_description(self) -> str:
         return self.description
     
-    def get_plot_image(self) -> Image:
-        image = self.convert_figure_to_image()
-        return image
-    
     def get_image(self) -> Image:
         return self.fig

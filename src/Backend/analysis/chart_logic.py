@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
-import backend.constants as constants
 import backend.data_processor.toolparser as tp
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -9,8 +8,6 @@ from matplotlib.figure import Figure
 from PIL import Image
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from fpdf import FPDF
-from fpdf.enums import XPos, YPos
 
 class ChartLogic():
     def __init__(self, raw_data: pd.DataFrame) -> None:
@@ -24,7 +21,6 @@ class ChartLogic():
         self.advanced_chart_dimensions: dict[str: str] = {'x': None, 'y': None, 'z': None}
         self.advanced_chart_data: pd.DataFrame = None
         self.img: Image = None
-        
         return None
     
     #region Simple Charts
@@ -150,23 +146,6 @@ class ChartLogic():
     def update_plot_dimensions(self, df_column: str, dimension: str) -> None:
         self.advanced_chart_dimensions[dimension] = df_column
         return None
-    
-    def get_data_for_advanced_chart(self, raw_data: pd.DataFrame, dimensions: list) -> None:
-        columns = self.get_columns_from_dimensions(dimensions)
-        self.advanced_chart_data = raw_data[columns]
-        return None
-    
-    def custom_sort_data_by_column(self, column: str, custom_order: list) -> None:
-        self.advanced_chart_data[column] = pd.Categorical(self.advanced_chart_data[column], categories=custom_order, ordered=True)
-        self.advanced_chart_data = self.advanced_chart_data.sort_values(column)
-        return None
-        
-    def get_columns_from_dimensions(self, dimensions: list) -> list:
-        columns = []
-        for dim in dimensions:
-            column = self.advanced_chart_dimensions[dim]
-            columns.append(column)
-        return columns
     
     def create_catplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
         self.set_up_figure(report_image)

@@ -59,11 +59,6 @@ class Survey():
     def get_uncategorized_questions(self) -> list:
         return self.not_categorized_questions
     
-    def get_data_from_category(self, category: str) -> pd.DataFrame:
-        category_columns = self.categorized_questions[category]
-        df = cl.extract_columns_by_name(category_columns)
-        return df
-    
     def get_responses_to_question(self, question: str):
         return self.raw_data[question]
     
@@ -117,12 +112,6 @@ class Survey():
     def questions_categorized(self) -> bool:
         return self.categorized_questions
     
-    def describe_input_data(self) -> pd.DataFrame:
-        return self.raw_data.describe()
-    
-    def count_responses(self) -> int:
-        return self.raw_data.shape[0]
-    
     def count_responses(self, question) -> int:
         column = pd.Series(self.raw_data[question])
         return column.count()
@@ -130,9 +119,6 @@ class Survey():
     def count_unique_responses(self, question) -> int:
         column = pd.Series(self.raw_data[question])
         return len(column.unique())
-    
-    def number_of_questions(self) -> tuple[int, int]:
-        return self.raw_data.shape[1]
     
     def get_columns_with_unique_values_by_threshold(self, threshold: int) -> list:
         unique_responses = tp.extract_possible_answers(self.raw_data)
@@ -145,26 +131,6 @@ class Survey():
     def update_plot_dimensions(self, column: str, dimension: str) -> None:
         self.chart_logic.update_plot_dimensions(column, dimension)
         return None
-    
-    def surveycompletion_counts(self, percentages: list) -> pd.DataFrame:
-        row_counts = self.raw_data.notnull().sum(axis=1)
-        total_cols = self.raw_data.shape[1]
-        row_completion_pct = (row_counts / total_cols) * 100
-        
-        counts = []
-        
-        for pct in percentages:
-            count = (row_completion_pct == pct).sum()
-            counts.append({'Completion_%': pct, 'Count': count})
-        
-        counts_df = pd.DataFrame(counts)
-        return counts_df
-    
-    def surveycompletion_precentages_per_row(self) -> pd.DataFrame:
-        df = self.raw_data.copy()
-        num_cols = df.shape[1]
-        df['completion'] = (df.notnull().sum(axis=1) / num_cols) * 100
-        return df
     
     def add_question_to_category(self, category: str, question: str) -> None:
         if category not in self.categorized_questions:

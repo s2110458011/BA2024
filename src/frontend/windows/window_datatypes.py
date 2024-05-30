@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class AssignDatatypes(ctk.CTkToplevel):
     def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.controller = controller
+        self.controller: Type['Controller'] = controller
         self.geometry('800x500')
         self.title('Prepare Data')
         self.datatypes_list = constants.DATATYPE_LIST
@@ -63,7 +63,6 @@ class AssignDatatypes(ctk.CTkToplevel):
         self.left_frame.grid_columnconfigure(0, weight=3)
         self.left_frame.grid_columnconfigure(1, weight=1)
         self.left_frame.grid_rowconfigure(1, weight=1)
-        #self.left_frame.grid_rowconfigure(2, weight=1)
         self.left_frame.grid(row=0, column=0, sticky='nsew')
         self.label_questions.grid(row=0, column=0, padx=20, pady=(20,0), sticky='w')
         self.label_values.grid(row=0, column=1, padx=10, pady=(20,0), sticky='w')
@@ -104,7 +103,6 @@ class AssignDatatypes(ctk.CTkToplevel):
         # Layout
         frame_listbox_questions.grid(row=1, column=0, sticky='nsew', pady=(0,20), padx=(20,10))
         self.listbox_questions.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-        #self.listbox_questions.pack(side='left', fill='both', expand=True)
         scroll_Y.grid(row=0, column=1, sticky='ns')
         scroll_X.grid(row=1, column=0, sticky='ew')
         return None

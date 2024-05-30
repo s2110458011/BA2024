@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class Categorize(ctk.CTkToplevel):
     def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.controller = controller
+        self.controller: Type['Controller'] = controller
         self.geometry('800x500')
         self.title('Categorize Questions')
         self.grid_columnconfigure(0, weight=1)
@@ -42,7 +42,6 @@ class Categorize(ctk.CTkToplevel):
         self.initialize_treeview_categories()
         
         self.button_save_categories = ctk.CTkButton(self, text='Save', command=self.action_save_categories)
-        
         return None
     
     def initialize_treeview_categories(self) -> None:
@@ -58,7 +57,6 @@ class Categorize(ctk.CTkToplevel):
                 id = self.treeview_categories.get_children()[-1]
                 for item in value:
                     self.treeview_categories.insert(id, 'end', values=[item])
-        
         return None
     
     def create_layout(self) -> None:
@@ -74,7 +72,6 @@ class Categorize(ctk.CTkToplevel):
         
         self.treeview_categories.grid(row=2, column=0, columnspan=5, sticky='nsew', padx=20)
         self.button_save_categories.grid(row=3, column=3, pady=20, padx=20)
-        
         return None
     
     def fill_listbox_with_questions(self) -> None:

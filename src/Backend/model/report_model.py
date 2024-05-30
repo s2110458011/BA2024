@@ -1,9 +1,6 @@
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 from backend.model.report_item_model import ReportItem
-from PIL import Image
-import numpy as np
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,7 +8,7 @@ if TYPE_CHECKING:
 
 class PDFReport():
     def __init__(self, title: str) -> None:
-        self.title = title
+        self.title: str = title
         self.report_items: list[ReportItem | str] = []
         self.preview_labels: list[Type['CTkLabel']] = []
         return None

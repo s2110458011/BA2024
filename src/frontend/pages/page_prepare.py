@@ -1,6 +1,4 @@
-import tkinter as tk
 import customtkinter as ctk
-from tkinter import ttk
 from typing import Type, TYPE_CHECKING
 
 from frontend.windows.window_categorize import Categorize
@@ -10,15 +8,16 @@ if TYPE_CHECKING:
     from backend.controller import Controller
 
 class Prepare(ctk.CTkFrame):
-    def __init__(self, master, controller: Type['Controller'], **kwargs):
+    def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
         self.master = master
-        self.controller = controller
-        self.cb_surveys_values = self.controller.get_survey_list()
+        self.controller: Type['Controller'] = controller
+        self.cb_surveys_values: list = self.controller.get_survey_list()
         
         self.create_widgets()
         self.create_main_layout()
         self.check_survey_selection()
+        return None
     
     #region Layout
     
@@ -55,7 +54,6 @@ class Prepare(ctk.CTkFrame):
     def create_main_layout(self) -> None:
         self.grid_columnconfigure(0, weight=1)
         self.dropdown_survey_list.grid(row=0, column=0, padx=20, pady=20, sticky='w')
-        
         return None
     
     #endregion Layout
@@ -96,7 +94,6 @@ class Prepare(ctk.CTkFrame):
         id = self.controller.get_survey_id(survey)
         self.controller.set_current_survey_selection(id)
         self.button_categorize.configure(state='normal')
-        
         return None
     
     def set_combobox_selected_value(self) -> None:

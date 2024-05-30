@@ -6,8 +6,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from typing import Type, TYPE_CHECKING
 
-from frontend.windows.window_create_chart import CreateChart
-
 if TYPE_CHECKING:
     from backend.controller import Controller
 
@@ -29,7 +27,6 @@ class Analyze(ctk.CTkFrame):
         self.more_options: bool = False
         self.create_widgets()
         self.create_main_layout()
-        
         return None
     
     #region Layout
@@ -47,7 +44,6 @@ class Analyze(ctk.CTkFrame):
         self.create_settings_layout()
         self.create_more_options_widget()
         self.create_more_options_layout()
-        
         return None
     
     def create_main_layout(self) -> None:
@@ -55,12 +51,10 @@ class Analyze(ctk.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
         
         self.display_frame.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
-        #self.chart_canvas_label.grid(row=0, column=0, sticky='nsew')
         self.grid_columnconfigure(1, weight=1)
         self.text_entry_description.grid(row=1, column=0, sticky='ew')
         self.display_frame.grid_columnconfigure(0, weight=1)
         self.display_frame.grid_rowconfigure(0, weight=1)
-        
         return None
     
     def create_settings_widget(self) -> None:
@@ -86,10 +80,8 @@ class Analyze(ctk.CTkFrame):
         self.button_switch_axes = ctk.CTkButton(self.chart_settings_frame, text='Switch Axes', corner_radius=0, state='disabled', command=self.action_switch_axes)
         
         self.text_entry_short_description = ctk.CTkEntry(self.settings_frame, corner_radius=0, placeholder_text='Short description')
-        self.button_create_chart = ctk.CTkButton(self.settings_frame, text='Create Chart', corner_radius=0, command=self.action_create_chart_button)
         self.button_more_options = ctk.CTkButton(self.settings_frame, text='More Options', corner_radius=0, command=self.action_show_more_options)
         self.button_add_to_report = ctk.CTkButton(self.settings_frame, text='Add to Report', corner_radius=0, command=self.action_add_to_report_item_list)
-        
         return None
     
     def create_settings_layout(self) -> None:
@@ -118,8 +110,6 @@ class Analyze(ctk.CTkFrame):
         self.text_entry_short_description.grid(row=4, column=0, padx=10, pady=10, sticky='nsew')
         self.button_add_to_report.grid(row=5, column=0, padx=10, pady=10)
         self.button_more_options.grid(row=6, column=0, padx=10, pady=10)
-        
-        
         return None
     
     def create_more_options_widget(self) -> None:
@@ -130,8 +120,6 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_var_second = tk.IntVar()
         self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', state='disabled', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0, command=self.on_click_cb_second)
-        #self.dropdown_third_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
-        #self.dropdown_third_category.set('Choose Third Category')
         self.dropdown_third_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_third)
         self.dropdown_third_question.set('Choose Third Question')
         self.cb_var_third = tk.IntVar()
@@ -148,7 +136,6 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_category.grid(row=0, column=0, padx=10, pady=(10,0), sticky='w')
         self.dropdown_second_question.grid(row=1, column=0, padx=10, pady=(5,10), sticky='w')
         self.cb_second_question.grid(row=1, column=1, padx=5, pady=(5,10))
-        #self.dropdown_third_category.grid(row=2, column=0, padx=10)
         self.dropdown_third_question.grid(row=3, column=0, padx=10, pady=(5,10))
         self.cb_third_question.grid(row=3, column=1, padx=10, pady=(5,10))  
         self.rb_frame.grid(row=4, column=0, columnspan=2, sticky='nsew')
@@ -215,13 +202,6 @@ class Analyze(ctk.CTkFrame):
         self.dropdown_second_question.configure(values=questions)
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_second_question.configure(state='disabled')
-        return None
-    
-    def get_questions_hue_category(self, category) -> None:
-        questions = self.controller.get_questions_by_category(category)
-        self.dropdown_third_question.configure(values=questions)
-        self.dropdown_third_question.set('Choose Color Question')
-        self.cb_third_question.configure(state='diabled')
         return None
     
     def update_categories_list(self) -> None:
@@ -337,10 +317,6 @@ class Analyze(ctk.CTkFrame):
     #endregion
     
     #region Button commands
-    
-    def action_create_chart_button(self) -> None:
-        CreateChart(self.master, self.controller)
-        return None
     
     def action_show_more_options(self) -> None:
         if self.more_options:

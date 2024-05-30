@@ -1,5 +1,0 @@
-Descriptive Statistics
-- only make sense for columns with values
-
-Encoding of int value columns
-- make it possible to assign tags to the numbers (e.g. Schätzen Sie Ihr ideologisches Weltbild ein)

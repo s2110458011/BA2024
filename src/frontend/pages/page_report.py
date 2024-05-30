@@ -1,8 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
 import backend.constants as constants
-from tkinter import ttk
-from PIL import Image, ImageTk
 from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,14 +9,13 @@ if TYPE_CHECKING:
 class Report(ctk.CTkFrame):
     def __init__(self, master, controller: Type['Controller'], **kwargs) -> None:
         super().__init__(master, corner_radius=0, **kwargs)
-        self.controller = controller
+        self.controller: Type['Controller'] = controller
         self.preview_labels: list[ctk.CTkLabel] = []
         self.current_item: ctk.CTkLabel = None
-        self.first_report_item = True
+        self.first_report_item: bool = True
         
         self.create_widgets()
         self.create_main_layout()
-        
         return None
     
     #region Layout
@@ -31,7 +28,6 @@ class Report(ctk.CTkFrame):
         # Preview section (left side)
         self.right_side_frame = ctk.CTkFrame(self, corner_radius=0)
         self.create_preview_widget()
-        
         return None
     
     def create_main_layout(self) -> None:
@@ -41,7 +37,6 @@ class Report(ctk.CTkFrame):
         
         self.right_side_frame.grid(row=0, column=1, padx=(0,10), pady=10, sticky='nsew')
         self.grid_columnconfigure(1, weight=1)
-        
         return None
     
     def create_preview_widget(self) -> None:
@@ -50,7 +45,6 @@ class Report(ctk.CTkFrame):
         self.right_side_frame.grid_rowconfigure(0, weight=1)
         self.right_side_frame.grid_columnconfigure(0, weight=1)
         self.preview_frame.grid_columnconfigure(0, weight=1)
-        
         return None
     
     def create_options_widget(self) -> None:
@@ -78,7 +72,6 @@ class Report(ctk.CTkFrame):
         self.report_items_list.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
         self.button_add_item = ctk.CTkButton(self.left_side_frame, text='Add item', state='disabled', corner_radius=0, command=self.add_item_to_report)
         self.button_add_item.grid(row=3, column=2, pady=50, sticky='nw')
-        
         return None
     
     #endregion
@@ -153,7 +146,6 @@ class Report(ctk.CTkFrame):
         for idx, item in enumerate(self.preview_labels):
             idx+=1 # add one because title label is in row=0
             item.grid(row=idx, column=0, padx=10, pady=5, sticky='ew')
-        
         return None
     
     def on_label_click(self, e) -> None:

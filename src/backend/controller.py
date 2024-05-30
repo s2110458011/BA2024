@@ -1,6 +1,5 @@
 import uuid
 import pandas as pd
-import backend.analysis.chart_logic as lgc
 import backend.data_processor.toolparser as tp
 import backend.constants as constants
 from matplotlib.figure import Figure
@@ -25,7 +24,6 @@ class Controller:
         self.view = MainWindow(controller=self, title='AutoGraph', size=(1000,600))
         self.report_init = True
         return None
-        
     
     def run(self) -> None:
         self.view.mainloop()
@@ -60,7 +58,6 @@ class Controller:
                 report_page.update_report_view_empty_report()
         analyze = self.view.get_page(Analyze)
         analyze.empty_analyze()
-        #self.report_init = False
         return None
     
     def check_survey_selected(self) -> bool:
@@ -252,13 +249,6 @@ class Controller:
         if not survey.add_item_to_report_items_list(short_description, new_item):
             return False
         return True
-    
-    def set_navigation_button_state(self, button_name: str, state: str) -> None:
-        navigation = self.view.get_navigation()
-        match button_name:
-            case 'Save':
-                navigation.set_save_button_state(state)
-        return None
       
     def update_chart_dimensions(self, column: str, dimension: str) -> None:
         survey = self.get_selected_survey()

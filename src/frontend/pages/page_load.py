@@ -18,7 +18,6 @@ class Load(ctk.CTkFrame):
         
         self.create_widgets()
         self.create_layout()
-        
         return None
         
     #region Widgets & Layout
@@ -87,7 +86,6 @@ class Load(ctk.CTkFrame):
         self.cb_exclude_columns.pack(pady_=(10,0))
         self.spinbox_number_cols = tk.Spinbox(description_frame, from_=0, to=20)
         self.spinbox_number_cols.pack(pady=10)
-        
         return frame_surveylist
     
     def survey_preview_frame(self) -> ctk.CTkFrame:
