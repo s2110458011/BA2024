@@ -2,6 +2,9 @@ from enum import Enum
 
 DESCRIPTION = 'Enter chart description here...'
 DATATYPE_LIST = ['datetime', 'category', 'float', 'int']
+HUE_DIMENSION = ['scatterplot', 'countplot']
+TWO_DIMENSIONS = ['scatterplot', 'catplot']
+THREE_DIMENSIONS = ['catplot']
 
 class ItemType(Enum):
     HEADING = 1

@@ -50,7 +50,6 @@ class Controller:
         # reset analyze widgets
         self.model.set_current_selection(id)
         self.update_category_list()
-        self.update_col_questions_list()
         if not self.report_init:
             survey = self.get_selected_survey()
             view = self.view.get_page(Report)
@@ -197,11 +196,6 @@ class Controller:
         view.update_categories_list()
         return None
     
-    def update_col_questions_list(self) -> None:
-        view = self.view.get_page(Analyze)
-        view.update_col_questions_list()
-        return None
-    
     def get_chart_options_by_question(self, question: str) -> list:
         survey = self.get_selected_survey()
         return survey.get_chart_options_by_question(question)
@@ -247,18 +241,7 @@ class Controller:
             case 'Save':
                 navigation.set_save_button_state(state)
         return None
-    
-    def get_advanced_chart_options(self, first_question: str, second_question: str) -> list:
-        survey = self.get_selected_survey()
-    
-    def get_col_questions(self, threshold) -> list:
-        survey = self.get_selected_survey()
-        if survey:
-            columns = survey.get_columns_with_unique_values_by_threshold(threshold)
-        else:
-            columns = []
-        return columns
-    
+      
     def update_chart_dimensions(self, column: str, dimension: str) -> None:
         survey = self.get_selected_survey()
         survey.update_plot_dimensions(column, dimension)

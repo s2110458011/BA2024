@@ -203,6 +203,12 @@ class Survey():
                 return self.chart_logic.create_simple_bar_chart(self.raw_data, report_image)
             case 'pie':
                 return self.chart_logic.create_simple_pie_chart(self.raw_data, report_image)
+            case 'scatterplot':
+                return self.chart_logic.create_scatterplot_chart(self.raw_data, report_image)
+            case 'catplot':
+                return self.chart_logic.create_catplot_chart(self.raw_data, report_image)
+            case 'countplot':
+                return self.chart_logic.create_countplot_chart(self.raw_data, report_image)
     
     def switch_axes(self) -> Figure:
         return self.chart_logic.switch_axes_simple_bar_chart()

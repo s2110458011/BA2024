@@ -170,36 +170,51 @@ class ChartLogic():
         return columns
     
     def create_catplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
-        if report_image:
-            self.figure = Figure(figsize=(6, 4), dpi=300, tight_layout=True)
-        else:
-            self.figure = Figure(tight_layout=True)
-        self.ax = self.figure.subplots()
-        self.ax.clear()
+        self.set_up_figure(report_image)
         
-        
+        x = self.advanced_chart_dimensions['x']
+        y = self.advanced_chart_dimensions['y']
+        hue = self.advanced_chart_dimensions['hue']
+        self.chart_data = raw_data[[x, y, hue]]
+        sns.catplot(data=self.chart_data, x=x, y=y, hue=hue, ax=self.ax)
         return self.figure
     
-    def plot_2_categories_scatterplot(self, raw_data: pd.DataFrame) -> None:
+    def create_scatterplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
+        self.set_up_figure(report_image)
+            
         x = self.advanced_chart_dimensions['x']
         y = self.advanced_chart_dimensions['y']
         df = self.compute_counts_of_observation(raw_data, x, y)
-        scale = 50*df['count'].size
+        scale = 100*df['count'].size
         size = df['count']/df['count'].sum()*scale
         scatter = self.ax.scatter(x, y, size, data=df, zorder=2, color='#2A788E')
-        kw = dict(prop="sizes", color=scatter.cmap(0.4), fmt="{x}", func=lambda s: s/50)
-        self.ax.legend(*scatter.legend_elements(**kw), bbox_to_anchor=(1.17, 1.0), loc="best", title="Sizes", labelspacing=2)
+        kw = dict(prop="sizes", color=scatter.cmap(0.4), fmt="{x}", func=lambda s: s/100)
+        #self.ax.legend(*scatter.legend_elements(**kw), bbox_to_anchor=(1.1, 1.0), loc="best", title="Sizes", labelspacing=2)
+        self.ax.legend(*scatter.legend_elements(**kw), bbox_to_anchor=(0.5, -0.3), loc="lower center", title="Sizes", labelspacing=2, ncols=3)
         self.ax.margins(.1)
-        return None
+        return self.figure
     
     def compute_counts_of_observation(self, raw_data: pd.DataFrame, cat1: str, cat2: str) -> pd.DataFrame:
         df_counts = raw_data.groupby([cat1, cat2]).size().reset_index()
         df_counts.columns.values[df_counts.columns==0] = 'count'
         return df_counts
     
-    def plot_3_categories_catplot(self, raw_data: pd.DataFrame) -> None:
+    def create_countplot_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
+        self.set_up_figure(report_image)
+        
         x = self.advanced_chart_dimensions['x']
         hue = self.advanced_chart_dimensions['hue']
+        self.chart_data = raw_data[[x, hue]]
+        sns.countplot(data=self.chart_data, x=x, hue=hue, ax=self.ax)
+        return self.figure
+    
+    def set_up_figure(self, report_image: bool) -> None:
+        if report_image:
+            self.figure = Figure(figsize=(6, 4), dpi=300, tight_layout=True)
+        else:
+            self.figure = Figure(tight_layout=True)
+        self.ax = self.figure.subplots()
+        self.ax.clear()
         return None
     
     #endregion Advanced Charts
