@@ -20,7 +20,7 @@ class Navigation(ctk.CTkFrame):
         
         self.create_widgets()
         self.create_layout()
-        self.current_page = 'HomePage'
+        self.current_page = 'Load'
         return None
     
     #region Widgets & Layout
