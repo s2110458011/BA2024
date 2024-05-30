@@ -87,7 +87,10 @@ class Controller:
         
     def get_questions_to_categorize(self) -> list:
         survey = self.get_selected_survey()
-        questions = survey.get_uncategorized_questions()
+        if survey:
+            questions = survey.get_uncategorized_questions()
+        else:
+            questions = []
         return questions
     
     def get_categorized_questions(self) -> dict:
