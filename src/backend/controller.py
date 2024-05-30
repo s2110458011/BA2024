@@ -198,7 +198,8 @@ class Controller:
     
     def update_col_questions_list(self) -> None:
         view = self.view.get_page(Analyze)
-        
+        view.update_col_questions_list()
+        return None
     
     def get_chart_options_by_question(self, question: str) -> list:
         survey = self.get_selected_survey()
