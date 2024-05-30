@@ -47,6 +47,7 @@ class Controller:
         return tp.load_data_from_csv(path)
     
     def set_current_survey_selection(self, id: str) -> None:
+        # reset analyze widgets
         self.model.set_current_selection(id)
         self.update_category_list()
         self.update_col_questions_list()

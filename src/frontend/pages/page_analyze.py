@@ -198,7 +198,10 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def on_radiobutton_select(self) -> None:
-        self.chart_col_threshold = 2
+        threshold = self.rb_var.get()
+        self.chart_col_threshold = threshold
+        self.update_col_questions_list()
+        return None
     
     #endregion
     
@@ -217,7 +220,7 @@ class Analyze(ctk.CTkFrame):
         return None
     
     def update_col_questions_list(self) -> None:
-        self.col_questions_list = self.controller.get_col_questions()
+        self.col_questions_list = self.controller.get_col_questions(self.chart_col_threshold)
         self.dropdown_col_question.configure(values=self.col_questions_list)
         return None
     
