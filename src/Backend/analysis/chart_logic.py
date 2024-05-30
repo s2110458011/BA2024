@@ -20,7 +20,7 @@ class ChartLogic():
         self.current_question: str = None
         self.chart_data: pd.DataFrame = None
         self.barchart_init_axes: bool = True
-        self.advanced_chart_axed: dict[str: str] = {'x': None, 'y': None, 'hue': None, 'col': None, 'kind': None}
+        self.advanced_chart_dimensions: dict[str: str] = {'x': None, 'y': None, 'hue': None, 'col': None, 'kind': None}
         self.advanced_chart_data: pd.DataFrame = None
         self.img: Image = None
         
@@ -149,7 +149,7 @@ class ChartLogic():
     #region Advanced Charts
     
     def update_plot_dimensions(self, df_column: str, dimension: str) -> None:
-        self.advanced_chart_axed[dimension] = df_column
+        self.advanced_chart_dimensions[dimension] = df_column
         return None
     
     def get_data_for_advanced_chart(self, raw_data: pd.DataFrame, dimensions: list) -> None:
@@ -165,7 +165,7 @@ class ChartLogic():
     def get_columns_from_dimensions(self, dimensions: list) -> list:
         columns = []
         for dim in dimensions:
-            column = self.advanced_chart_axed[dim]
+            column = self.advanced_chart_dimensions[dim]
             columns.append(column)
         return columns
     
@@ -181,8 +181,8 @@ class ChartLogic():
         return self.figure
     
     def plot_2_categories_scatterplot(self, raw_data: pd.DataFrame) -> None:
-        x = self.advanced_chart_axed['x']
-        y = self.advanced_chart_axed['y']
+        x = self.advanced_chart_dimensions['x']
+        y = self.advanced_chart_dimensions['y']
         df = self.compute_counts_of_observation(raw_data, x, y)
         scale = 50*df['count'].size
         size = df['count']/df['count'].sum()*scale
@@ -198,8 +198,8 @@ class ChartLogic():
         return df_counts
     
     def plot_3_categories_catplot(self, raw_data: pd.DataFrame) -> None:
-        x = self.advanced_chart_axed['x']
-        hue = self.advanced_chart_axed['hue']
+        x = self.advanced_chart_dimensions['x']
+        hue = self.advanced_chart_dimensions['hue']
         return None
     
     #endregion Advanced Charts

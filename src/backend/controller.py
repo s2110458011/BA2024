@@ -259,6 +259,11 @@ class Controller:
             columns = []
         return columns
     
+    def update_chart_dimensions(self, column: str, dimension: str) -> None:
+        survey = self.get_selected_survey()
+        survey.update_plot_dimensions(column, dimension)
+        return None
+    
     # endregion
     
     # region Report

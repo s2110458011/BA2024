@@ -142,6 +142,10 @@ class Survey():
                 columns.append(key)
         return columns
     
+    def update_plot_dimensions(self, column: str, dimension: str) -> None:
+        self.chart_logic.update_plot_dimensions(column, dimension)
+        return None
+    
     def surveycompletion_counts(self, percentages: list) -> pd.DataFrame:
         row_counts = self.raw_data.notnull().sum(axis=1)
         total_cols = self.raw_data.shape[1]

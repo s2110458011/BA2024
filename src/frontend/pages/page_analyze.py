@@ -126,17 +126,17 @@ class Analyze(ctk.CTkFrame):
         self.frame_more_options = ctk.CTkFrame(self.settings_frame, corner_radius=0, fg_color='transparent')
         self.dropdown_second_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_second_category)
         self.dropdown_second_category.set('Choose Second Category')
-        self.dropdown_second_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.update_chart_options_list_advanced)
+        self.dropdown_second_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_second)
         self.dropdown_second_question.set('Choose Second Question')
         self.cb_var_second = tk.IntVar()
-        self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0)
+        self.cb_second_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_second, onvalue=1, offvalue=0, command=self.on_click_cb_second)
         self.dropdown_hue_category = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.categories_list, command=self.get_questions_hue_category)
         self.dropdown_hue_category.set('Choose Color Category')
-        self.dropdown_hue_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list)
+        self.dropdown_hue_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.questions_list, command=self.set_chart_dimension_hue)
         self.dropdown_hue_question.set('Choose Color Question')
         self.cb_var_hue = tk.IntVar()
         self.cb_hue_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_hue, onvalue=1, offvalue=0)
-        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list)
+        self.dropdown_col_question = ctk.CTkComboBox(self.frame_more_options, width=200, values=self.col_questions_list, command=self.set_chart_dimension_col)
         self.dropdown_col_question.set('Choose Column Question')
         self.cb_var_col = tk.IntVar()
         self.cb_col_question = ctk.CTkCheckBox(self.frame_more_options, text='include', corner_radius=0, checkbox_width=16, checkbox_height=16, border_width=2, variable=self.cb_var_col, onvalue=1, offvalue=0)
@@ -189,6 +189,7 @@ class Analyze(ctk.CTkFrame):
         current_selection = self.get_selected_question()
         if current_selection:
             self.selected_question = current_selection
+            self.controller.update_chart_dimensions(current_selection, 'x')
         self.controller.set_current_simple_chart_question(self.selected_question)
         chart_type = self.dropdown_charts.get()
         self.update_chart_options_list_simple(self.selected_question)
@@ -240,6 +241,18 @@ class Analyze(ctk.CTkFrame):
     def update_chart_options_list_simple(self, question) -> None:
         self.charts_list = self.controller.get_chart_options_by_question(question)
         self.dropdown_charts.configure(values=self.charts_list)
+        return None
+    
+    def set_chart_dimension_second(self, question) -> None:
+        self.controller.update_chart_dimensions(question, 'y')
+        return None
+    
+    def set_chart_dimension_hue(self, question) -> None:
+        self.controller.update_chart_dimensions(question, 'hue')
+        return None
+    
+    def set_chart_dimension_col(self, question) -> None:
+        self.controller.update_chart_dimensions(question, 'col')
         return None
     
     def update_chart_options_list_advanced(self, second_question) -> None:
@@ -360,6 +373,15 @@ class Analyze(ctk.CTkFrame):
         if not self.controller.add_item_to_report(img, short_description, description_text):
             tk.messagebox.showerror(title='error', message='Short description must be unique. This is short description already exists.')
         self.controller.update_report_item_listbox()
+        return None
+    
+    def on_click_cb_second(self) -> None:
+        if self.cb_second_question.get() == 1:
+            # include
+            pass
+        elif self.cb_second_question.get() == 0:
+            # do not include
+            pass
         return None
     
     #endregion
