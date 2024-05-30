@@ -55,12 +55,12 @@ class Navigation(ctk.CTkFrame):
     def create_layout(self) -> None:
         # place the widgets
         self.lbl_menu.grid(row=0, sticky='nsew')
-        self.btn_load.grid(row=1)
-        self.btn_prepare.grid(row=2, pady=10)
-        self.btn_analyze.grid(row=3)
-        self.btn_report.grid(row=4, pady=10)
-        self.btn_save.grid(row=6, pady=10)
-        self.btn_exit.grid(row=7)
+        self.btn_load.grid(row=1, sticky='nsew')
+        self.btn_prepare.grid(row=2, pady=10, sticky='nsew')
+        self.btn_analyze.grid(row=3, sticky='nsew')
+        self.btn_report.grid(row=4, pady=10, sticky='nsew')
+        self.btn_save.grid(row=6, pady=10, sticky='nsew')
+        self.btn_exit.grid(row=7, sticky='nsew')
         return None
     
     #endregion
