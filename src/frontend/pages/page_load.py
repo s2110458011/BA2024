@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Type, TYPE_CHECKING
 
-from backend.data_processor.toolparser import *
+from backend.analysis.toolparser import *
 
 if TYPE_CHECKING:
     from backend.controller import Controller

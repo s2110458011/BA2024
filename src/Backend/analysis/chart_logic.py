@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
-import backend.data_processor.toolparser as tp
+import backend.analysis.toolparser as tp
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 

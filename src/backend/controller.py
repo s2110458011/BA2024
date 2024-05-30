@@ -1,6 +1,6 @@
 import uuid
 import pandas as pd
-import backend.data_processor.toolparser as tp
+import backend.analysis.toolparser as tp
 import backend.constants as constants
 from matplotlib.figure import Figure
 from backend.model.survey_library import SurveyLibrary
