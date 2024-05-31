@@ -1,8 +1,6 @@
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
 import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
 
 class ReportItem():
     def __init__(self, item_number: int, img: Image, short_description: str,  description: str) -> None:
