@@ -4,7 +4,7 @@ import backend.analysis.toolparser as tp
 import backend.constants as constants
 from matplotlib.figure import Figure
 from backend.model.survey_library import SurveyLibrary
-from frontend.main_window import MainWindow
+from frontend.windows.main_window import MainWindow
 from backend.model.survey import Survey
 from backend.model.report_item_model import ReportItem
 from frontend.pages.page_prepare import Prepare

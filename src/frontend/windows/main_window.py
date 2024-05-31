@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from frontend.navigation import Navigation
+from frontend.pages.navigation import Navigation
 from frontend.pages.page_load import Load
 from frontend.pages.page_prepare import Prepare
 from frontend.pages.page_analyze import Analyze
