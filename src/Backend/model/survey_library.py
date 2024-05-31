@@ -31,5 +31,8 @@ class SurveyLibrary:
     def get_survey_id_by_name(self, search_name: str) -> str:
         #TODO if name is not found
         for id, survey in self.surveys.items():
-            if survey.name == search_name:
-                return id
+            try:
+                if survey.name == search_name:
+                    return id
+            except:
+                print('Survey not found.')

@@ -9,15 +9,15 @@ from backend.model.report_item_model import ReportItem
 
 class Survey():
     def __init__(self, id:int, name: str, data: pd.DataFrame) -> None:
-        self.id = id
+        self.id: int = id
         self.name: str = name
         self.raw_data: pd.DataFrame = data
         self.categorized_questions: dict[str, list[str]] = {}
         self.not_categorized_questions: list = tp.extract_features(self.raw_data)
         self.selected_question: str = None
-        self.chart_logic = ChartLogic(data)
+        self.chart_logic: ChartLogic = ChartLogic(data)
         self.simple_charts_by_question = self.chart_logic.get_simple_chart_options()
-        self.next_report_item_number = 1
+        self.next_report_item_number: int = 1
         self.report_items: dict = {}
         self.pdf_report: PDFReport = None
         

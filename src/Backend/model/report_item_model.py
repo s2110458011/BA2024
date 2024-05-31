@@ -10,13 +10,6 @@ class ReportItem():
         self.description = description
         return None
     
-    def convert_figure_to_image(self) -> Image:
-        canvas = FigureCanvas(self.fig)
-        canvas.draw()
-        img = Image.fromarray(np.asarray(canvas.buffer_rgba()))
-        print(img)
-        return img
-    
     def get_description(self) -> str:
         return self.description
     
