@@ -18,9 +18,6 @@ def get_count_dropped(dataframes: list) -> int:
 #endregion
 
 # region Feature extraction
-def extract_columns_by_name(data: pd.DataFrame, columns: list) -> pd.DataFrame:
-    new_df = data[columns]
-    return new_df
 
 def prepare_column_for_float(data: pd.DataFrame, column) -> pd.DataFrame:
     values = list(data[column])

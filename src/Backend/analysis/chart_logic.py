@@ -65,10 +65,7 @@ class ChartLogic():
                 return ['bar', 'line']
     
     def create_simple_line_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
-        if report_image:
-            self.figure = Figure(figsize=(6, 4), dpi=300, tight_layout=True)
-        else:
-            self.figure = Figure(tight_layout=True)
+        self.set_up_figure(report_image)
         self.ax = self.figure.subplots()
         self.chart_data = self.get_data_for_simple_chart(raw_data)
         self.chart_simple_x = self.current_question
@@ -79,10 +76,7 @@ class ChartLogic():
         return self.figure
     
     def create_simple_bar_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
-        if report_image:
-            self.figure = Figure(figsize=(6, 4), dpi=300, tight_layout=True)
-        else:
-            self.figure = Figure(tight_layout=True)
+        self.set_up_figure(report_image)
         self.ax = self.figure.subplots()
         self.chart_data = self.get_data_for_simple_chart(raw_data)
         self.chart_simple_x = self.current_question
@@ -114,10 +108,7 @@ class ChartLogic():
         return self.figure
     
     def create_simple_pie_chart(self, raw_data: pd.DataFrame, report_image: bool) -> Figure:
-        if report_image:
-            self.figure = Figure(figsize=(6, 4), dpi=300, tight_layout=True)
-        else:
-            self.figure = Figure(tight_layout=True)
+        self.set_up_figure(report_image)
         self.ax = self.figure.subplots()
         self.ax.clear()
         self.chart_data = self.get_data_for_simple_chart(raw_data)

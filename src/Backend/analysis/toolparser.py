@@ -24,12 +24,17 @@ def infer_datatypes(df: pd.DataFrame) -> pd.DataFrame:
             while sample_value != sample_value:
                 idx += 1
                 sample_value = column.iloc[idx]
-            if isinstance(sample_value, str):
-                df[column_name]= df[column_name].astype('category')
-            elif isinstance(sample_value, int):
-                df[column_name]= df[column_name].astype('int32')
-            elif isinstance(sample_value, float):
-                df[column_name]= df[column_name].astype('float')
+            try:
+                if isinstance(sample_value, str):
+                    df[column_name]= df[column_name].astype('category')
+                elif isinstance(sample_value, int):
+                    df[column_name]= df[column_name].astype('int32')
+                elif isinstance(sample_value, float):
+                    df[column_name]= df[column_name].astype('float')
+                else:
+                    df[column_name]= df[column_name].astype('category')
+            except:
+                print('Something went wrong. Please manually change datatypes in Prepare.')
     return df
 
 def extract_features(df: pd.DataFrame) -> list:
