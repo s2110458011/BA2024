@@ -10,7 +10,7 @@ from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from backend.controller import Controller
-    from frontend.windows.main_window import MainWindow
+    from frontend.main_window import MainWindow
 
 class Navigation(ctk.CTkFrame):
     def __init__(self, master: Type['MainWindow'], controller: Type['Controller'], **kwargs) -> None:
@@ -41,9 +41,9 @@ class Navigation(ctk.CTkFrame):
             image = Image.open(img_path)
             photo = ctk.CTkImage(image, size=(160,120))
             self.lbl_menu = ctk.CTkLabel(self, text='', image=photo, height=60, width=30)
+            self.lbl_menu._image = photo
         except:
             self.lbl_menu = ctk.CTkLabel(self, text='Menu', height=20)
-        self.lbl_menu._image = photo
         self.btn_load = self.create_menu_button('Load', 30, 0, action=self.load_click)
         self.btn_prepare = self.create_menu_button('Prepare', 30, 0, action=self.prepare_click)
         self.btn_analyze = self.create_menu_button('Analyze', 30, 0, action=self.analyze_click)
